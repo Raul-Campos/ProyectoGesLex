@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 31-mar-2020 13:59:39 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="map.Datosincidentes" table="datosincidentes" catalog="geslexbd" optimistic-lock="version">
+        <id name="codigo" type="java.lang.Integer">
+            <column name="codigo" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="cochesByCoche" class="map.Coches" fetch="select">
+            <column name="coche" length="7" not-null="true" />
+        </many-to-one>
+        <many-to-one name="cochesByCocheContrario" class="map.Coches" fetch="select">
+            <column name="coche_contrario" length="7" />
+        </many-to-one>
+        <property name="fechaHora" type="timestamp">
+            <column name="fecha_hora" length="19" not-null="true" />
+        </property>
+        <property name="lugar" type="string">
+            <column name="lugar" length="30" not-null="true" />
+        </property>
+        <property name="defensa" type="string">
+            <column name="defensa" length="250" />
+        </property>
+        <property name="parte" type="string">
+            <column name="parte" length="250" />
+        </property>
+        <property name="enviadoPor" type="string">
+            <column name="enviado_por" length="70" not-null="true" />
+        </property>
+        <set name="expedienteses" table="expedientes" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="cod_incidente" not-null="true" />
+            </key>
+            <one-to-many class="map.Expedientes" />
+        </set>
+    </class>
+</hibernate-mapping>
