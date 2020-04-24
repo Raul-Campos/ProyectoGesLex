@@ -1,4 +1,4 @@
-create database geslexbd;
+
 
 create table datospersonales(
 	dni varchar(9) primary key,
