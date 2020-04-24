@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 24-abr-2020 13:48:42 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="map.Incidente" table="incidente" catalog="geslexbd" optimistic-lock="version">
+        <id name="codigoExpediente" type="int">
+            <column name="codigo_expediente" />
+            <generator class="foreign">
+                <param name="property">expediente</param>
+            </generator>
+        </id>
+        <one-to-one name="expediente" class="map.Expediente" constrained="true"></one-to-one>
+        <property name="fechaHora" type="timestamp">
+            <column name="fecha_hora" length="19" not-null="true" />
+        </property>
+        <property name="lugar" type="string">
+            <column name="lugar" length="30" not-null="true" />
+        </property>
+        <property name="defensa" type="string">
+            <column name="defensa" length="250" />
+        </property>
+        <property name="parte" type="string">
+            <column name="parte" length="9" not-null="true" />
+        </property>
+        <property name="enviadoPor" type="string">
+            <column name="enviado_por" length="70" not-null="true" />
+        </property>
+        <property name="fallecidos" type="string">
+            <column name="fallecidos" length="3" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

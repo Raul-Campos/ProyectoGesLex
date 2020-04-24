@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 24-abr-2020 13:48:42 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="map.Vehiculo" table="vehiculo" catalog="geslexbd" optimistic-lock="version">
+        <id name="matricula" type="string">
+            <column name="matricula" length="7" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="expediente" class="map.Expediente" fetch="select">
+            <column name="codigo_expediente" />
+        </many-to-one>
+        <property name="marca" type="string">
+            <column name="marca" length="15" not-null="true" />
+        </property>
+        <property name="modelo" type="string">
+            <column name="modelo" length="15" not-null="true" />
+        </property>
+        <property name="color" type="string">
+            <column name="color" length="15" not-null="true" />
+        </property>
+        <property name="numeroBastidor" type="string">
+            <column name="numero_bastidor" length="20" not-null="true" />
+        </property>
+        <property name="aseguradora" type="string">
+            <column name="aseguradora" length="20" not-null="true" />
+        </property>
+        <property name="numeroPoliza" type="string">
+            <column name="numero_poliza" length="20" not-null="true" />
+        </property>
+        <property name="rol" type="string">
+            <column name="rol" length="11" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>
