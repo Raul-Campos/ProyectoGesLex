@@ -1,4 +1,4 @@
-create database geslexbd;
+
 
 create table cliente(
 	dni varchar(9) primary key,
