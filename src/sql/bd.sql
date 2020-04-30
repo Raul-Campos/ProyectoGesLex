@@ -2,7 +2,8 @@
 
 create table cliente(
 	dni varchar(9) primary key,
-    nombre_completo varchar(70) not null,
+    nombre varchar(20) not null,
+    apellidos varchar(60) not null,
     fecha_nacimiento date not null,
     sexo enum('Mujer', 'Hombre') not null,
     situacion_familiar enum('Soltero/a','Casado/a','Divorciado/a','Viudo/a') not null,
