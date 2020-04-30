@@ -6,19 +6,29 @@
 package proyectogeslex;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import map.Cliente;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 /**
  * FXML Controller class
@@ -28,9 +38,9 @@ import javafx.scene.layout.VBox;
 public class VerClientesController implements Initializable {
 
     @FXML
-    private TableView<?> tableClientes;
+    private TableView<Cliente> tableClientes;
     @FXML
-    private ChoiceBox<?> cbColumna;
+    private ChoiceBox<String> cbColumna;
     @FXML
     private TextField tfBusqueda;
     private AnchorPane v;
@@ -42,15 +52,40 @@ public class VerClientesController implements Initializable {
     private Button btnBuscar;
     @FXML
     private Button btnBorrar;
+    private Session session;
+    private SessionFactory sesion;
+    @FXML
+    private TableColumn<Cliente, String> dniColumn;
+    @FXML
+    private TableColumn<Cliente, String> nombreColumn;
+    @FXML
+    private TableColumn<Cliente, String> apellidosColumn;
+    @FXML
+    private TableColumn<Cliente, String> fechaColumn;
+    @FXML
+    private TableColumn<Cliente, String> sexoColumn;
+    @FXML
+    private TableColumn<Cliente, String> sitLaboralColumn;
+    @FXML
+    private TableColumn<Cliente, String> sitFamiliarColumn;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        idbajo.setAlignment(Pos.CENTER);
-        idcentro.setAlignment(Pos.CENTER);
+        
+        //Enlaza las columnas con los campos de cliente
+        dniColumn.setCellValueFactory(new PropertyValueFactory<>("dni"));
+        nombreColumn.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        apellidosColumn.setCellValueFactory(new PropertyValueFactory<>("apellidos"));
+        fechaColumn.setCellValueFactory(new PropertyValueFactory<>("fechaNacimiento"));
+        sexoColumn.setCellValueFactory(new PropertyValueFactory<>("sexo"));
+        sitLaboralColumn.setCellValueFactory(new PropertyValueFactory<>("situacionLaboral"));
+        sitFamiliarColumn.setCellValueFactory(new PropertyValueFactory<>("situacionFamiliar"));
+        
+        //Añade opciones
+        cbColumna.getItems().addAll("DNI", "Nombre", "Apellidos", "Fecha de nacimiento", "Sexo", "Sit.Laboral", "Sit.Familiar");
     }    
 
 
@@ -60,6 +95,43 @@ public class VerClientesController implements Initializable {
 
     @FXML
     private void borrarCliente(ActionEvent event) {
+        
+        Cliente aBorrar = (Cliente) tableClientes.getSelectionModel().getSelectedItem();
+        
+        if(aBorrar != null){
+            
+            //Elimina el cliente seleccionado
+            Transaction tx = session.getTransaction();
+            
+            tx.begin();
+            session.delete(aBorrar);
+            tx.commit();
+            
+            cargarClientes();
+        }else{
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+            alerta.setHeaderText("Cliente no seleccionado");
+            alerta.setContentText("Porfavor seleccione el cliente que desee eliminar");
+            alerta.showAndWait();
+        }
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+        cargarClientes();
+    }
+
+    public void setSesion(SessionFactory sesion) {
+        this.sesion = sesion;
     }
     
+    private void cargarClientes(){
+        
+        //Busca todos los clientes en la base de datos
+        Query consulta = session.createQuery("from Cliente");
+        List<Cliente> clientes = consulta.list();
+        
+        //Muestra los clientes en la tabla
+        tableClientes.setItems(FXCollections.observableArrayList(clientes));
+    }
 }
