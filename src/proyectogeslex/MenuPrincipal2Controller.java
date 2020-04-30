@@ -5,13 +5,19 @@
  */
 package proyectogeslex;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TitledPane;
+import javafx.scene.layout.BorderPane;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 /**
  * FXML Controller class
@@ -46,6 +52,10 @@ public class MenuPrincipal2Controller implements Initializable {
     private TitledPane TPaneAvisos;
     @FXML
     private TitledPane TPaneConfiguracion;
+    private Session session;
+    private SessionFactory sesion;
+    @FXML
+    private BorderPane principal;
 
     /**
      * Initializes the controller class.
@@ -56,7 +66,16 @@ public class MenuPrincipal2Controller implements Initializable {
     }    
 
     @FXML
-    private void BuscarCliente(ActionEvent event) {
+    private void BuscarCliente(ActionEvent event) throws IOException {
+        
+          FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("VerClientes.fxml"));
+          BorderPane verClientes = fxmlLoader.load();
+          VerClientesController controladorClientes = (VerClientesController) fxmlLoader.getController();
+          
+          controladorClientes.setSesion(sesion);
+          controladorClientes.setSession(session);
+          
+          principal.setCenter(verClientes);
     }
 
     @FXML
@@ -82,5 +101,15 @@ public class MenuPrincipal2Controller implements Initializable {
     @FXML
     private void Incidentes(ActionEvent event) {
     }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+
+    public void setSesion(SessionFactory sesion) {
+        this.sesion = sesion;
+    }
+    
+    
     
 }
