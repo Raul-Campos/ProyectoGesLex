@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="401.0" prefWidth="635.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectogeslex.AñadirVehiculoController">
+   <children>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="600.0">
+         <children>
+            <VBox alignment="CENTER" prefHeight="58.0" prefWidth="301.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Añadir Vehículo" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold Italic" size="21.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Rellene los siguientes campos para añadir un vehículo" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="52.0" prefWidth="600.0">
+         <children>
+            <GridPane prefHeight="86.0" prefWidth="554.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="59.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="199.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="43.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="178.0" minWidth="10.0" prefWidth="64.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="283.0" minWidth="10.0" prefWidth="193.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Matrícula" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Expediente" wrappingWidth="75.2890625" GridPane.columnIndex="3">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </Text>
+                  <TextField fx:id="tfExpediente" GridPane.columnIndex="4" />
+                  <TextField fx:id="tfMatricula" alignment="CENTER_RIGHT" GridPane.columnIndex="1" />
+               </children>
+            </GridPane>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="56.0" prefWidth="600.0">
+         <children>
+            <GridPane prefHeight="86.0" prefWidth="554.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="59.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="199.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="53.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="178.0" minWidth="10.0" prefWidth="56.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="283.0" minWidth="10.0" prefWidth="193.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Marca" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Modelo" GridPane.columnIndex="3">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </Text>
+                  <TextField fx:id="tfModelo" GridPane.columnIndex="4" />
+                  <TextField fx:id="tfMarca" alignment="CENTER_RIGHT" GridPane.columnIndex="1" />
+               </children>
+            </GridPane>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="62.0" prefWidth="600.0">
+         <children>
+            <GridPane prefHeight="59.0" prefWidth="558.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="59.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="199.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="20.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="178.0" minWidth="10.0" prefWidth="86.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="283.0" minWidth="10.0" prefWidth="192.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Color" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nº de bastidor" GridPane.columnIndex="3">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </Text>
+                  <TextField fx:id="tfBastidor" GridPane.columnIndex="4" />
+                  <TextField fx:id="tfColor" alignment="CENTER_RIGHT" GridPane.columnIndex="1" />
+               </children>
+            </GridPane>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="62.0" prefWidth="600.0">
+         <children>
+            <GridPane prefHeight="59.0" prefWidth="595.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="79.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="204.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="7.0" prefWidth="25.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="178.0" minWidth="10.0" prefWidth="77.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="306.0" minWidth="10.0" prefWidth="193.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="283.0" minWidth="10.0" prefWidth="18.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Aseguradora" wrappingWidth="73.6171875" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nº de poliza" wrappingWidth="71.490234375" GridPane.columnIndex="3">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </Text>
+                  <TextField fx:id="tfPoliza" prefHeight="25.0" prefWidth="198.0" GridPane.columnIndex="4" />
+                  <TextField fx:id="tfAseguradora" alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="200.0" GridPane.columnIndex="1" />
+               </children>
+            </GridPane>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="88.0" prefWidth="600.0">
+         <children>
+            <GridPane alignment="CENTER_RIGHT" prefHeight="96.0" prefWidth="599.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="108.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="361.0" minWidth="10.0" prefWidth="330.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="208.0" minWidth="10.0" prefWidth="79.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="127.0" minWidth="10.0" prefWidth="79.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="57.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Button fx:id="btnLimpiar" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Limpiar" textAlignment="RIGHT">
+                     <GridPane.margin>
+                        <Insets left="20.0" />
+                     </GridPane.margin>
+                  </Button>
+                  <Button fx:id="btnAceptar" mnemonicParsing="false" onAction="#guardarVehiculo" text="Aceptar" textAlignment="CENTER" textFill="#00b50c" GridPane.columnIndex="2" />
+                  <Button fx:id="btnCancelar" mnemonicParsing="false" text="Cancelar" textFill="#ee0000" GridPane.columnIndex="3" />
+               </children>
+            </GridPane>
+         </children>
+      </HBox>
+   </children>
+</VBox>

@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -36,7 +37,21 @@ public class VerPeritoController implements Initializable {
     @FXML
     private HBox idcentro;
     @FXML
-    private TableView<?> tableClientes;
+    private TableView<?> tablePeritos;
+    @FXML
+    private TableColumn<?, ?> columnDNi;
+    @FXML
+    private TableColumn<?, ?> columnNombre;
+    @FXML
+    private TableColumn<?, ?> columnApellidos;
+    @FXML
+    private TableColumn<?, ?> columnDireccion;
+    @FXML
+    private TableColumn<?, ?> columnProvinca;
+    @FXML
+    private TableColumn<?, ?> columnTelefono;
+    @FXML
+    private TableColumn<?, ?> columnEmail;
 
     /**
      * Initializes the controller class.
@@ -46,12 +61,13 @@ public class VerPeritoController implements Initializable {
         // TODO
     }    
 
-    @FXML
-    private void buscarCLiente(ActionEvent event) {
-    }
 
     @FXML
     private void borrarCliente(ActionEvent event) {
+    }
+
+    @FXML
+    private void buscarPerito(ActionEvent event) {
     }
     
 }

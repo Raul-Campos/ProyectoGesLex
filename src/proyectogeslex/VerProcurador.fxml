@@ -37,7 +37,7 @@
                   <Insets left="5.0" />
                </HBox.margin>
             </TextField>
-            <Button fx:id="btnBuscar" mnemonicParsing="false" onAction="#buscarCLiente" text="Buscar">
+            <Button fx:id="btnBuscar" mnemonicParsing="false" onAction="#buscarProcurador" text="Buscar">
                <HBox.margin>
                   <Insets left="15.0" />
                </HBox.margin>
@@ -51,14 +51,14 @@
    <center>
       <HBox fx:id="idcentro" alignment="CENTER" prefHeight="488.0" prefWidth="941.0" BorderPane.alignment="CENTER">
          <children>
-            <TableView fx:id="tableClientes" prefHeight="408.0" prefWidth="780.0">
+            <TableView fx:id="tableProcurador" prefHeight="408.0" prefWidth="780.0">
                <columns>
-                  <TableColumn prefWidth="112.0" text="DNI" />
-                  <TableColumn prefWidth="101.0" text=" Nombre" />
-                  <TableColumn prefWidth="135.0" text="Apellidos" />
-                  <TableColumn prefWidth="132.0" text="Dirección" />
-                  <TableColumn prefWidth="158.0" text="Télefono" />
-                  <TableColumn prefWidth="141.0" text="Email" />
+                  <TableColumn fx:id="columnDNI" prefWidth="112.0" text="DNI" />
+                  <TableColumn fx:id="columnNombre" prefWidth="101.0" text=" Nombre" />
+                  <TableColumn fx:id="columnApellidos" prefWidth="135.0" text="Apellidos" />
+                  <TableColumn fx:id="columnDireccion" prefWidth="132.0" text="Dirección" />
+                  <TableColumn fx:id="columnTelefono" prefWidth="158.0" text="Télefono" />
+                  <TableColumn fx:id="columnEmail" prefWidth="141.0" text="Email" />
                </columns>
                <HBox.margin>
                   <Insets bottom="25.0" top="50.0" />
