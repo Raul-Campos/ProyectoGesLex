@@ -38,7 +38,7 @@
             <Font size="16.0" />
          </font>
       </Text>
-      <Text layoutX="376.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Iniciar Sesion">
+      <Text layoutX="376.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Iniciar Sesión">
          <font>
             <Font name="System Bold Italic" size="24.0" />
          </font>

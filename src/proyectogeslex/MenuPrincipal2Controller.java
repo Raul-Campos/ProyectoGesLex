@@ -15,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TitledPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -69,13 +70,14 @@ public class MenuPrincipal2Controller implements Initializable {
     private void BuscarCliente(ActionEvent event) throws IOException {
         
           FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("VerClientes.fxml"));
-          BorderPane verClientes = fxmlLoader.load();
+          BorderPane anadirClientes = fxmlLoader.load();
           VerClientesController controladorClientes = (VerClientesController) fxmlLoader.getController();
           
           controladorClientes.setSesion(sesion);
           controladorClientes.setSession(session);
           
-          principal.setCenter(verClientes);
+          principal.setCenter(anadirClientes);
+          
     }
 
     @FXML
