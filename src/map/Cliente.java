@@ -1,5 +1,5 @@
 package map;
-// Generated 30-abr-2020 16:47:02 by Hibernate Tools 4.3.1
+// Generated 30-abr-2020 20:44:27 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -14,34 +14,34 @@ public class Cliente  implements java.io.Serializable {
 
      private String dni;
      private String nombre;
+     private String apellidos;
      private Date fechaNacimiento;
      private String sexo;
      private String situacionFamiliar;
      private String situacionLaboral;
-     private String apellidos;
      private Set expedientes = new HashSet(0);
 
     public Cliente() {
     }
 
 	
-    public Cliente(String dni, String nombre, Date fechaNacimiento, String sexo, String situacionFamiliar, String situacionLaboral, String apellidos) {
+    public Cliente(String dni, String nombre, String apellidos, Date fechaNacimiento, String sexo, String situacionFamiliar, String situacionLaboral) {
         this.dni = dni;
         this.nombre = nombre;
+        this.apellidos = apellidos;
         this.fechaNacimiento = fechaNacimiento;
         this.sexo = sexo;
         this.situacionFamiliar = situacionFamiliar;
         this.situacionLaboral = situacionLaboral;
-        this.apellidos = apellidos;
     }
-    public Cliente(String dni, String nombre, Date fechaNacimiento, String sexo, String situacionFamiliar, String situacionLaboral, String apellidos, Set expedientes) {
+    public Cliente(String dni, String nombre, String apellidos, Date fechaNacimiento, String sexo, String situacionFamiliar, String situacionLaboral, Set expedientes) {
        this.dni = dni;
        this.nombre = nombre;
+       this.apellidos = apellidos;
        this.fechaNacimiento = fechaNacimiento;
        this.sexo = sexo;
        this.situacionFamiliar = situacionFamiliar;
        this.situacionLaboral = situacionLaboral;
-       this.apellidos = apellidos;
        this.expedientes = expedientes;
     }
    
@@ -58,6 +58,13 @@ public class Cliente  implements java.io.Serializable {
     
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+    public String getApellidos() {
+        return this.apellidos;
+    }
+    
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
     }
     public Date getFechaNacimiento() {
         return this.fechaNacimiento;
@@ -86,13 +93,6 @@ public class Cliente  implements java.io.Serializable {
     
     public void setSituacionLaboral(String situacionLaboral) {
         this.situacionLaboral = situacionLaboral;
-    }
-    public String getApellidos() {
-        return this.apellidos;
-    }
-    
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
     }
     public Set getExpedientes() {
         return this.expedientes;

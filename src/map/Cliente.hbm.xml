@@ -1,15 +1,18 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 30-abr-2020 16:47:02 by Hibernate Tools 4.3.1 -->
+<!-- Generated 30-abr-2020 20:44:29 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
-    <class name="map.Cliente" table="cliente" catalog="geslexbd" optimistic-lock="version">
+    <class name="map.Cliente" table="cliente" catalog="geslexdb" optimistic-lock="version">
         <id name="dni" type="string">
             <column name="dni" length="9" />
             <generator class="assigned" />
         </id>
         <property name="nombre" type="string">
             <column name="nombre" length="20" not-null="true" />
+        </property>
+        <property name="apellidos" type="string">
+            <column name="apellidos" length="60" not-null="true" />
         </property>
         <property name="fechaNacimiento" type="date">
             <column name="fecha_nacimiento" length="10" not-null="true" />
@@ -22,9 +25,6 @@
         </property>
         <property name="situacionLaboral" type="string">
             <column name="situacion_laboral" length="13" not-null="true" />
-        </property>
-        <property name="apellidos" type="string">
-            <column name="apellidos" length="60" not-null="true" />
         </property>
         <set name="expedientes" table="expediente" inverse="true" lazy="true" fetch="select">
             <key>
