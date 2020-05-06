@@ -22,7 +22,7 @@ import javafx.scene.layout.HBox;
  *
  * @author Raul
  */
-public class VerProcuradorController implements Initializable {
+public class VerVehiculosController implements Initializable {
 
     @FXML
     private ChoiceBox<?> cbColumna;
@@ -37,19 +37,25 @@ public class VerProcuradorController implements Initializable {
     @FXML
     private HBox idcentro;
     @FXML
-    private TableView<?> tableProcurador;
+    private TableView<?> tableVehiculos;
     @FXML
-    private TableColumn<?, ?> columnDNI;
+    private TableColumn<?, ?> matriculaColumn;
     @FXML
-    private TableColumn<?, ?> columnNombre;
+    private TableColumn<?, ?> expedienteColumn;
     @FXML
-    private TableColumn<?, ?> columnApellidos;
+    private TableColumn<?, ?> marcaColumn;
     @FXML
-    private TableColumn<?, ?> columnDireccion;
+    private TableColumn<?, ?> modeloColumn;
     @FXML
-    private TableColumn<?, ?> columnTelefono;
+    private TableColumn<?, ?> colorColumn;
     @FXML
-    private TableColumn<?, ?> columnEmail;
+    private TableColumn<?, ?> numBastidorColumn;
+    @FXML
+    private TableColumn<?, ?> aseguradoraColumn;
+    @FXML
+    private TableColumn<?, ?> nPolizaColumn;
+    @FXML
+    private TableColumn<?, ?> rolColumn;
 
     /**
      * Initializes the controller class.
@@ -59,13 +65,12 @@ public class VerProcuradorController implements Initializable {
         // TODO
     }    
 
-
     @FXML
-    private void borrarCliente(ActionEvent event) {
+    private void buscarCLiente(ActionEvent event) {
     }
 
     @FXML
-    private void buscarProcurador(ActionEvent event) {
+    private void borrarCliente(ActionEvent event) {
     }
     
 }
