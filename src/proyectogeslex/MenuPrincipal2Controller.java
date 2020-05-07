@@ -77,8 +77,12 @@ public class MenuPrincipal2Controller implements Initializable {
         BorderPane verProcuradores = fxmlLoaderProcuradores.load();
         VerProcuradorController controladorProcuradoes = (VerProcuradorController) fxmlLoaderProcuradores.getController();
 
+        //Pasa la sesión al resto de vistas
         controladorClientes.setSesion(sesion);
         controladorClientes.setSession(session);
+        controladorProcuradoes.setSession(session);
+        controladorLetrados.setSession(session);
+        controladorPeritos.setSession(session);
 
         //Crea pestañas para cargar vista de actores
         TabPane tabPane = new TabPane();
@@ -132,7 +136,9 @@ public class MenuPrincipal2Controller implements Initializable {
         //Carga la vista y controlador
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("VerVehiculos.fxml"));
         BorderPane verVehiculos = fxmlLoader.load();
-        VerVehiculosController controladorClientes = (VerVehiculosController) fxmlLoader.getController();
+        VerVehiculosController controladorVehiculos = (VerVehiculosController) fxmlLoader.getController();
+        
+        controladorVehiculos.setSession(session);
 
         //Crea pestaña para cargar vista de clientes
         TabPane tabPane = new TabPane();
