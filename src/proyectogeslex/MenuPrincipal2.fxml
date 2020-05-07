@@ -8,7 +8,7 @@
 
 <BorderPane fx:id="principal" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectogeslex.MenuPrincipal2Controller">
    <left>
-      <VBox prefHeight="400.0" prefWidth="166.0" BorderPane.alignment="CENTER">
+      <VBox BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="btnBuscarClientes" contentDisplay="TOP" mnemonicParsing="false" onAction="#BuscarCliente" prefHeight="25.0" prefWidth="166.0">
                <graphic>
