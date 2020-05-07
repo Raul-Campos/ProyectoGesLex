@@ -23,7 +23,7 @@
       </Button>
       <ImageView fitHeight="295.0" fitWidth="277.0" layoutX="23.0" layoutY="53.0">
          <image>
-            <Image url="@../../../a72bdf2e-901f-431d-8cef-5296724d9128_200x200.png" />
+             <Image url="@../recursos/logo.png" />
          </image>
       </ImageView>
       <TextField fx:id="tfusuario" layoutX="430.0" layoutY="117.0" />
