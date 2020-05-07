@@ -6,14 +6,13 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectogeslex.VerClientesController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="784.0" prefWidth="941.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectogeslex.VerClientesController">
    <bottom>
-      <HBox fx:id="idbajo" alignment="CENTER_RIGHT" prefHeight="57.0" prefWidth="781.0" BorderPane.alignment="CENTER">
+      <HBox fx:id="idbajo" alignment="CENTER_RIGHT" prefHeight="145.0" prefWidth="941.0" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="btnBorrar" mnemonicParsing="false" onAction="#borrarCliente" text="Borrar Cliente" textFill="#f20000">
                <HBox.margin>
@@ -23,7 +22,7 @@
       </HBox>
    </bottom>
    <top>
-      <HBox alignment="CENTER" prefHeight="55.0" prefWidth="781.0" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Seleccione el criterio por el que desa buscar " />
             <ChoiceBox fx:id="cbColumna" prefWidth="150.0" />
@@ -47,27 +46,23 @@
       </HBox>
    </top>
    <center>
-      <AnchorPane>
+      <HBox fx:id="idcentro" alignment="CENTER" prefHeight="488.0" prefWidth="941.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox fx:id="idcentro" alignment="CENTER">
-               <children>
-                  <TableView fx:id="tableClientes" prefHeight="389.0" prefWidth="781.0">
-                     <columns>
-                        <TableColumn fx:id="dniColumn" prefWidth="81.0" text="DNI" />
-                        <TableColumn fx:id="nombreColumn" prefWidth="99.0" text=" Nombre" />
-                        <TableColumn fx:id="apellidosColumn" prefWidth="149.0" text="Apellidos" />
-                        <TableColumn fx:id="fechaColumn" prefWidth="157.0" text="Fecha Nacimiento" />
-                        <TableColumn fx:id="sexoColumn" prefWidth="63.0" text="Sexo" />
-                        <TableColumn fx:id="sitLaboralColumn" prefWidth="112.0" text="Sit.Laboral" />
-                        <TableColumn fx:id="sitFamiliarColumn" prefWidth="118.0" text="Sit.Familiar" />
-                     </columns>
-                     <HBox.margin>
-                        <Insets bottom="25.0" top="50.0" />
-                     </HBox.margin>
-                  </TableView>
-               </children>
-            </HBox>
+            <TableView fx:id="tableClientes" prefHeight="408.0" prefWidth="780.0">
+               <columns>
+                  <TableColumn fx:id="dniColumn" prefWidth="81.0" text="DNI" />
+                  <TableColumn fx:id="nombreColumn" prefWidth="99.0" text=" Nombre" />
+                  <TableColumn fx:id="apellidosColumn" prefWidth="149.0" text="Apellidos" />
+                  <TableColumn fx:id="fechaColumn" prefWidth="157.0" text="Fecha Nacimiento" />
+                  <TableColumn fx:id="sexoColumn" prefWidth="63.0" text="Sexo" />
+                  <TableColumn fx:id="sitLaboralColumn" prefWidth="112.0" text="Sit.Laboral" />
+                  <TableColumn fx:id="sitFamiliarColumn" prefWidth="118.0" text="Sit.Familiar" />
+               </columns>
+               <HBox.margin>
+                  <Insets bottom="25.0" top="50.0" />
+               </HBox.margin>
+            </TableView>
          </children>
-      </AnchorPane>
+      </HBox>
    </center>
 </BorderPane>
