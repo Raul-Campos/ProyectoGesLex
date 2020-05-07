@@ -14,7 +14,7 @@
    <bottom>
       <HBox fx:id="idbajo" alignment="CENTER_RIGHT" prefHeight="145.0" prefWidth="941.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btnBorrar" mnemonicParsing="false" onAction="#borrarCliente" text="Borrar Vehículo" textFill="#f20000">
+            <Button fx:id="btnBorrar" mnemonicParsing="false" onAction="#borrarVehiculo" text="Borrar Vehículo" textFill="#f20000">
                <HBox.margin>
                   <Insets right="75.0" />
                </HBox.margin>
@@ -37,7 +37,7 @@
                   <Insets left="5.0" />
                </HBox.margin>
             </TextField>
-            <Button fx:id="btnBuscar" mnemonicParsing="false" onAction="#buscarCLiente" text="Buscar">
+            <Button fx:id="btnBuscar" mnemonicParsing="false" onAction="#buscarVehiculo" text="Buscar">
                <HBox.margin>
                   <Insets left="15.0" />
                </HBox.margin>
@@ -51,17 +51,16 @@
    <center>
       <HBox fx:id="idcentro" alignment="CENTER" prefHeight="488.0" prefWidth="941.0" BorderPane.alignment="CENTER">
          <children>
-            <TableView fx:id="tableVehiculos" prefHeight="444.0" prefWidth="857.0">
+            <TableView fx:id="tableVehiculos" prefHeight="444.0" prefWidth="787.0">
                <columns>
                   <TableColumn fx:id="matriculaColumn" prefWidth="88.0" text="Matrícula" />
-                  <TableColumn fx:id="expedienteColumn" prefWidth="74.0" text="Expediente" />
                   <TableColumn fx:id="marcaColumn" prefWidth="94.0" text="Marca" />
                   <TableColumn fx:id="modeloColumn" prefWidth="86.0" text="Modelo" />
                   <TableColumn fx:id="colorColumn" prefWidth="82.0" text="Color" />
                   <TableColumn fx:id="numBastidorColumn" prefWidth="112.0" text="Nº de bastidor" />
                   <TableColumn fx:id="aseguradoraColumn" prefWidth="127.0" text="Aeguradorra" />
                   <TableColumn fx:id="nPolizaColumn" prefWidth="111.0" text="Nº de poliza" />
-                  <TableColumn fx:id="rolColumn" prefWidth="82.0" text="Rol" />
+                  <TableColumn fx:id="rolColumn" prefWidth="86.0" text="Rol" />
                </columns>
                <HBox.margin>
                   <Insets bottom="25.0" top="50.0" />

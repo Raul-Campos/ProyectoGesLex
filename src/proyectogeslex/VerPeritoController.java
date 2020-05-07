@@ -6,16 +6,25 @@
 package proyectogeslex;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import map.Cliente;
+import map.Perito;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 /**
  * FXML Controller class
@@ -25,7 +34,7 @@ import javafx.scene.layout.HBox;
 public class VerPeritoController implements Initializable {
 
     @FXML
-    private ChoiceBox<?> cbColumna;
+    private ChoiceBox<String> cbColumna;
     @FXML
     private TextField tfBusqueda;
     @FXML
@@ -37,37 +46,83 @@ public class VerPeritoController implements Initializable {
     @FXML
     private HBox idcentro;
     @FXML
-    private TableView<?> tablePeritos;
+    private TableView<Perito> tablePeritos;
     @FXML
-    private TableColumn<?, ?> columnDNi;
+    private TableColumn<Perito, String> columnNombre;
     @FXML
-    private TableColumn<?, ?> columnNombre;
+    private TableColumn<Perito, String> columnApellidos;
     @FXML
-    private TableColumn<?, ?> columnApellidos;
+    private TableColumn<Perito, String> columnDireccion;
     @FXML
-    private TableColumn<?, ?> columnDireccion;
+    private TableColumn<Perito, String> columnTelefono;
     @FXML
-    private TableColumn<?, ?> columnProvinca;
+    private TableColumn<Perito, String> columnEmail;
     @FXML
-    private TableColumn<?, ?> columnTelefono;
+    private TableColumn<Perito, String> columnDNI;
     @FXML
-    private TableColumn<?, ?> columnEmail;
+    private TableColumn<Perito, String> columnProvincia;
+    private Session session;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        
+        //Enlaza las columnas con los campos de letrado
+        columnDNI.setCellValueFactory(new PropertyValueFactory<>("dniPerito"));
+        columnNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        columnApellidos.setCellValueFactory(new PropertyValueFactory<>("apellidos"));
+        columnProvincia.setCellValueFactory(new PropertyValueFactory<>("provincia"));
+        columnDireccion.setCellValueFactory(new PropertyValueFactory<>("direccion"));
+        columnTelefono.setCellValueFactory(new PropertyValueFactory<>("telefono"));
+        columnEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        
+        cbColumna.getItems().addAll("DNI", "Nombre", "Apellidos", "Provincia", 
+                "Dirección", "Teléfono", "Email");
     }    
 
 
-    @FXML
-    private void borrarCliente(ActionEvent event) {
-    }
 
     @FXML
     private void buscarPerito(ActionEvent event) {
     }
+
+    @FXML
+    private void borrarPerito(ActionEvent event) {
+        
+        Perito peritoABorrar = (Perito) tablePeritos.getSelectionModel().getSelectedItem();
+        
+        if(peritoABorrar != null){
+            
+            //Elimina el perito seleccionado
+            Transaction tx = session.getTransaction();
+            
+            tx.begin();
+            session.delete(peritoABorrar);
+            tx.commit();
+            
+            cargarPeritos();
+        }else{
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+            alerta.setHeaderText("Perito no seleccionado");
+            alerta.setContentText("Porfavor seleccione el perito que desee eliminar");
+            alerta.showAndWait();
+        }
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+        cargarPeritos();
+    }
     
+    private void cargarPeritos(){
+        
+        //Busca todos los peritos en la base de datos
+        Query consulta = session.createQuery("from Perito");
+        List<Perito> peritos = consulta.list();
+        
+        //Muestra los peritos en la tabla
+        tablePeritos.setItems(FXCollections.observableArrayList(peritos));
+    }
 }

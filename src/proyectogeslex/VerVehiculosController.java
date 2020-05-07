@@ -6,16 +6,26 @@
 package proyectogeslex;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import map.Cliente;
+import map.Vehiculo;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 /**
  * FXML Controller class
@@ -25,7 +35,7 @@ import javafx.scene.layout.HBox;
 public class VerVehiculosController implements Initializable {
 
     @FXML
-    private ChoiceBox<?> cbColumna;
+    private ChoiceBox<String> cbColumna;
     @FXML
     private TextField tfBusqueda;
     @FXML
@@ -37,40 +47,85 @@ public class VerVehiculosController implements Initializable {
     @FXML
     private HBox idcentro;
     @FXML
-    private TableView<?> tableVehiculos;
+    private TableView<Vehiculo> tableVehiculos;
     @FXML
-    private TableColumn<?, ?> matriculaColumn;
+    private TableColumn<Vehiculo, String> matriculaColumn;
     @FXML
-    private TableColumn<?, ?> expedienteColumn;
+    private TableColumn<Vehiculo, String> marcaColumn;
     @FXML
-    private TableColumn<?, ?> marcaColumn;
+    private TableColumn<Vehiculo, String> modeloColumn;
     @FXML
-    private TableColumn<?, ?> modeloColumn;
+    private TableColumn<Vehiculo, String> colorColumn;
     @FXML
-    private TableColumn<?, ?> colorColumn;
+    private TableColumn<Vehiculo, String> numBastidorColumn;
     @FXML
-    private TableColumn<?, ?> numBastidorColumn;
+    private TableColumn<Vehiculo, String> aseguradoraColumn;
     @FXML
-    private TableColumn<?, ?> aseguradoraColumn;
+    private TableColumn<Vehiculo, String> nPolizaColumn;
     @FXML
-    private TableColumn<?, ?> nPolizaColumn;
-    @FXML
-    private TableColumn<?, ?> rolColumn;
+    private TableColumn<Vehiculo, String> rolColumn;
+    private Session session;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
-
-    @FXML
-    private void buscarCLiente(ActionEvent event) {
+        
+        //Enlaza las columnas con los campos de vehiculos
+        matriculaColumn.setCellValueFactory(new PropertyValueFactory<>("matricula"));
+        marcaColumn.setCellValueFactory(new PropertyValueFactory<>("marca"));
+        modeloColumn.setCellValueFactory(new PropertyValueFactory<>("modelo"));
+        colorColumn.setCellValueFactory(new PropertyValueFactory<>("color"));
+        numBastidorColumn.setCellValueFactory(new PropertyValueFactory<>("numeroBastidor"));
+        aseguradoraColumn.setCellValueFactory(new PropertyValueFactory<>("aseguradora"));
+        nPolizaColumn.setCellValueFactory(new PropertyValueFactory<>("numeroPoliza"));
+        rolColumn.setCellValueFactory(new PropertyValueFactory<>("rol"));
+        
+        //Añade opciones
+        cbColumna.getItems().addAll("Matricula", "Expediente", "Marca", "Modelo",
+                "Color", "Nº de bastidor", "Aseguradora", "Nº de poliza", "Rol");
     }
 
     @FXML
-    private void borrarCliente(ActionEvent event) {
+    private void buscarVehiculo(ActionEvent event) {
+    }
+
+    @FXML
+    private void borrarVehiculo(ActionEvent event) {
+        Vehiculo vehiculoABorrar = (Vehiculo) tableVehiculos.getSelectionModel().getSelectedItem();
+        
+        if(vehiculoABorrar != null){
+            
+            //Elimina el vehiculo seleccionado
+            Transaction tx = session.getTransaction();
+            
+            tx.begin();
+            session.delete(vehiculoABorrar);
+            tx.commit();
+            
+            cargarVehiculos();
+        }else{
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+            alerta.setHeaderText("Vehículo no seleccionado");
+            alerta.setContentText("Porfavor seleccione el vehículo que desee eliminar");
+            alerta.showAndWait();
+        }
+    }
+    
+    public void setSession(Session session) {
+        this.session = session;
+        cargarVehiculos();
+    }
+    
+    private void cargarVehiculos(){
+        
+        //Busca todos los vehiculos en la base de datos
+        Query consulta = session.createQuery("from Vehiculo");
+        List<Vehiculo> vehiculos = consulta.list();
+        
+        //Muestra los vehiculos en la tabla
+        tableVehiculos.setItems(FXCollections.observableArrayList(vehiculos));
     }
     
 }
