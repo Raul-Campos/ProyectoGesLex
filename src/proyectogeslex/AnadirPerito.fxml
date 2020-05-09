@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="401.0" prefWidth="635.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectogeslex.AñadirVehiculoController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="401.0" prefWidth="635.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectogeslex.AnadirPeritoController">
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="600.0">
          <children>
@@ -48,7 +48,7 @@
                      </GridPane.margin>
                   </Text>
                   <TextField fx:id="tfApellidos" GridPane.columnIndex="4" />
-                  <TextField fx:id="tfNombre" alignment="CENTER_RIGHT" GridPane.columnIndex="1" />
+                  <TextField fx:id="tfNombre" GridPane.columnIndex="1" />
                </children>
             </GridPane>
          </children>
@@ -74,7 +74,7 @@
                      </GridPane.margin>
                   </Text>
                   <TextField fx:id="tfDireccion" GridPane.columnIndex="4" />
-                  <TextField fx:id="tfDNI" alignment="CENTER_RIGHT" GridPane.columnIndex="1" />
+                  <TextField fx:id="tfDNI" GridPane.columnIndex="1" />
                </children>
             </GridPane>
          </children>
@@ -100,7 +100,7 @@
                      </GridPane.margin>
                   </Text>
                   <TextField fx:id="tfTelefono" GridPane.columnIndex="4" />
-                  <TextField fx:id="tfProvincia" alignment="CENTER_RIGHT" GridPane.columnIndex="1" />
+                  <TextField fx:id="tfProvincia" GridPane.columnIndex="1" />
                </children>
             </GridPane>
          </children>
@@ -122,7 +122,7 @@
                </rowConstraints>
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email" wrappingWidth="73.6171875" GridPane.columnIndex="1" />
-                  <TextField fx:id="tfEmail" alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="200.0" GridPane.columnIndex="2" />
+                  <TextField fx:id="tfEmail" prefHeight="25.0" prefWidth="200.0" GridPane.columnIndex="2" />
                </children>
             </GridPane>
          </children>
@@ -140,13 +140,13 @@
                   <RowConstraints maxHeight="57.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Button fx:id="btnLimpiar" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Limpiar" textAlignment="RIGHT">
+                  <Button fx:id="btnLimpiar" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#LimpiarPerito" text="Limpiar" textAlignment="RIGHT">
                      <GridPane.margin>
                         <Insets left="20.0" />
                      </GridPane.margin>
                   </Button>
-                  <Button fx:id="btnAceptar" mnemonicParsing="false" onAction="#guardarPerito" text="Aceptar" textAlignment="CENTER" textFill="#00b50c" GridPane.columnIndex="2" />
-                  <Button fx:id="btnCancelar" mnemonicParsing="false" text="Cancelar" textFill="#ee0000" GridPane.columnIndex="3" />
+                  <Button fx:id="btnAceptar" mnemonicParsing="false" onAction="#AceptarPerito" text="Aceptar" textAlignment="CENTER" textFill="#00b50c" GridPane.columnIndex="2" />
+                  <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#CancelarPerito" text="Cancelar" textFill="#ee0000" GridPane.columnIndex="3" />
                </children>
             </GridPane>
          </children>

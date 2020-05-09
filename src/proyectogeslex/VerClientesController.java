@@ -91,6 +91,7 @@ public class VerClientesController implements Initializable {
         
         //Añade opciones
         cbColumna.getItems().addAll("DNI", "Nombre", "Apellidos", "Fecha de nacimiento", "Sexo", "Sit.Laboral", "Sit.Familiar");
+       
     }    
 
 
