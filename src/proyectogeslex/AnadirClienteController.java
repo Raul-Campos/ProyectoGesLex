@@ -31,20 +31,6 @@ import org.hibernate.Transaction;
  */
 public class AnadirClienteController implements Initializable {
 
-    @FXML
-    private MenuItem anadirCliente;
-    @FXML
-    private MenuItem borrarCliente;
-    @FXML
-    private MenuItem verCliente;
-    @FXML
-    private MenuItem anadirExpediente;
-    @FXML
-    private MenuItem verExpedientes;
-    @FXML
-    private MenuItem anadirMinutas;
-    @FXML
-    private MenuItem verMinutas;
 
     private Session session;
     private SessionFactory sesion;
@@ -80,33 +66,6 @@ public class AnadirClienteController implements Initializable {
         cbSitLab.getItems().addAll("Empleado/a", "Desempleado/a");
     }
 
-    @FXML
-    private void anadirCliente(ActionEvent event) {
-    }
-
-    @FXML
-    private void borrarCliente(ActionEvent event) {
-    }
-
-    @FXML
-    private void verCliente(ActionEvent event) {
-    }
-
-    @FXML
-    private void anadirExpediente(ActionEvent event) {
-    }
-
-    @FXML
-    private void verExpedientes(ActionEvent event) {
-    }
-
-    @FXML
-    private void anadirMinutas(ActionEvent event) {
-    }
-
-    @FXML
-    private void verMinutas(ActionEvent event) {
-    }
 
     public void setSession(Session session) {
         this.session = session;
@@ -121,8 +80,8 @@ public class AnadirClienteController implements Initializable {
     private void btnEnviar(ActionEvent event) {
         Cliente cliente = new Cliente();
         //falta control de errores
-        if(textfieldDni.getText() != null && !textfieldDni.getText().isEmpty())
-            cliente.setDni(textfieldDni.getText());
+        
+        cliente.setDni(textfieldDni.getText());
         cliente.setApellidos(textfieldApellidos.getText());
         cliente.setFechaNacimiento(StringToDate(textfieldFecha.getText()));
         cliente.setNombre(textfieldNombre.getText());
@@ -140,10 +99,6 @@ public class AnadirClienteController implements Initializable {
         session.merge(cliente);
         tx.commit();
 
-        /* em.getTransaction().begin();
-                        em.merge(cliente);
-                        em.persist(habitacion);
-                        em.getTransaction().commit();*/
         Stage stage = (Stage) btnEnviar.getScene().getWindow();
         stage.close();
     }

@@ -5,13 +5,17 @@
  */
 package proyectogeslex;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -20,9 +24,12 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import map.Letrado;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 /**
@@ -38,10 +45,6 @@ public class VerLetradoController implements Initializable {
     private TextField tfBusqueda;
     @FXML
     private Button btnBuscar;
-    @FXML
-    private HBox idbajo;
-    @FXML
-    private Button btnBorrar;
     @FXML
     private HBox idcentro;
     @FXML
@@ -60,14 +63,21 @@ public class VerLetradoController implements Initializable {
     private TableColumn<Letrado, String> columnEmail;
     @FXML
     private TableColumn<Letrado, String> columnDNI;
+
     private Session session;
+    private SessionFactory sesion;
+
+    @FXML
+    private Button btnAñadir;
+    @FXML
+    private Button btnBorrar;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
         //Enlaza las columnas con los campos de letrado
         columnDNI.setCellValueFactory(new PropertyValueFactory<>("dniLetrado"));
         columnNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
@@ -76,10 +86,10 @@ public class VerLetradoController implements Initializable {
         columnDireccion.setCellValueFactory(new PropertyValueFactory<>("direccion"));
         columnTelefono.setCellValueFactory(new PropertyValueFactory<>("telefono"));
         columnEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-        
+
         cbColumna.getItems().addAll("DNI", "Nombre", "Apellidos", "Colegio",
                 "Dirección", "Teléfono", "Email");
-    }    
+    }
 
     @FXML
     private void buscarLetrado(ActionEvent event) {
@@ -113,38 +123,42 @@ public class VerLetradoController implements Initializable {
 
     @FXML
     private void borrarLetrado(ActionEvent event) {
-        
+      
         Letrado LetradoABorrar = (Letrado) tableLetrados.getSelectionModel().getSelectedItem();
-        
-        if(LetradoABorrar != null){
-            
+
+        if (LetradoABorrar != null) {
+
             //Elimina el letrado seleccionado
             Transaction tx = session.getTransaction();
-            
+
             tx.begin();
             session.delete(LetradoABorrar);
             tx.commit();
-            
+
             cargarLetrado();
-        }else{
+        } else {
             Alert alerta = new Alert(Alert.AlertType.INFORMATION);
             alerta.setHeaderText("Letrado no seleccionado");
             alerta.setContentText("Porfavor seleccione el letrado que desee eliminar");
             alerta.showAndWait();
         }
     }
-    
+
     public void setSession(Session session) {
         this.session = session;
         cargarLetrado();
     }
-    
-    private void cargarLetrado(){
-        
+
+    public void setSesion(SessionFactory sesion) {
+        this.sesion = sesion;
+    }
+
+    private void cargarLetrado() {
+
         //Busca todos los letrados en la base de datos
         Query consulta = session.createQuery("from Letrado");
         List<Letrado> letrados = consulta.list();
-        
+
         //Muestra los letrados en la tabla
         tableLetrados.setItems(FXCollections.observableArrayList(letrados));
     }
@@ -167,4 +181,46 @@ public class VerLetradoController implements Initializable {
         consulta = session.createQuery("from Letrado where "+campo+" = ?").setParameter(0, valor);
         return consulta.list();
     }
+
+    @FXML
+    private void añadirLetrado(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirLetrado.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Añadir Letrado");
+        stage.setScene(new Scene(root));
+        stage.setResizable(false);
+
+        stage.show();
+
+        AnadirLetradoController anadirLetrado = (AnadirLetradoController) fxmlLoader.getController();
+        anadirLetrado.setSesion(sesion);
+        anadirLetrado.setSession(session);
+        cargarLetrado();
+    }
+
+    @FXML
+    private void borrarLetrado(ActionEvent event) {
+        Letrado aBorrar = (Letrado) tableLetrados.getSelectionModel().getSelectedItem();
+
+        if (aBorrar != null) {
+
+            //Elimina el cliente seleccionado
+            Transaction tx = session.getTransaction();
+
+            tx.begin();
+            session.delete(aBorrar);
+            tx.commit();
+
+            cargarLetrado();
+        } else {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+            alerta.setHeaderText("Letrado no seleccionado");
+            alerta.setContentText("Porfavor seleccione el letrado que desee eliminar");
+            alerta.showAndWait();
+        }
+    }
+
 }

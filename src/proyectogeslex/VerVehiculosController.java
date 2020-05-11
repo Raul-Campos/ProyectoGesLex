@@ -5,13 +5,17 @@
  */
 package proyectogeslex;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -20,6 +24,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import map.Vehiculo;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -62,7 +68,12 @@ public class VerVehiculosController implements Initializable {
     private TableColumn<Vehiculo, String> nPolizaColumn;
     @FXML
     private TableColumn<Vehiculo, String> rolColumn;
+    
     private Session session;
+    private SessionFactory sesion;
+    
+    @FXML
+    private Button btnAñadir;
 
     /**
      * Initializes the controller class.
@@ -142,6 +153,10 @@ public class VerVehiculosController implements Initializable {
         cargarVehiculos();
     }
     
+    public void setSesion(SessionFactory sesion) {
+        this.sesion = sesion;
+    }
+    
     private void cargarVehiculos(){
         
         //Busca todos los vehiculos en la base de datos
@@ -150,6 +165,25 @@ public class VerVehiculosController implements Initializable {
         
         //Muestra los vehiculos en la tabla
         tableVehiculos.setItems(FXCollections.observableArrayList(vehiculos));
+    }
+
+    @FXML
+    private void AñadirVehiculo(ActionEvent event) throws IOException {
+         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirVehiculo.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Añadir Vehiculo");
+        stage.setScene(new Scene(root));
+        stage.setResizable(false);
+
+        stage.show();
+
+        AnadirVehiculoController anadirVehiculo = (AnadirVehiculoController) fxmlLoader.getController();
+        anadirVehiculo.setSesion(sesion);
+        anadirVehiculo.setSession(session);
+        cargarVehiculos();
     }
     
      //Devuelve una lista en función del campo en el que desea buscar y el valor que busca
