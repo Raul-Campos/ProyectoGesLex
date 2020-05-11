@@ -64,7 +64,7 @@ public class MenuPrincipal2Controller implements Initializable {
         FXMLLoader fxmlLoaderClientes = new FXMLLoader(getClass().getResource("VerClientes.fxml"));
         BorderPane verClientes = fxmlLoaderClientes.load();
         VerClientesController controladorClientes = (VerClientesController) fxmlLoaderClientes.getController();
-        
+
         FXMLLoader fxmlLoaderLetrado = new FXMLLoader(getClass().getResource("VerLetrado.fxml"));
         BorderPane verLetrados = fxmlLoaderLetrado.load();
         VerLetradoController controladorLetrados = (VerLetradoController) fxmlLoaderLetrado.getController();
@@ -72,7 +72,7 @@ public class MenuPrincipal2Controller implements Initializable {
         FXMLLoader fxmlLoaderPeritos = new FXMLLoader(getClass().getResource("VerPerito.fxml"));
         BorderPane verPeritos = fxmlLoaderPeritos.load();
         VerPeritoController controladorPeritos = (VerPeritoController) fxmlLoaderPeritos.getController();
-        
+
         FXMLLoader fxmlLoaderProcuradores = new FXMLLoader(getClass().getResource("VerProcurador.fxml"));
         BorderPane verProcuradores = fxmlLoaderProcuradores.load();
         VerProcuradorController controladorProcuradoes = (VerProcuradorController) fxmlLoaderProcuradores.getController();
@@ -114,7 +114,34 @@ public class MenuPrincipal2Controller implements Initializable {
     }
 
     @FXML
-    private void VerExp(ActionEvent event) {
+    private void VerExp(ActionEvent event) throws IOException {
+
+        FXMLLoader fxmlLoaderExpedientes = new FXMLLoader(getClass().getResource("VerExpediente.fxml"));
+        BorderPane verExpedientes = fxmlLoaderExpedientes.load();
+        VerExpedienteController controladorExpedientes = (VerExpedienteController) fxmlLoaderExpedientes.getController();
+
+        controladorExpedientes.setSession(session);
+
+        principal.setCenter(verExpedientes);
+        actual = controladorExpedientes.getTabPanePrincipal();
+
+        escenario = (Stage) principal.getScene().getWindow();
+        BorderPane contenido = (BorderPane) principal.getCenter();
+        contenido.setPrefWidth((double) (escenario.getWidth() - btnBuscarClientes.getWidth()));
+        contenido.setPrefHeight((double) (escenario.heightProperty().doubleValue() - 50.0));
+        escenario.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                contenido.setPrefWidth((double) (escenario.getWidth() - btnBuscarClientes.getWidth()));
+            }
+        });
+
+        escenario.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                contenido.setPrefHeight((double) (escenario.heightProperty().doubleValue() - 50.0));
+            }
+        });
 
     }
 
@@ -137,7 +164,7 @@ public class MenuPrincipal2Controller implements Initializable {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("VerVehiculos.fxml"));
         BorderPane verVehiculos = fxmlLoader.load();
         VerVehiculosController controladorVehiculos = (VerVehiculosController) fxmlLoader.getController();
-        
+
         controladorVehiculos.setSession(session);
 
         //Crea pestaña para cargar vista de clientes
@@ -152,7 +179,7 @@ public class MenuPrincipal2Controller implements Initializable {
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         principal.setCenter(tabPane);
-        
+
         actual = tabPane;
 
         ajustarVista();

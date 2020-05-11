@@ -41,7 +41,7 @@
                <graphic>
                   <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../recursos/calendario.png" />
+                        <Image url="@../recursos/configuracion.png" />
                      </image>
                   </ImageView>
                </graphic>
