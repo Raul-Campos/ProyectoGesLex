@@ -7,6 +7,9 @@ package proyectogeslex;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -79,7 +82,7 @@ public class VerClientesController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
         //Enlaza las columnas con los campos de cliente
         dniColumn.setCellValueFactory(new PropertyValueFactory<>("dni"));
         nombreColumn.setCellValueFactory(new PropertyValueFactory<>("nombre"));
@@ -88,32 +91,57 @@ public class VerClientesController implements Initializable {
         sexoColumn.setCellValueFactory(new PropertyValueFactory<>("sexo"));
         sitLaboralColumn.setCellValueFactory(new PropertyValueFactory<>("situacionLaboral"));
         sitFamiliarColumn.setCellValueFactory(new PropertyValueFactory<>("situacionFamiliar"));
-        
+
         //Añade opciones
         cbColumna.getItems().addAll("DNI", "Nombre", "Apellidos", "Fecha de nacimiento", "Sexo", "Sit.Laboral", "Sit.Familiar");
-    }    
-
+    }
 
     @FXML
-    private void buscarCLiente(ActionEvent event) {
+    private void buscarCliente(ActionEvent event) throws ParseException {
+
+        //Comprueba si hay una opción seleccionada
+        if (cbColumna.getValue() != null) {
+
+            //Comprueba si se ha introducido un parámetro de busqueda
+            if (tfBusqueda.getText() != null) {
+                
+                List<Cliente> clientes = consultaCliente(cbColumna.getValue(), tfBusqueda.getText());
+                 
+                //Comprueba si encuentra datos relacionados con la búsqueda
+                if (!clientes.isEmpty()) {
+                    tableClientes.setItems(FXCollections.observableArrayList(clientes));
+                } else {
+                    Alert alertaBuqueda = new Alert(Alert.AlertType.INFORMATION);
+                    alertaBuqueda.setHeaderText("Error de búsqueda");
+                    alertaBuqueda.setContentText("No se ha podido encontrar datos relacionados con la búsqueda realizada.");
+                    alertaBuqueda.showAndWait();
+                }
+            }
+
+        } else {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+            alerta.setHeaderText("Opción no seleccionado");
+            alerta.setContentText("Porfavor seleccione un campo por el que desee realizar la búsqueda");
+            alerta.showAndWait();
+        }
     }
 
     @FXML
     private void borrarCliente(ActionEvent event) {
-        
+
         Cliente aBorrar = (Cliente) tableClientes.getSelectionModel().getSelectedItem();
-        
-        if(aBorrar != null){
-            
+
+        if (aBorrar != null) {
+
             //Elimina el cliente seleccionado
             Transaction tx = session.getTransaction();
-            
+
             tx.begin();
             session.delete(aBorrar);
             tx.commit();
-            
+
             cargarClientes();
-        }else{
+        } else {
             Alert alerta = new Alert(Alert.AlertType.INFORMATION);
             alerta.setHeaderText("Cliente no seleccionado");
             alerta.setContentText("Porfavor seleccione el cliente que desee eliminar");
@@ -129,13 +157,13 @@ public class VerClientesController implements Initializable {
     public void setSesion(SessionFactory sesion) {
         this.sesion = sesion;
     }
-    
-    private void cargarClientes(){
-        
+
+    private void cargarClientes() {
+
         //Busca todos los clientes en la base de datos
         Query consulta = session.createQuery("from Cliente");
         List<Cliente> clientes = consulta.list();
-        
+
         //Muestra los clientes en la tabla
         tableClientes.setItems(FXCollections.observableArrayList(clientes));
     }
@@ -150,12 +178,30 @@ public class VerClientesController implements Initializable {
         stage.setTitle("Añadir Clientes");
         stage.setScene(new Scene(root));
         stage.setResizable(false);
-        
+
         stage.show();
 
         AnadirClienteController anadirClientes = (AnadirClienteController) fxmlLoader.getController();
         anadirClientes.setSesion(sesion);
         anadirClientes.setSession(session);
         cargarClientes();
+    }
+    
+    //Devuelve una lista en función del campo en el que desea buscar y el valor que busca
+    private List<Cliente> consultaCliente(String campo, String valor) throws ParseException{
+        Query consulta;
+        
+        if(campo.equals("Fecha de nacimiento")){
+            campo = "fechaNacimiento";
+            Date fecha = new SimpleDateFormat("yyyy-MM-dd").parse(valor);
+            consulta = session.createQuery("from Cliente where "+campo+" = ?").setParameter(0, fecha);
+            return consulta.list();
+        }else if(campo.equals("Sit.Laboral"))
+            campo = "situacionLaboral";
+        else if(campo.equals("Sit.Familiar"))
+            campo = "situacionFamiliar";
+        
+        consulta = session.createQuery("from Cliente where "+campo+" = ?").setParameter(0, valor);
+        return consulta.list();
     }
 }

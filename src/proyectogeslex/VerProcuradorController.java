@@ -20,11 +20,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
-import map.Cliente;
 import map.Procurador;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 /**
@@ -105,6 +103,32 @@ public class VerProcuradorController implements Initializable {
 
     @FXML
     private void buscarProcurador(ActionEvent event) {
+        
+        //Comprueba si hay una opción seleccionada
+        if (cbColumna.getValue() != null) {
+
+            //Comprueba si se ha introducido un parámetro de busqueda
+            if (tfBusqueda.getText() != null) {
+                
+                List<Procurador> procuradores = consultaProcurador(cbColumna.getValue(), tfBusqueda.getText());
+                 
+                //Comprueba si encuentra datos relacionados con la búsqueda
+                if (!procuradores.isEmpty()) {
+                    tableProcurador.setItems(FXCollections.observableArrayList(procuradores));
+                } else {
+                    Alert alertaBuqueda = new Alert(Alert.AlertType.INFORMATION);
+                    alertaBuqueda.setHeaderText("Error de búsqueda");
+                    alertaBuqueda.setContentText("No se ha podido encontrar datos relacionados con la búsqueda realizada.");
+                    alertaBuqueda.showAndWait();
+                }
+            }
+
+        } else {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+            alerta.setHeaderText("Opción no seleccionado");
+            alerta.setContentText("Porfavor seleccione un campo por el que desee realizar la búsqueda");
+            alerta.showAndWait();
+        }
     }
     
     public void setSession(Session session) {
@@ -122,4 +146,22 @@ public class VerProcuradorController implements Initializable {
         tableProcurador.setItems(FXCollections.observableArrayList(procuradores));
     }
     
+    //Devuelve una lista en función del campo en el que desea buscar y el valor que busca
+    private List<Procurador> consultaProcurador(String campo, String valor){
+        Query consulta;
+        
+        if(campo.equals("DNI"))
+            campo = "dniProcurador";
+        else if(campo.equals("Dirección"))
+            campo = "direccion";
+        else if(campo.equals("Teléfono")){
+            campo = "telefono";
+            int tlf = Integer.valueOf(valor);
+            consulta = session.createQuery("from Procurador where "+campo+" = ?").setParameter(0, tlf);
+            return consulta.list();
+        }
+        
+        consulta = session.createQuery("from Procurador where "+campo+" = ?").setParameter(0, valor);
+        return consulta.list();
+    }
 }

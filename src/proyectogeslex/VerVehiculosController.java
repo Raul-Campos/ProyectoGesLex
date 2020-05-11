@@ -20,11 +20,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
-import map.Cliente;
 import map.Vehiculo;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 /**
@@ -89,6 +87,32 @@ public class VerVehiculosController implements Initializable {
 
     @FXML
     private void buscarVehiculo(ActionEvent event) {
+        
+        //Comprueba si hay una opción seleccionada
+        if (cbColumna.getValue() != null) {
+
+            //Comprueba si se ha introducido un parámetro de busqueda
+            if (tfBusqueda.getText() != null) {
+                
+                List<Vehiculo> vehiculos = consultaVehiculo(cbColumna.getValue(), tfBusqueda.getText());
+                 
+                //Comprueba si encuentra datos relacionados con la búsqueda
+                if (!vehiculos.isEmpty()) {
+                    tableVehiculos.setItems(FXCollections.observableArrayList(vehiculos));
+                } else {
+                    Alert alertaBuqueda = new Alert(Alert.AlertType.INFORMATION);
+                    alertaBuqueda.setHeaderText("Error de búsqueda");
+                    alertaBuqueda.setContentText("No se ha podido encontrar datos relacionados con la búsqueda realizada.");
+                    alertaBuqueda.showAndWait();
+                }
+            }
+
+        } else {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+            alerta.setHeaderText("Opción no seleccionado");
+            alerta.setContentText("Porfavor seleccione un campo por el que desee realizar la búsqueda");
+            alerta.showAndWait();
+        }
     }
 
     @FXML
@@ -126,6 +150,17 @@ public class VerVehiculosController implements Initializable {
         
         //Muestra los vehiculos en la tabla
         tableVehiculos.setItems(FXCollections.observableArrayList(vehiculos));
+    }
+    
+     //Devuelve una lista en función del campo en el que desea buscar y el valor que busca
+    private List<Vehiculo> consultaVehiculo(String campo, String valor){
+        if(campo.equals("Nº de bastidor"))
+            campo = "numeroBastidor";
+        else if(campo.equals("Nº de poliza"))
+            campo = "numeroPoliza";
+        
+        Query consulta = session.createQuery("from Vehiculo where "+campo+" = ?").setParameter(0, valor);
+        return consulta.list();
     }
     
 }

@@ -20,7 +20,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
-import map.Cliente;
 import map.Perito;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -86,6 +85,32 @@ public class VerPeritoController implements Initializable {
 
     @FXML
     private void buscarPerito(ActionEvent event) {
+        
+        //Comprueba si hay una opción seleccionada
+        if (cbColumna.getValue() != null) {
+
+            //Comprueba si se ha introducido un parámetro de busqueda
+            if (tfBusqueda.getText() != null) {
+                
+                List<Perito> peritos = consultaPeritos(cbColumna.getValue(), tfBusqueda.getText());
+                 
+                //Comprueba si encuentra datos relacionados con la búsqueda
+                if (!peritos.isEmpty()) {
+                    tablePeritos.setItems(FXCollections.observableArrayList(peritos));
+                } else {
+                    Alert alertaBuqueda = new Alert(Alert.AlertType.INFORMATION);
+                    alertaBuqueda.setHeaderText("Error de búsqueda");
+                    alertaBuqueda.setContentText("No se ha podido encontrar datos relacionados con la búsqueda realizada.");
+                    alertaBuqueda.showAndWait();
+                }
+            }
+
+        } else {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+            alerta.setHeaderText("Opción no seleccionado");
+            alerta.setContentText("Porfavor seleccione un campo por el que desee realizar la búsqueda");
+            alerta.showAndWait();
+        }
     }
 
     @FXML
@@ -124,5 +149,24 @@ public class VerPeritoController implements Initializable {
         
         //Muestra los peritos en la tabla
         tablePeritos.setItems(FXCollections.observableArrayList(peritos));
+    }
+    
+    //Devuelve una lista en función del campo en el que desea buscar y el valor que busca
+    private List<Perito> consultaPeritos(String campo, String valor){
+        Query consulta;
+        
+        if(campo.equals("DNI"))
+            campo = "dniPerito";
+        else if(campo.equals("Dirección"))
+            campo = "direccion";
+        else if(campo.equals("Teléfono")){
+            campo = "telefono";
+            int tlf = Integer.valueOf(valor);
+            consulta = session.createQuery("from Letrado where "+campo+" = ?").setParameter(0, tlf);
+            return consulta.list();
+        }
+        
+        consulta = session.createQuery("from Perito where "+campo+" = ?").setParameter(0, valor);
+        return consulta.list();
     }
 }

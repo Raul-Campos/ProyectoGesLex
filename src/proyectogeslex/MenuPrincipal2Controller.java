@@ -58,7 +58,7 @@ public class MenuPrincipal2Controller implements Initializable {
     }
 
     @FXML
-    private void BuscarCliente(ActionEvent event) throws IOException {
+    private void verActores(ActionEvent event) throws IOException {
 
         //Carga las vista y controlador
         FXMLLoader fxmlLoaderClientes = new FXMLLoader(getClass().getResource("VerClientes.fxml"));
@@ -195,6 +195,5 @@ public class MenuPrincipal2Controller implements Initializable {
                 }
             });
         }
-
     }
 }
