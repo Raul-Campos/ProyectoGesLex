@@ -11,7 +11,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="371.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectogeslex.AnadirProcuradorController">
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="600.0">
@@ -49,18 +48,18 @@
                      </GridPane.margin>
                   </Text>
                   <TextField fx:id="tfApellidos" GridPane.columnIndex="4" />
-                  <TextField fx:id="tfNombre" alignment="CENTER_RIGHT" GridPane.columnIndex="1" />
+                  <TextField fx:id="tfNombre" GridPane.columnIndex="1" />
                </children>
             </GridPane>
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="56.0" prefWidth="600.0">
          <children>
-            <GridPane prefHeight="43.0" prefWidth="557.0">
+            <GridPane prefHeight="56.0" prefWidth="552.0">
                <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="31.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="186.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="94.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="60.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="195.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="52.0" />
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="178.0" minWidth="10.0" prefWidth="56.0" />
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="283.0" minWidth="10.0" prefWidth="193.0" />
                </columnConstraints>
@@ -75,14 +74,14 @@
                      </GridPane.margin>
                   </Text>
                   <TextField fx:id="tfDireccion" GridPane.columnIndex="4" />
-                  <TextField fx:id="tfDni" alignment="CENTER" GridPane.columnIndex="1" />
+                  <TextField fx:id="tfDni" prefHeight="25.0" prefWidth="181.0" GridPane.columnIndex="1" />
                </children>
             </GridPane>
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="62.0" prefWidth="600.0">
          <children>
-            <GridPane prefHeight="43.0" prefWidth="557.0">
+            <GridPane prefHeight="62.0" prefWidth="550.0">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="118.0" />
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="168.0" />
@@ -101,7 +100,7 @@
                      </GridPane.margin>
                   </Text>
                   <TextField fx:id="tfEmail" GridPane.columnIndex="4" />
-                  <TextField fx:id="tfNumero" alignment="CENTER" prefHeight="25.0" prefWidth="181.0" GridPane.columnIndex="1" />
+                  <TextField fx:id="tfNumero" prefHeight="25.0" prefWidth="181.0" GridPane.columnIndex="1" />
                </children>
             </GridPane>
          </children>
@@ -120,13 +119,13 @@
                 <RowConstraints maxHeight="57.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="btnLimpiar" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Limpiar" textAlignment="RIGHT" GridPane.rowIndex="1">
+                  <Button fx:id="btnLimpiar" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#LimpiarProcurador" text="Limpiar" textAlignment="RIGHT" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets left="20.0" />
                      </GridPane.margin>
                   </Button>
-                  <Button fx:id="btnAceptar" mnemonicParsing="false" text="Aceptar" textAlignment="CENTER" textFill="#00b50c" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                  <Button fx:id="btnCancelar" mnemonicParsing="false" text="Cancelar" textFill="#ee0000" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <Button fx:id="btnAceptar" mnemonicParsing="false" onAction="#AceptarProcurador" text="Aceptar" textAlignment="CENTER" textFill="#00b50c" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#CancelarProcurador" text="Cancelar" textFill="#ee0000" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                </children>
             </GridPane>
          </children>

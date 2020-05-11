@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="401.0" prefWidth="635.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectogeslex.AñadirVehiculoController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="401.0" prefWidth="635.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectogeslex.AnadirVehiculoController">
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="600.0">
          <children>
@@ -48,7 +48,7 @@
                      </GridPane.margin>
                   </Text>
                   <TextField fx:id="tfExpediente" GridPane.columnIndex="4" />
-                  <TextField fx:id="tfMatricula" alignment="CENTER_RIGHT" GridPane.columnIndex="1" />
+                  <TextField fx:id="tfMatricula" GridPane.columnIndex="1" />
                </children>
             </GridPane>
          </children>
@@ -74,14 +74,14 @@
                      </GridPane.margin>
                   </Text>
                   <TextField fx:id="tfModelo" GridPane.columnIndex="4" />
-                  <TextField fx:id="tfMarca" alignment="CENTER_RIGHT" GridPane.columnIndex="1" />
+                  <TextField fx:id="tfMarca" GridPane.columnIndex="1" />
                </children>
             </GridPane>
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="62.0" prefWidth="600.0">
          <children>
-            <GridPane prefHeight="59.0" prefWidth="558.0">
+            <GridPane prefHeight="59.0" prefWidth="551.0">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="59.0" />
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="246.0" minWidth="10.0" prefWidth="199.0" />
@@ -93,14 +93,14 @@
                   <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Color" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Color" wrappingWidth="29.5703125" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nº de bastidor" GridPane.columnIndex="3">
                      <GridPane.margin>
                         <Insets />
                      </GridPane.margin>
                   </Text>
                   <TextField fx:id="tfBastidor" GridPane.columnIndex="4" />
-                  <TextField fx:id="tfColor" alignment="CENTER_RIGHT" GridPane.columnIndex="1" />
+                  <TextField fx:id="tfColor" GridPane.columnIndex="1" />
                </children>
             </GridPane>
          </children>
@@ -127,7 +127,7 @@
                      </GridPane.margin>
                   </Text>
                   <TextField fx:id="tfPoliza" prefHeight="25.0" prefWidth="198.0" GridPane.columnIndex="4" />
-                  <TextField fx:id="tfAseguradora" alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="200.0" GridPane.columnIndex="1" />
+                  <TextField fx:id="tfAseguradora" prefHeight="25.0" prefWidth="200.0" GridPane.columnIndex="1" />
                </children>
             </GridPane>
          </children>
@@ -145,13 +145,13 @@
                   <RowConstraints maxHeight="57.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Button fx:id="btnLimpiar" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Limpiar" textAlignment="RIGHT">
+                  <Button fx:id="btnLimpiar" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#LimpiarVehiculo" text="Limpiar" textAlignment="RIGHT">
                      <GridPane.margin>
                         <Insets left="20.0" />
                      </GridPane.margin>
                   </Button>
-                  <Button fx:id="btnAceptar" mnemonicParsing="false" onAction="#guardarVehiculo" text="Aceptar" textAlignment="CENTER" textFill="#00b50c" GridPane.columnIndex="2" />
-                  <Button fx:id="btnCancelar" mnemonicParsing="false" text="Cancelar" textFill="#ee0000" GridPane.columnIndex="3" />
+                  <Button fx:id="btnAceptar" mnemonicParsing="false" onAction="#AceptarVehiculo" text="Aceptar" textAlignment="CENTER" textFill="#00b50c" GridPane.columnIndex="2" />
+                  <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#CancelarVehiculo" text="Cancelar" textFill="#ee0000" GridPane.columnIndex="3" />
                </children>
             </GridPane>
          </children>

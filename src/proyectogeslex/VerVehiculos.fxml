@@ -14,6 +14,11 @@
    <bottom>
       <HBox fx:id="idbajo" alignment="CENTER_RIGHT" prefHeight="145.0" prefWidth="941.0" BorderPane.alignment="CENTER">
          <children>
+            <Button fx:id="btnAñadir" mnemonicParsing="false" onAction="#AñadirVehiculo" text="Añadir Vehiculo" textFill="#00a413">
+               <HBox.margin>
+                  <Insets right="30.0" />
+               </HBox.margin>
+            </Button>
             <Button fx:id="btnBorrar" mnemonicParsing="false" onAction="#borrarVehiculo" text="Borrar Vehículo" textFill="#f20000">
                <HBox.margin>
                   <Insets right="75.0" />

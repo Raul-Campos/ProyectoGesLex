@@ -13,7 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import map.Procurador;
+import map.Perito;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -23,7 +23,7 @@ import org.hibernate.Transaction;
  *
  * @author Jose Carlos PC
  */
-public class AnadirProcuradorController implements Initializable {
+public class AnadirPeritoController implements Initializable {
 
     @FXML
     private TextField tfApellidos;
@@ -32,11 +32,13 @@ public class AnadirProcuradorController implements Initializable {
     @FXML
     private TextField tfDireccion;
     @FXML
-    private TextField tfDni;
+    private TextField tfDNI;
+    @FXML
+    private TextField tfTelefono;
+    @FXML
+    private TextField tfProvincia;
     @FXML
     private TextField tfEmail;
-    @FXML
-    private TextField tfNumero;
     @FXML
     private Button btnLimpiar;
     @FXML
@@ -55,32 +57,32 @@ public class AnadirProcuradorController implements Initializable {
     }    
 
     @FXML
-    private void LimpiarProcurador(ActionEvent event) {
+    private void LimpiarPerito(ActionEvent event) {
         tfNombre.setText("");
         tfApellidos.setText("");
-        tfDni.setText("");
+        tfDNI.setText("");
         tfDireccion.setText("");
-        tfNumero.setText("");
+        tfProvincia.setText("");
+        tfTelefono.setText("");
         tfEmail.setText("");
-       
+        
     }
 
     @FXML
-    private void AceptarProcurador(ActionEvent event) {
-         Procurador procurador=new Procurador();
-        
-        procurador.setNombre(tfNombre.getText());
-        procurador.setApellidos(tfApellidos.getText());
-        procurador.setDniProcurador(tfDni.getText());
-        procurador.setDireccion(tfDireccion.getText());
-        procurador.setTelefono(Integer.parseInt(tfNumero.getText()));
-        procurador.setEmail(tfEmail.getText());
-       
+    private void AceptarPerito(ActionEvent event) {
+        Perito perito=new Perito();
+        perito.setNombre(tfNombre.getText());
+        perito.setApellidos(tfApellidos.getText());
+        perito.setDniPerito(tfDNI.getText());
+        perito.setDireccion(tfDireccion.getText());
+        perito.setProvincia(tfProvincia.getText());
+        perito.setTelefono(Integer.parseInt(tfTelefono.getText()));
+        perito.setEmail(tfEmail.getText());
         
          Transaction tx = session.getTransaction();
 
         tx.begin();
-        session.merge(procurador);
+        session.merge(perito);
         tx.commit();
 
         Stage stage = (Stage) btnAceptar.getScene().getWindow();
@@ -88,12 +90,12 @@ public class AnadirProcuradorController implements Initializable {
     }
 
     @FXML
-    private void CancelarProcurador(ActionEvent event) {
+    private void CancelarPerito(ActionEvent event) {
         Stage stage = (Stage) btnCancelar.getScene().getWindow();
         stage.close();
     }
     
-    public void setSession(Session session) {
+     public void setSession(Session session) {
         this.session = session;
 
     }
