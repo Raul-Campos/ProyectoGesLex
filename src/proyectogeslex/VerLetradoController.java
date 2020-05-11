@@ -201,26 +201,4 @@ public class VerLetradoController implements Initializable {
         cargarLetrado();
     }
 
-    @FXML
-    private void borrarLetrado(ActionEvent event) {
-        Letrado aBorrar = (Letrado) tableLetrados.getSelectionModel().getSelectedItem();
-
-        if (aBorrar != null) {
-
-            //Elimina el cliente seleccionado
-            Transaction tx = session.getTransaction();
-
-            tx.begin();
-            session.delete(aBorrar);
-            tx.commit();
-
-            cargarLetrado();
-        } else {
-            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
-            alerta.setHeaderText("Letrado no seleccionado");
-            alerta.setContentText("Porfavor seleccione el letrado que desee eliminar");
-            alerta.showAndWait();
-        }
-    }
-
 }
