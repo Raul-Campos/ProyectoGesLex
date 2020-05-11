@@ -26,7 +26,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import map.Cliente;
 import map.Letrado;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -94,7 +93,37 @@ public class VerLetradoController implements Initializable {
 
     @FXML
     private void buscarLetrado(ActionEvent event) {
+        
+        //Comprueba si hay una opción seleccionada
+        if (cbColumna.getValue() != null) {
 
+            //Comprueba si se ha introducido un parámetro de busqueda
+            if (tfBusqueda.getText() != null) {
+                
+                List<Letrado> letrados = consultaLetrados(cbColumna.getValue(), tfBusqueda.getText());
+                 
+                //Comprueba si encuentra datos relacionados con la búsqueda
+                if (!letrados.isEmpty()) {
+                    tableLetrados.setItems(FXCollections.observableArrayList(letrados));
+                } else {
+                    Alert alertaBuqueda = new Alert(Alert.AlertType.INFORMATION);
+                    alertaBuqueda.setHeaderText("Error de búsqueda");
+                    alertaBuqueda.setContentText("No se ha podido encontrar datos relacionados con la búsqueda realizada.");
+                    alertaBuqueda.showAndWait();
+                }
+            }
+
+        } else {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+            alerta.setHeaderText("Opción no seleccionado");
+            alerta.setContentText("Porfavor seleccione un campo por el que desee realizar la búsqueda");
+            alerta.showAndWait();
+        }
+    }
+
+    @FXML
+    private void borrarLetrado(ActionEvent event) {
+      
         Letrado LetradoABorrar = (Letrado) tableLetrados.getSelectionModel().getSelectedItem();
 
         if (LetradoABorrar != null) {
@@ -132,6 +161,25 @@ public class VerLetradoController implements Initializable {
 
         //Muestra los letrados en la tabla
         tableLetrados.setItems(FXCollections.observableArrayList(letrados));
+    }
+    
+    //Devuelve una lista en función del campo en el que desea buscar y el valor que busca
+    private List<Letrado> consultaLetrados(String campo, String valor){
+        Query consulta;
+        
+        if(campo.equals("DNI"))
+            campo = "dniLetrado";
+        else if(campo.equals("Dirección"))
+            campo = "direccion";
+        else if(campo.equals("Teléfono")){
+            campo = "telefono";
+            int tlf = Integer.valueOf(valor);
+            consulta = session.createQuery("from Letrado where "+campo+" = ?").setParameter(0, tlf);
+            return consulta.list();
+        }
+        
+        consulta = session.createQuery("from Letrado where "+campo+" = ?").setParameter(0, valor);
+        return consulta.list();
     }
 
     @FXML

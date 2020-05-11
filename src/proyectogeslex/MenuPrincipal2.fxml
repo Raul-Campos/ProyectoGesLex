@@ -10,7 +10,7 @@
    <left>
       <VBox BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btnBuscarClientes" contentDisplay="TOP" mnemonicParsing="false" onAction="#BuscarCliente" prefHeight="25.0" prefWidth="166.0">
+            <Button fx:id="btnBuscarClientes" contentDisplay="TOP" mnemonicParsing="false" onAction="#verActores" prefHeight="25.0" prefWidth="166.0">
                <graphic>
                   <ImageView fx:id="imagenPersonas" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
