@@ -115,7 +115,7 @@
                <content>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <TableView fx:id="tableDocumentos1" prefHeight="256.0" prefWidth="857.0">
+                        <TableView fx:id="tableSentencias" prefHeight="256.0" prefWidth="857.0">
                            <columns>
                               <TableColumn fx:id="columnSentTitulo" prefWidth="276.0" text="Título" />
                               <TableColumn fx:id="columnSentFecha" prefWidth="272.0" text="Fecha de publicación" />
@@ -143,7 +143,7 @@
                <content>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <TableView fx:id="tableDocumentos11" prefHeight="256.0" prefWidth="857.0">
+                        <TableView fx:id="tableAvisos" prefHeight="256.0" prefWidth="857.0">
                            <columns>
                               <TableColumn fx:id="columnAvisoID" prefWidth="92.0" text="ID del aviso" />
                               <TableColumn fx:id="columnAvisoFecha" minWidth="4.0" prefWidth="131.0" text="Fecha" />
@@ -172,7 +172,7 @@
                <content>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <TableView fx:id="tableDocumentos111" prefHeight="256.0" prefWidth="857.0">
+                        <TableView fx:id="tableHoja" prefHeight="256.0" prefWidth="857.0">
                            <columns>
                               <TableColumn fx:id="columnHojaCod" prefWidth="384.0" text="Código de expediente" />
                               <TableColumn fx:id="columnHojaEstado" prefWidth="462.0" text="Estado" />
