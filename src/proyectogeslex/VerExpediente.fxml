@@ -48,11 +48,10 @@
                                  <columns>
                                     <TableColumn fx:id="columnCodExpediente" prefWidth="137.0" text="Código de expediente" />
                                     <TableColumn fx:id="columnFechaCreacion" prefWidth="142.0" text="Fecha de creación" />
-                                    <TableColumn fx:id="columnFechaCierre" prefWidth="108.0" text="Fecha de cierre" />
-                                    <TableColumn fx:id="columnDNICliente" prefWidth="131.0" text="DNI del cliente" />
-                                    <TableColumn fx:id="columnDNILetrado" prefWidth="124.0" text="DNI del letrado" />
-                                    <TableColumn fx:id="columnDNIProcurador" prefWidth="126.0" text="DNI del procurador" />
-                                    <TableColumn prefWidth="172.0" text="Hoja de encargo" />
+                                    <TableColumn fx:id="columnFechaCierre" prefWidth="144.0" text="Fecha de cierre" />
+                                    <TableColumn fx:id="columnDNICliente" prefWidth="189.0" text="DNI del cliente" />
+                                    <TableColumn fx:id="columnDNILetrado" prefWidth="166.0" text="DNI del letrado" />
+                                    <TableColumn fx:id="columnDNIProcurador" prefWidth="152.0" text="DNI del procurador" />
                                  </columns>
                                  <HBox.margin>
                                     <Insets left="5.0" right="5.0" />
@@ -163,6 +162,33 @@
                                  </VBox.margin>
                               </Button>
                               <Button fx:id="btnEliminarAviso" mnemonicParsing="false" onAction="#eliminarAviso" text="Eliminar" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </content>
+            </Tab>
+            <Tab text="Hoja de encargo">
+               <content>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="tableDocumentos111" prefHeight="256.0" prefWidth="857.0">
+                           <columns>
+                              <TableColumn fx:id="columnHojaCod" prefWidth="384.0" text="Código de expediente" />
+                              <TableColumn fx:id="columnHojaEstado" prefWidth="462.0" text="Estado" />
+                           </columns>
+                           <HBox.margin>
+                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                           </HBox.margin>
+                        </TableView>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Button fx:id="btnAnadirHoja" mnemonicParsing="false" onAction="#anadirHoja" text=" Añadir ">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" />
+                                 </VBox.margin>
+                              </Button>
+                              <Button fx:id="btnEliminarHoja" mnemonicParsing="false" onAction="#eliminarHoja" text="Eliminar" />
                            </children>
                         </VBox>
                      </children>
