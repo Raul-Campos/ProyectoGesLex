@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import map.Vehiculo;
@@ -50,6 +51,8 @@ public class AnadirVehiculoController implements Initializable {
     
      private Session session;
     private SessionFactory sesion;
+    @FXML
+    private ChoiceBox<String> cbRol;
 
     /**
      * Initializes the controller class.
@@ -57,6 +60,7 @@ public class AnadirVehiculoController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        cbRol.getItems().addAll("Cliente","Implicado/a");
     }    
 
     @FXML
@@ -84,6 +88,7 @@ public class AnadirVehiculoController implements Initializable {
         vehiculo.setNumeroBastidor(tfBastidor.getText());
         vehiculo.setAseguradora(tfAseguradora.getText());
         vehiculo.setNumeroPoliza(tfPoliza.getText());
+        vehiculo.setRol(cbRol.getValue());
         
           Transaction tx = session.getTransaction();
 
