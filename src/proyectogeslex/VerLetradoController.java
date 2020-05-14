@@ -7,6 +7,7 @@ package proyectogeslex;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -93,15 +94,15 @@ public class VerLetradoController implements Initializable {
 
     @FXML
     private void buscarLetrado(ActionEvent event) {
-        
+
         //Comprueba si hay una opción seleccionada
         if (cbColumna.getValue() != null) {
 
             //Comprueba si se ha introducido un parámetro de busqueda
             if (tfBusqueda.getText() != null) {
-                
+
                 List<Letrado> letrados = consultaLetrados(cbColumna.getValue(), tfBusqueda.getText());
-                 
+
                 //Comprueba si encuentra datos relacionados con la búsqueda
                 if (!letrados.isEmpty()) {
                     tableLetrados.setItems(FXCollections.observableArrayList(letrados));
@@ -123,7 +124,7 @@ public class VerLetradoController implements Initializable {
 
     @FXML
     private void borrarLetrado(ActionEvent event) {
-      
+
         Letrado LetradoABorrar = (Letrado) tableLetrados.getSelectionModel().getSelectedItem();
 
         if (LetradoABorrar != null) {
@@ -162,23 +163,35 @@ public class VerLetradoController implements Initializable {
         //Muestra los letrados en la tabla
         tableLetrados.setItems(FXCollections.observableArrayList(letrados));
     }
-    
+
     //Devuelve una lista en función del campo en el que desea buscar y el valor que busca
-    private List<Letrado> consultaLetrados(String campo, String valor){
+    private List<Letrado> consultaLetrados(String campo, String valor) {
         Query consulta;
-        
-        if(campo.equals("DNI"))
+
+        if (campo.equals("DNI")) {
             campo = "dniLetrado";
-        else if(campo.equals("Dirección"))
+        } else if (campo.equals("Dirección")) {
             campo = "direccion";
-        else if(campo.equals("Teléfono")){
+        } else if (campo.equals("Teléfono")) {
             campo = "telefono";
-            int tlf = Integer.valueOf(valor);
-            consulta = session.createQuery("from Letrado where "+campo+" = ?").setParameter(0, tlf);
-            return consulta.list();
+
+            try {
+                int tlf = Integer.valueOf(valor);
+                consulta = session.createQuery("from Letrado where " + campo + " = ?").setParameter(0, tlf);
+                return consulta.list();
+            } catch (NumberFormatException ex) {
+
+                //error al introducir valor numérico
+                Alert codigoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                codigoAlerta.setHeaderText("Error al buscar código");
+                codigoAlerta.setContentText("El valor introducido debe de ser númerico, porfavor vulve a intentarlo.");
+                codigoAlerta.showAndWait();
+
+                return new ArrayList<>();
+            }
         }
-        
-        consulta = session.createQuery("from Letrado where "+campo+" = ?").setParameter(0, valor);
+
+        consulta = session.createQuery("from Letrado where " + campo + " = ?").setParameter(0, valor);
         return consulta.list();
     }
 

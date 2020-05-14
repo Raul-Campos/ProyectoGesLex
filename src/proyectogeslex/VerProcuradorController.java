@@ -7,6 +7,7 @@ package proyectogeslex;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -65,9 +66,9 @@ public class VerProcuradorController implements Initializable {
     private TableColumn<Procurador, String> columnTelefono;
     @FXML
     private TableColumn<Procurador, String> columnEmail;
-    
+
     private Session session;
-        private SessionFactory sesion;
+    private SessionFactory sesion;
 
     @FXML
     private Button btnAñadir;
@@ -77,7 +78,7 @@ public class VerProcuradorController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
         //Enlaza las columnas con los campos de procuradores
         columnDNI.setCellValueFactory(new PropertyValueFactory<>("dniProcurador"));
         columnNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
@@ -85,27 +86,27 @@ public class VerProcuradorController implements Initializable {
         columnDireccion.setCellValueFactory(new PropertyValueFactory<>("direccion"));
         columnTelefono.setCellValueFactory(new PropertyValueFactory<>("telefono"));
         columnEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-        
+
         //Añade opciones
-        cbColumna.getItems().addAll("DNI" , "Nombre", "Apellidos", "Dirección", "Teléfono", "Email");
+        cbColumna.getItems().addAll("DNI", "Nombre", "Apellidos", "Dirección", "Teléfono", "Email");
     }
-    
+
     @FXML
     private void borrarProcurador(ActionEvent event) {
-        
+
         Procurador procuradorABorrar = (Procurador) tableProcurador.getSelectionModel().getSelectedItem();
-        
-        if(procuradorABorrar != null){
-            
+
+        if (procuradorABorrar != null) {
+
             //Elimina el procurador seleccionado
             Transaction tx = session.getTransaction();
-            
+
             tx.begin();
             session.delete(procuradorABorrar);
             tx.commit();
-            
+
             cargarProcuradores();
-        }else{
+        } else {
             Alert alerta = new Alert(Alert.AlertType.INFORMATION);
             alerta.setHeaderText("Procurador no seleccionado");
             alerta.setContentText("Porfavor seleccione el procurador que desee eliminar");
@@ -115,15 +116,15 @@ public class VerProcuradorController implements Initializable {
 
     @FXML
     private void buscarProcurador(ActionEvent event) {
-        
+
         //Comprueba si hay una opción seleccionada
         if (cbColumna.getValue() != null) {
 
             //Comprueba si se ha introducido un parámetro de busqueda
             if (tfBusqueda.getText() != null) {
-                
+
                 List<Procurador> procuradores = consultaProcurador(cbColumna.getValue(), tfBusqueda.getText());
-                 
+
                 //Comprueba si encuentra datos relacionados con la búsqueda
                 if (!procuradores.isEmpty()) {
                     tableProcurador.setItems(FXCollections.observableArrayList(procuradores));
@@ -142,28 +143,29 @@ public class VerProcuradorController implements Initializable {
             alerta.showAndWait();
         }
     }
-    
+
     public void setSession(Session session) {
         this.session = session;
         cargarProcuradores();
     }
-     public void setSesion(SessionFactory sesion) {
+
+    public void setSesion(SessionFactory sesion) {
         this.sesion = sesion;
     }
-    
-    private void cargarProcuradores(){
-        
+
+    private void cargarProcuradores() {
+
         //Busca todos los procuradores en la base de datos
         Query consulta = session.createQuery("from Procurador");
         List<Procurador> procuradores = consulta.list();
-        
+
         //Muestra los procuradores en la tabla
         tableProcurador.setItems(FXCollections.observableArrayList(procuradores));
     }
 
     @FXML
     private void añadirProcurador(ActionEvent event) throws IOException {
-         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirProcurador.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirProcurador.fxml"));
         Parent root = (Parent) fxmlLoader.load();
         Stage stage = new Stage();
 
@@ -179,23 +181,35 @@ public class VerProcuradorController implements Initializable {
         anadirProcurador.setSession(session);
         cargarProcuradores();
     }
-    
+
     //Devuelve una lista en función del campo en el que desea buscar y el valor que busca
-    private List<Procurador> consultaProcurador(String campo, String valor){
+    private List<Procurador> consultaProcurador(String campo, String valor) {
         Query consulta;
-        
-        if(campo.equals("DNI"))
+
+        if (campo.equals("DNI")) {
             campo = "dniProcurador";
-        else if(campo.equals("Dirección"))
+        } else if (campo.equals("Dirección")) {
             campo = "direccion";
-        else if(campo.equals("Teléfono")){
+        } else if (campo.equals("Teléfono")) {
             campo = "telefono";
-            int tlf = Integer.valueOf(valor);
-            consulta = session.createQuery("from Procurador where "+campo+" = ?").setParameter(0, tlf);
-            return consulta.list();
+
+            try {
+                int tlf = Integer.valueOf(valor);
+                consulta = session.createQuery("from Letrado where " + campo + " = ?").setParameter(0, tlf);
+                return consulta.list();
+            } catch (NumberFormatException ex) {
+
+                //error al introducir valor numérico
+                Alert codigoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                codigoAlerta.setHeaderText("Error al buscar código");
+                codigoAlerta.setContentText("El valor introducido debe de ser númerico, porfavor vulve a intentarlo.");
+                codigoAlerta.showAndWait();
+
+                return new ArrayList<>();
+            }
         }
-        
-        consulta = session.createQuery("from Procurador where "+campo+" = ?").setParameter(0, valor);
+
+        consulta = session.createQuery("from Procurador where " + campo + " = ?").setParameter(0, valor);
         return consulta.list();
     }
 }

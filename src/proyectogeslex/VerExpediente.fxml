@@ -44,7 +44,7 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="309.0" prefWidth="941.0">
                            <children>
-                              <TableView fx:id="tableExpedientes" prefHeight="303.0" prefWidth="959.0">
+                              <TableView fx:id="tableExpedientes" onMouseClicked="#expedienteSeleccionado" prefHeight="303.0" prefWidth="959.0">
                                  <columns>
                                     <TableColumn fx:id="columnCodExpediente" prefWidth="137.0" text="Código de expediente" />
                                     <TableColumn fx:id="columnFechaCreacion" prefWidth="142.0" text="Fecha de creación" />
@@ -81,7 +81,7 @@
       </TabPane>
    </center>
    <bottom>
-      <TabPane fx:id="tabPaneAsociado" prefHeight="285.0" prefWidth="941.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+      <TabPane fx:id="tabPaneAsociado" prefHeight="285.0" prefWidth="917.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
           <Tab text="Documentos">
                <content>
@@ -196,6 +196,9 @@
                </content>
             </Tab>
         </tabs>
+         <BorderPane.margin>
+            <Insets left="10.0" right="25.0" />
+         </BorderPane.margin>
       </TabPane>
    </bottom>
 </BorderPane>

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -31,6 +32,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import map.Cliente;
+import map.Expediente;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -95,9 +97,7 @@ public class VerClientesController implements Initializable {
         //Añade opciones
         cbColumna.getItems().addAll("DNI", "Nombre", "Apellidos", "Fecha de nacimiento", "Sexo", "Sit.Laboral", "Sit.Familiar");
 
-       
-    }    
-
+    }
 
     @FXML
     private void buscarCliente(ActionEvent event) throws ParseException {
@@ -107,9 +107,9 @@ public class VerClientesController implements Initializable {
 
             //Comprueba si se ha introducido un parámetro de busqueda
             if (tfBusqueda.getText() != null) {
-                
+
                 List<Cliente> clientes = consultaCliente(cbColumna.getValue(), tfBusqueda.getText());
-                 
+
                 //Comprueba si encuentra datos relacionados con la búsqueda
                 if (!clientes.isEmpty()) {
                     tableClientes.setItems(FXCollections.observableArrayList(clientes));
@@ -189,22 +189,35 @@ public class VerClientesController implements Initializable {
         anadirClientes.setSession(session);
         cargarClientes();
     }
-    
+
     //Devuelve una lista en función del campo en el que desea buscar y el valor que busca
-    private List<Cliente> consultaCliente(String campo, String valor) throws ParseException{
+    private List<Cliente> consultaCliente(String campo, String valor) throws ParseException {
         Query consulta;
-        
-        if(campo.equals("Fecha de nacimiento")){
+
+        if (campo.equals("Fecha de nacimiento")) {
             campo = "fechaNacimiento";
-            Date fecha = new SimpleDateFormat("yyyy-MM-dd").parse(valor);
-            consulta = session.createQuery("from Cliente where "+campo+" = ?").setParameter(0, fecha);
-            return consulta.list();
-        }else if(campo.equals("Sit.Laboral"))
+
+            try {
+                Date fecha = new SimpleDateFormat("yyyy-MM-dd").parse(valor);
+                consulta = session.createQuery("from Cliente where " + campo + " = ?").setParameter(0, fecha);
+                return consulta.list();
+            } catch (ParseException ex) {
+
+                //Error al introducir la fecha
+                Alert fechaAlerta = new Alert(Alert.AlertType.INFORMATION);
+                fechaAlerta.setHeaderText("Error al buscar fecha");
+                fechaAlerta.setContentText("El texto introducido no corresponde al formato de una fecha, porfavor vuelva a intentarlo.");
+                fechaAlerta.showAndWait();
+
+                return new ArrayList<>();
+            }
+        } else if (campo.equals("Sit.Laboral")) {
             campo = "situacionLaboral";
-        else if(campo.equals("Sit.Familiar"))
+        } else if (campo.equals("Sit.Familiar")) {
             campo = "situacionFamiliar";
-        
-        consulta = session.createQuery("from Cliente where "+campo+" = ?").setParameter(0, valor);
+        }
+
+        consulta = session.createQuery("from Cliente where " + campo + " = ?").setParameter(0, valor);
         return consulta.list();
     }
 }

@@ -5,7 +5,12 @@
  */
 package proyectogeslex;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,6 +20,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,11 +33,15 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import map.Cliente;
+import map.Documento;
+import map.DocumentoId;
 import map.Expediente;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 /**
  * FXML Controller class
@@ -43,15 +53,15 @@ public class VerExpedienteController implements Initializable {
     @FXML
     private TabPane tabPaneAsociado;
     @FXML
-    private TableView<?> tableDocumentos;
+    private TableView<Documento> tableDocumentos;
     @FXML
-    private TableColumn<?, ?> columnDocNombre;
+    private TableColumn<Documento, String> columnDocNombre;
     @FXML
-    private TableColumn<?, ?> columnDocFecha;
+    private TableColumn<Documento, String> columnDocFecha;
     @FXML
-    private TableColumn<?, ?> columnDocAportador;
+    private TableColumn<Documento, String> columnDocAportador;
     @FXML
-    private TableColumn<?, ?> columnDocDescrip;
+    private TableColumn<Documento, String> columnDocDescrip;
     @FXML
     private Button btnAnadirDoc;
     @FXML
@@ -135,14 +145,56 @@ public class VerExpedienteController implements Initializable {
         columnDNIProcurador.setCellValueFactory(new PropertyValueFactory<>("procurador"));
 
         cbColumna.getItems().addAll("Código", "Fecha de creación", "Fecha de cierre", "Cliente", "Letrado", "Procurador");
+
+        //Tabla de documentos
+        columnDocNombre.setCellValueFactory(new PropertyValueFactory<>("id"));
+        columnDocFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
+        columnDocDescrip.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
+        columnDocAportador.setCellValueFactory(new PropertyValueFactory<>("aportadoPor"));
+
+        //Quita el color gris del header al tabpane asociado al principal
+        tabPaneAsociado.getStyleClass().add("floating");
     }
 
     @FXML
-    private void anadirDocumento(ActionEvent event) {
+    private void anadirDocumento(ActionEvent event) throws IOException {
+        /*DocumentoId id = new DocumentoId();
+        id.setNombre("Prueba");
+        Documento doc = new Documento();
+        doc.setId(id);
+        doc.setAportadoPor("Raúl");
+        Expediente expediente = (Expediente) session.createQuery("from Expediente where codigo = 2").uniqueResult();
+        id.setCodExpediente(expediente.getCodigo());
+        doc.setExpediente(expediente);
+        doc.setFecha(new Date());
+        doc.setDescripcion("Prueba de descripción");
+        File file = new File("C:\\Users\\Raul\\Documents\\prueba.pdf");
+        byte[] pdf = Files.readAllBytes(file.toPath());
+        doc.setPdf(pdf);
+
+        Transaction tx = session.getTransaction();
+        tx.begin();
+        session.save(doc);
+        tx.commit();*/
+
     }
 
     @FXML
     private void eliminarDoc(ActionEvent event) {
+
+        Documento documentoABorrar = tableDocumentos.getSelectionModel().getSelectedItem();
+
+        if (documentoABorrar != null) {
+            Transaction tx = session.getTransaction();
+            tx.begin();
+            session.delete(documentoABorrar);
+            tx.commit();
+        } else {
+            Alert alertaBorrarDoc = new Alert(Alert.AlertType.INFORMATION);
+            alertaBorrarDoc.setHeaderText("Documento no seleccionado");
+            alertaBorrarDoc.setContentText("Porfavor seleccione el documento que desee eliminar");
+            alertaBorrarDoc.showAndWait();
+        }
     }
 
     @FXML
@@ -248,12 +300,12 @@ public class VerExpedienteController implements Initializable {
                 fechaAlerta.showAndWait();
             }
 
-        }else if (campo.equals("Código")){
-            try{
+        } else if (campo.equals("Código")) {
+            try {
                 consulta = session.createQuery("from Expediente where codigo = ?").setParameter(0, Integer.valueOf(valor));
                 return consulta.list();
-            }catch(NumberFormatException ex){
-                
+            } catch (NumberFormatException ex) {
+
                 //error al introducir valor numérico
                 Alert codigoAlerta = new Alert(Alert.AlertType.INFORMATION);
                 codigoAlerta.setHeaderText("Error al buscar código");
@@ -270,17 +322,41 @@ public class VerExpedienteController implements Initializable {
             consulta = session.createQuery("select e from Expediente e JOIN e.letrado l where l.dniLetrado  = ?").setParameter(0, valor);
             return consulta.list();
         }
-        
+
         return new ArrayList<Expediente>();
     }
 
     private void cargarExpedientes() {
 
-        //Busca todos los clientes en la base de datos
+        //Busca todos los expedientes en la base de datos
         Query consulta = session.createQuery("from Expediente");
         List<Expediente> expedientes = consulta.list();
 
         //Muestra los clientes en la tabla
         tableExpedientes.setItems(FXCollections.observableArrayList(expedientes));
+    }
+
+    private void verDatosAscoiados() {
+
+    }
+
+    //Al hacer click sobre un expediente de la tabla muestra en la parte inferior
+    //todos los documentos, sentencias, etc, asociados a él
+    @FXML
+    private void expedienteSeleccionado(MouseEvent event) throws FileNotFoundException, IOException {
+
+        Expediente expediente = tableExpedientes.getSelectionModel().getSelectedItem();
+
+        //Trae todos los documentos del expediente seleccionado
+        Query consulta = session.createQuery("select d from Documento d JOIN "
+                + "d.expediente e where e.codigo = ?").setParameter(0, expediente.getCodigo());
+        List<Documento> documentos = consulta.list();
+
+        tableDocumentos.setItems(FXCollections.observableArrayList(documentos));
+        //columnDocDescrip.setCellValueFactory(v -> new SimpleStringProperty("hdfkjdskjflksd"));
+        /*File file = new File("prueba.pdf");
+        FileOutputStream os = new FileOutputStream(file);
+        os.write(documentos.get(0).getPdf());
+        os.close();*/
     }
 }

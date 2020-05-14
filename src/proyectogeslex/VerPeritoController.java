@@ -7,6 +7,7 @@ package proyectogeslex;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -68,7 +69,7 @@ public class VerPeritoController implements Initializable {
     private TableColumn<Perito, String> columnDNI;
     @FXML
     private TableColumn<Perito, String> columnProvincia;
-    
+
     private SessionFactory sesion;
     private Session session;
     @FXML
@@ -79,7 +80,7 @@ public class VerPeritoController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
         //Enlaza las columnas con los campos de letrado
         columnDNI.setCellValueFactory(new PropertyValueFactory<>("dniPerito"));
         columnNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
@@ -88,24 +89,22 @@ public class VerPeritoController implements Initializable {
         columnDireccion.setCellValueFactory(new PropertyValueFactory<>("direccion"));
         columnTelefono.setCellValueFactory(new PropertyValueFactory<>("telefono"));
         columnEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-        
-        cbColumna.getItems().addAll("DNI", "Nombre", "Apellidos", "Provincia", 
+
+        cbColumna.getItems().addAll("DNI", "Nombre", "Apellidos", "Provincia",
                 "Dirección", "Teléfono", "Email");
-    }    
-
-
+    }
 
     @FXML
     private void buscarPerito(ActionEvent event) {
-        
+
         //Comprueba si hay una opción seleccionada
         if (cbColumna.getValue() != null) {
 
             //Comprueba si se ha introducido un parámetro de busqueda
             if (tfBusqueda.getText() != null) {
-                
+
                 List<Perito> peritos = consultaPeritos(cbColumna.getValue(), tfBusqueda.getText());
-                 
+
                 //Comprueba si encuentra datos relacionados con la búsqueda
                 if (!peritos.isEmpty()) {
                     tablePeritos.setItems(FXCollections.observableArrayList(peritos));
@@ -127,20 +126,20 @@ public class VerPeritoController implements Initializable {
 
     @FXML
     private void borrarPerito(ActionEvent event) {
-        
+
         Perito peritoABorrar = (Perito) tablePeritos.getSelectionModel().getSelectedItem();
-        
-        if(peritoABorrar != null){
-            
+
+        if (peritoABorrar != null) {
+
             //Elimina el perito seleccionado
             Transaction tx = session.getTransaction();
-            
+
             tx.begin();
             session.delete(peritoABorrar);
             tx.commit();
-            
+
             cargarPeritos();
-        }else{
+        } else {
             Alert alerta = new Alert(Alert.AlertType.INFORMATION);
             alerta.setHeaderText("Perito no seleccionado");
             alerta.setContentText("Porfavor seleccione el perito que desee eliminar");
@@ -152,33 +151,45 @@ public class VerPeritoController implements Initializable {
         this.session = session;
         cargarPeritos();
     }
-    
-    private void cargarPeritos(){
-        
+
+    private void cargarPeritos() {
+
         //Busca todos los peritos en la base de datos
         Query consulta = session.createQuery("from Perito");
         List<Perito> peritos = consulta.list();
-        
+
         //Muestra los peritos en la tabla
         tablePeritos.setItems(FXCollections.observableArrayList(peritos));
     }
-    
+
     //Devuelve una lista en función del campo en el que desea buscar y el valor que busca
-    private List<Perito> consultaPeritos(String campo, String valor){
+    private List<Perito> consultaPeritos(String campo, String valor) {
         Query consulta;
-        
-        if(campo.equals("DNI"))
+
+        if (campo.equals("DNI")) {
             campo = "dniPerito";
-        else if(campo.equals("Dirección"))
+        } else if (campo.equals("Dirección")) {
             campo = "direccion";
-        else if(campo.equals("Teléfono")){
+        } else if (campo.equals("Teléfono")) {
             campo = "telefono";
-            int tlf = Integer.valueOf(valor);
-            consulta = session.createQuery("from Letrado where "+campo+" = ?").setParameter(0, tlf);
-            return consulta.list();
+
+            try {
+                int tlf = Integer.valueOf(valor);
+                consulta = session.createQuery("from Letrado where " + campo + " = ?").setParameter(0, tlf);
+                return consulta.list();
+            } catch (NumberFormatException ex) {
+
+                //error al introducir valor numérico
+                Alert codigoAlerta = new Alert(Alert.AlertType.INFORMATION);
+                codigoAlerta.setHeaderText("Error al buscar código");
+                codigoAlerta.setContentText("El valor introducido debe de ser númerico, porfavor vulve a intentarlo.");
+                codigoAlerta.showAndWait();
+
+                return new ArrayList<>();
+            }
         }
-        
-        consulta = session.createQuery("from Perito where "+campo+" = ?").setParameter(0, valor);
+
+        consulta = session.createQuery("from Perito where " + campo + " = ?").setParameter(0, valor);
         return consulta.list();
     }
 
@@ -192,7 +203,7 @@ public class VerPeritoController implements Initializable {
         stage.setTitle("Añadir Perito");
         stage.setScene(new Scene(root));
         stage.setResizable(false);
-        
+
         stage.show();
 
         AnadirPeritoController anadirPerito = (AnadirPeritoController) fxmlLoader.getController();
@@ -200,7 +211,7 @@ public class VerPeritoController implements Initializable {
         anadirPerito.setSession(session);
         cargarPeritos();
     }
-    
+
     public void setSesion(SessionFactory sesion) {
         this.sesion = sesion;
     }
