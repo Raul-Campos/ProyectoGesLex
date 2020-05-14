@@ -24,7 +24,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -35,6 +38,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import map.Cliente;
 import map.Documento;
 import map.DocumentoId;
@@ -131,6 +136,7 @@ public class VerExpedienteController implements Initializable {
     private Button btnAnadirHoja;
     @FXML
     private Button btnEliminarHoja;
+    private Expediente expedienteSeleccionado;
 
     /**
      * Initializes the controller class.
@@ -158,24 +164,36 @@ public class VerExpedienteController implements Initializable {
 
     @FXML
     private void anadirDocumento(ActionEvent event) throws IOException {
-        /*DocumentoId id = new DocumentoId();
-        id.setNombre("Prueba");
-        Documento doc = new Documento();
-        doc.setId(id);
-        doc.setAportadoPor("Raúl");
-        Expediente expediente = (Expediente) session.createQuery("from Expediente where codigo = 2").uniqueResult();
-        id.setCodExpediente(expediente.getCodigo());
-        doc.setExpediente(expediente);
-        doc.setFecha(new Date());
-        doc.setDescripcion("Prueba de descripción");
-        File file = new File("C:\\Users\\Raul\\Documents\\prueba.pdf");
-        byte[] pdf = Files.readAllBytes(file.toPath());
-        doc.setPdf(pdf);
+        Expediente seleccionado = tableExpedientes.getSelectionModel().getSelectedItem();
 
-        Transaction tx = session.getTransaction();
-        tx.begin();
-        session.save(doc);
-        tx.commit();*/
+        if (seleccionado != null) {
+
+            //Abre ventana modal para añadir un documento al expediente seleccionado
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirDocumento.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            AnadirDocumentoController documentoController = (AnadirDocumentoController) fxmlLoader.getController();
+            documentoController.setSession(session);
+            documentoController.setCodigoExpediente(seleccionado.getCodigo());
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Añadir documentos");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.show();
+
+            stage.setOnCloseRequest(e -> {
+                cargarDocumentos(expedienteSeleccionado);
+            });
+
+        } else {
+
+            //Si no selecciona ningúno
+            Alert alertaNuevoDoc = new Alert(Alert.AlertType.INFORMATION);
+            alertaNuevoDoc.setHeaderText("Expediente no seleccionado");
+            alertaNuevoDoc.setContentText("Porfavor seleccione un expediente para añadir un documento a ese expediente.");
+            alertaNuevoDoc.showAndWait();
+        }
 
     }
 
@@ -336,16 +354,22 @@ public class VerExpedienteController implements Initializable {
         tableExpedientes.setItems(FXCollections.observableArrayList(expedientes));
     }
 
-    private void verDatosAscoiados() {
-
-    }
-
     //Al hacer click sobre un expediente de la tabla muestra en la parte inferior
     //todos los documentos, sentencias, etc, asociados a él
     @FXML
-    private void expedienteSeleccionado(MouseEvent event) throws FileNotFoundException, IOException {
+    private void expedienteSeleccionado(MouseEvent event) {
 
-        Expediente expediente = tableExpedientes.getSelectionModel().getSelectedItem();
+        expedienteSeleccionado = tableExpedientes.getSelectionModel().getSelectedItem();
+        cargarDocumentos(expedienteSeleccionado);
+
+        //columnDocDescrip.setCellValueFactory(v -> new SimpleStringProperty("hdfkjdskjflksd"));
+        /*File file = new File("prueba.pdf");
+        FileOutputStream os = new FileOutputStream(file);
+        os.write(documentos.get(0).getPdf());
+        os.close();*/
+    }
+
+    private void cargarDocumentos(Expediente expediente) {
 
         //Trae todos los documentos del expediente seleccionado
         Query consulta = session.createQuery("select d from Documento d JOIN "
@@ -353,10 +377,5 @@ public class VerExpedienteController implements Initializable {
         List<Documento> documentos = consulta.list();
 
         tableDocumentos.setItems(FXCollections.observableArrayList(documentos));
-        //columnDocDescrip.setCellValueFactory(v -> new SimpleStringProperty("hdfkjdskjflksd"));
-        /*File file = new File("prueba.pdf");
-        FileOutputStream os = new FileOutputStream(file);
-        os.write(documentos.get(0).getPdf());
-        os.close();*/
     }
 }
