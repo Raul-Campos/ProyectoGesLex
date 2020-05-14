@@ -81,8 +81,11 @@ public class MenuPrincipal2Controller implements Initializable {
         controladorClientes.setSesion(sesion);
         controladorClientes.setSession(session);
         controladorProcuradoes.setSession(session);
+        controladorProcuradoes.setSesion(sesion);
         controladorLetrados.setSession(session);
-        controladorPeritos.setSession(session);
+        controladorLetrados.setSesion(sesion);
+       controladorPeritos.setSession(session);
+       controladorPeritos.setSesion(sesion);
 
         //Crea pestañas para cargar vista de actores
         TabPane tabPane = new TabPane();
@@ -121,6 +124,7 @@ public class MenuPrincipal2Controller implements Initializable {
         VerExpedienteController controladorExpedientes = (VerExpedienteController) fxmlLoaderExpedientes.getController();
 
         controladorExpedientes.setSession(session);
+        controladorExpedientes.setSesion(sesion);
 
         principal.setCenter(verExpedientes);
         actual = controladorExpedientes.getTabPanePrincipal();
@@ -129,18 +133,12 @@ public class MenuPrincipal2Controller implements Initializable {
         BorderPane contenido = (BorderPane) principal.getCenter();
         contenido.setPrefWidth((double) (escenario.getWidth() - btnBuscarClientes.getWidth()));
         contenido.setPrefHeight((double) (escenario.heightProperty().doubleValue() - 50.0));
-        escenario.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                contenido.setPrefWidth((double) (escenario.getWidth() - btnBuscarClientes.getWidth()));
-            }
+        escenario.widthProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+            contenido.setPrefWidth((double) (escenario.getWidth() - btnBuscarClientes.getWidth()));
         });
 
-        escenario.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                contenido.setPrefHeight((double) (escenario.heightProperty().doubleValue() - 50.0));
-            }
+        escenario.heightProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+            contenido.setPrefHeight((double) (escenario.heightProperty().doubleValue() - 50.0));
         });
 
     }

@@ -5,11 +5,16 @@
  */
 package proyectogeslex;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TabPane;
@@ -17,7 +22,14 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import map.Cliente;
+import map.Letrado;
+import map.Procurador;
+import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 /**
  * FXML Controller class
@@ -97,6 +109,18 @@ public class VerExpedienteController implements Initializable {
     @FXML
     private Button btnBorrar;
     private Session session;
+        private SessionFactory sesion;
+
+    @FXML
+    private TableView<?> tableDocumentos111;
+    @FXML
+    private TableColumn<?, ?> columnHojaCod;
+    @FXML
+    private TableColumn<?, ?> columnHojaEstado;
+    @FXML
+    private Button btnAnadirHoja;
+    @FXML
+    private Button btnEliminarHoja;
 
     /**
      * Initializes the controller class.
@@ -135,7 +159,22 @@ public class VerExpedienteController implements Initializable {
     }
 
     @FXML
-    private void añadirExpediente(ActionEvent event) {
+    private void añadirExpediente(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirExpediente.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Añadir Expediente");
+        stage.setScene(new Scene(root));
+        stage.setResizable(false);
+
+        stage.show();
+
+        AnadirExpedienteController anadirClientes = (AnadirExpedienteController) fxmlLoader.getController();
+        anadirClientes.setSesion(sesion);
+        anadirClientes.setSession(session);
+        
     }
 
     @FXML
@@ -145,6 +184,9 @@ public class VerExpedienteController implements Initializable {
     public void setSession(Session session) {
         this.session = session;
     }
+    public void setSesion(SessionFactory sesion) {
+        this.sesion = sesion;
+    }
 
     public TabPane getTabPaneAsociado() {
         return tabPaneAsociado;
@@ -153,6 +195,14 @@ public class VerExpedienteController implements Initializable {
     public TabPane getTabPanePrincipal() {
         return tabPanePrincipal;
     }
+
+    @FXML
+    private void anadirHoja(ActionEvent event) {
+    }
+
+    @FXML
+    private void eliminarHoja(ActionEvent event) {
+    }
     
-    
+   
 }
