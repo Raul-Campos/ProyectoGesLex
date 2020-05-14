@@ -20,6 +20,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import map.Usuarios;
@@ -53,7 +54,21 @@ public class LoginController implements Initializable {
     }
 
     @FXML
-    private void registrarse(ActionEvent event) {
+    private void registrarse(ActionEvent event) throws IOException {
+         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("CrearCuenta.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Registrarse");
+        stage.setScene(new Scene(root));
+        stage.setResizable(false);
+
+        stage.show();
+
+       CrearCuentaController crearCuenta = (CrearCuentaController) fxmlLoader.getController();
+        crearCuenta.setSesion(sesion);
+        crearCuenta.setSession(session);
     }
 
     @FXML
