@@ -5,6 +5,7 @@
  */
 package proyectogeslex;
 
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -16,6 +17,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -47,6 +50,12 @@ import map.Expediente;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import map.Letrado;
+import map.Procurador;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+
 
 /**
  * FXML Controller class
@@ -128,6 +137,7 @@ public class VerExpedienteController implements Initializable {
     private TableView<?> tableAvisos;
     @FXML
     private TableView<?> tableHoja;
+        private SessionFactory sesion;
     @FXML
     private TableColumn<?, ?> columnHojaCod;
     @FXML
@@ -262,7 +272,22 @@ public class VerExpedienteController implements Initializable {
     }
 
     @FXML
-    private void añadirExpediente(ActionEvent event) {
+    private void añadirExpediente(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirExpediente.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Añadir Expediente");
+        stage.setScene(new Scene(root));
+        stage.setResizable(false);
+
+        stage.show();
+
+        AnadirExpedienteController anadirClientes = (AnadirExpedienteController) fxmlLoader.getController();
+        anadirClientes.setSesion(sesion);
+        anadirClientes.setSession(session);
+        
     }
 
     @FXML
@@ -272,6 +297,9 @@ public class VerExpedienteController implements Initializable {
     public void setSession(Session session) {
         this.session = session;
         cargarExpedientes();
+    }
+    public void setSesion(SessionFactory sesion) {
+        this.sesion = sesion;
     }
 
     public TabPane getTabPaneAsociado() {
@@ -289,6 +317,7 @@ public class VerExpedienteController implements Initializable {
     @FXML
     private void eliminarHoja(ActionEvent event) {
     }
+
 
     //Devuelve una lista en función del campo en el que desea buscar y el valor que busca
     private List<Expediente> consultaExpediente(String campo, String valor) {
