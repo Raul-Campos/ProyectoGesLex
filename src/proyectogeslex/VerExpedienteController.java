@@ -6,24 +6,14 @@
  */
 package proyectogeslex;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Files;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -43,17 +33,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import map.Cliente;
 import map.Documento;
-import map.DocumentoId;
 import map.Expediente;
 import map.HojaEncargo;
 import map.Incidente;
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.Transaction;
-import map.Letrado;
-import map.Procurador;
 import map.Aviso;
 import map.Sentencia;
 import org.hibernate.Query;
@@ -373,7 +357,7 @@ public class VerExpedienteController implements Initializable {
     }
     
     @FXML
-    private void anadirAviso(ActionEvent event) {
+    private void anadirAviso(ActionEvent event) throws IOException {
       
         Expediente seleccionado = tableExpedientes.getSelectionModel().getSelectedItem();
 
