@@ -26,6 +26,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import map.Documento;
 import map.DocumentoId;
+import org.hibernate.NonUniqueObjectException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -110,10 +111,17 @@ public class AnadirDocumentoController implements Initializable {
         } catch (IOException ex) {
             ex.printStackTrace();
         }catch(NullPointerException ex){
+            tx.rollback();
             Alert alertaNuevoDoc = new Alert(Alert.AlertType.INFORMATION);
             alertaNuevoDoc.setHeaderText("Archivo no seleccionado");
             alertaNuevoDoc.setContentText("Porfavor seleccione un documento");
             alertaNuevoDoc.showAndWait();
+        }catch(NonUniqueObjectException ex){
+            tx.rollback();
+            Alert alertaDocExistente = new Alert(Alert.AlertType.INFORMATION);
+            alertaDocExistente.setHeaderText("Documento existente");
+            alertaDocExistente.setContentText("Ya se ha adjuntado ese documento anteriormente.");
+            alertaDocExistente.showAndWait();  
         }
     }
 

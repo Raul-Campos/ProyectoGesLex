@@ -10,11 +10,13 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import map.Vehiculo;
+import org.hibernate.NonUniqueObjectException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -48,8 +50,8 @@ public class AnadirVehiculoController implements Initializable {
     private Button btnAceptar;
     @FXML
     private Button btnCancelar;
-    
-     private Session session;
+
+    private Session session;
     private SessionFactory sesion;
     @FXML
     private ChoiceBox<String> cbRol;
@@ -60,8 +62,8 @@ public class AnadirVehiculoController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        cbRol.getItems().addAll("Cliente","Implicado/a");
-    }    
+        cbRol.getItems().addAll("Cliente", "Implicado/a");
+    }
 
     @FXML
     private void LimpiarVehiculo(ActionEvent event) {
@@ -73,13 +75,12 @@ public class AnadirVehiculoController implements Initializable {
         tfBastidor.setText("");
         tfAseguradora.setText("");
         tfPoliza.setText("");
-            
-               
+
     }
 
     @FXML
     private void AceptarVehiculo(ActionEvent event) {
-        Vehiculo vehiculo=new Vehiculo();
+        Vehiculo vehiculo = new Vehiculo();
         vehiculo.setMatricula(tfMatricula.getText());
         //vehiculo.setExpediente(expediente);
         vehiculo.setMarca(tfMarca.getText());
@@ -89,12 +90,20 @@ public class AnadirVehiculoController implements Initializable {
         vehiculo.setAseguradora(tfAseguradora.getText());
         vehiculo.setNumeroPoliza(tfPoliza.getText());
         vehiculo.setRol(cbRol.getValue());
-        
-          Transaction tx = session.getTransaction();
 
-        tx.begin();
-        session.merge(vehiculo);
-        tx.commit();
+        Transaction tx = session.getTransaction();
+
+        try {
+            tx.begin();
+            session.merge(vehiculo);
+            tx.commit();
+        } catch (NonUniqueObjectException ex) {
+            tx.rollback();
+            Alert alertaExistente = new Alert(Alert.AlertType.INFORMATION);
+            alertaExistente.setHeaderText("Vehículo existente");
+            alertaExistente.setContentText("Ya se ha añadido ese vehículo anteriormente.");
+            alertaExistente.showAndWait();
+        }
 
         Stage stage = (Stage) btnAceptar.getScene().getWindow();
         stage.close();
@@ -102,10 +111,10 @@ public class AnadirVehiculoController implements Initializable {
 
     @FXML
     private void CancelarVehiculo(ActionEvent event) {
-          Stage stage = (Stage) btnCancelar.getScene().getWindow();
+        Stage stage = (Stage) btnCancelar.getScene().getWindow();
         stage.close();
     }
-    
+
     public void setSession(Session session) {
         this.session = session;
 
@@ -114,5 +123,5 @@ public class AnadirVehiculoController implements Initializable {
     public void setSesion(SessionFactory sesion) {
         this.sesion = sesion;
     }
-    
+
 }

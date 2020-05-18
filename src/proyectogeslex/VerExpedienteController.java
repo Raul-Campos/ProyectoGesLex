@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -53,6 +54,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import map.Letrado;
 import map.Procurador;
+import map.Aviso;
 import map.Sentencia;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -94,13 +96,13 @@ public class VerExpedienteController implements Initializable {
     @FXML
     private Button btnEliminarSent;
     @FXML
-    private TableColumn<?, ?> columnAvisoID;
+    private TableColumn<Aviso, String> columnAvisoID;
     @FXML
-    private TableColumn<?, ?> columnAvisoFecha;
+    private TableColumn<Aviso, String> columnAvisoFecha;
     @FXML
-    private TableColumn<?, ?> columnAvisoEmail;
+    private TableColumn<Aviso, String> columnAvisoEmail;
     @FXML
-    private TableColumn<?, ?> columnAvisoDescrip;
+    private TableColumn<Aviso, String> columnAvisoDescrip;
     @FXML
     private Button btnAnadirAviso;
     @FXML
@@ -135,7 +137,7 @@ public class VerExpedienteController implements Initializable {
     private Button btnBorrar;
 
     @FXML
-    private TableView<?> tableAvisos;
+    private TableView<Aviso> tableAvisos;
     @FXML
     private TableView<HojaEncargo> tableHoja;
 
@@ -206,6 +208,12 @@ public class VerExpedienteController implements Initializable {
         columnIncidenteFecha.setCellValueFactory(new PropertyValueFactory<>("fechaHora"));
         columnIncidenteLugar.setCellValueFactory(new PropertyValueFactory<>("lugar"));
         columnIncidenteTipo.setCellValueFactory(new PropertyValueFactory<>("parte"));
+      
+        //Tabla avisos
+        columnAvisoID.setCellValueFactory(new PropertyValueFactory<>("idAviso"));
+        columnAvisoFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
+        columnAvisoEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        columnAvisoDescrip.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
                 
     }
 
@@ -366,10 +374,53 @@ public class VerExpedienteController implements Initializable {
     
     @FXML
     private void anadirAviso(ActionEvent event) {
+      
+        Expediente seleccionado = tableExpedientes.getSelectionModel().getSelectedItem();
+
+        if (seleccionado != null) {
+
+            //Abre ventana modal para añadir un documento al expediente seleccionado
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirAviso.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            AnadirAvisoController avisoController = (AnadirAvisoController) fxmlLoader.getController();
+            avisoController.setSession(session);
+            avisoController.setExpediente(seleccionado);
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Añadir avisos");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.show();
+
+
+        } else {
+
+            //Si no selecciona ningúno
+            Alert alertaNuevoAviso = new Alert(Alert.AlertType.INFORMATION);
+            alertaNuevoAviso.setHeaderText("Expediente no seleccionado");
+            alertaNuevoAviso.setContentText("Porfavor seleccione un expediente para añadir un aviso a ese expediente.");
+            alertaNuevoAviso.showAndWait();
+        }
+
     }
 
     @FXML
     private void eliminarAviso(ActionEvent event) {
+      
+        Aviso avisoABorrar = tableAvisos.getSelectionModel().getSelectedItem();
+
+        if (avisoABorrar != null) {
+            Transaction tx = session.getTransaction();
+            tx.begin();
+            session.delete(avisoABorrar);
+            tx.commit();
+        } else {
+            Alert alertaBorrarDoc = new Alert(Alert.AlertType.INFORMATION);
+            alertaBorrarDoc.setHeaderText("Aviso no seleccionado");
+            alertaBorrarDoc.setContentText("Porfavor seleccione el aviso que desee eliminar");
+            alertaBorrarDoc.showAndWait();
+        }
     }
 
     @FXML
@@ -524,6 +575,7 @@ public class VerExpedienteController implements Initializable {
         cargarDocumentos(expedienteSeleccionado);
         cargarIncidente(expedienteSeleccionado);
         cargarSentencia(expedienteSeleccionado);
+        cargarAvisos(expedienteSeleccionado);
 
         //columnDocDescrip.setCellValueFactory(v -> new SimpleStringProperty("hdfkjdskjflksd"));
         /*File file = new File("prueba.pdf");
@@ -558,6 +610,16 @@ public class VerExpedienteController implements Initializable {
         List<Incidente> incidente = consulta.list();
 
         tableIncidente.setItems(FXCollections.observableArrayList(incidente));
+    }
+  
+    private void cargarAvisos(Expediente expediente) {
+
+        //Trae todos los avisos del expediente seleccionado
+        Query consulta = session.createQuery("select a from Aviso a JOIN "
+                + "a.expediente e where e.codigo = ?").setParameter(0, expediente.getCodigo());
+        List<Aviso> avisos = consulta.list();
+
+        tableAvisos.setItems(FXCollections.observableArrayList(avisos));
     }
 
 }
