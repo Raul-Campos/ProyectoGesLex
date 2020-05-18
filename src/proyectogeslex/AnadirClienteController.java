@@ -96,7 +96,7 @@ public class AnadirClienteController implements Initializable {
         
         try {
             tx.begin();
-            session.merge(cliente);
+            session.save(cliente);
             tx.commit();
 
             Stage stage = (Stage) btnEnviar.getScene().getWindow();
@@ -114,6 +114,7 @@ public class AnadirClienteController implements Initializable {
             alertaClienteExistente.setContentText("Ya se ha añadido ese cliente anteriormente.");
             alertaClienteExistente.showAndWait();
         }
+
     }
 
     private static Date StringToDate(String date) {

@@ -82,11 +82,12 @@ public class AnadirLetradoController implements Initializable {
         letrado.setEmail(tfEmail.getText());
         letrado.setColegio(tfColegio.getText());
 
+
         Transaction tx = session.getTransaction();
 
         try {
             tx.begin();
-            session.merge(letrado);
+            session.save(letrado);
             tx.commit();
 
             Stage stage = (Stage) btnAceptar.getScene().getWindow();
