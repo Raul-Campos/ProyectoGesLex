@@ -10,12 +10,14 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import map.Perito;
+import org.hibernate.NonUniqueObjectException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -50,13 +52,14 @@ public class AnadirPeritoController implements Initializable {
 
     private Session session;
     private SessionFactory sesion;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
+    }
 
     @FXML
     private void LimpiarPerito(ActionEvent event) {
@@ -67,12 +70,12 @@ public class AnadirPeritoController implements Initializable {
         tfProvincia.setText("");
         tfTelefono.setText("");
         tfEmail.setText("");
-        
+
     }
 
     @FXML
     private void AceptarPerito(ActionEvent event) {
-        Perito perito=new Perito();
+        Perito perito = new Perito();
         perito.setNombre(tfNombre.getText());
         perito.setApellidos(tfApellidos.getText());
         perito.setDniPerito(tfDNI.getText());
@@ -80,15 +83,23 @@ public class AnadirPeritoController implements Initializable {
         perito.setProvincia(tfProvincia.getText());
         perito.setTelefono(Integer.parseInt(tfTelefono.getText()));
         perito.setEmail(tfEmail.getText());
-        
-         Transaction tx = session.getTransaction();
 
-        tx.begin();
-        session.merge(perito);
-        tx.commit();
+        Transaction tx = session.getTransaction();
 
-        Stage stage = (Stage) btnAceptar.getScene().getWindow();
-        stage.close();
+        try {
+            tx.begin();
+            session.merge(perito);
+            tx.commit();
+
+            Stage stage = (Stage) btnAceptar.getScene().getWindow();
+            stage.close();
+        } catch (NonUniqueObjectException ex) {
+            tx.rollback();
+            Alert alertaExistente = new Alert(Alert.AlertType.INFORMATION);
+            alertaExistente.setHeaderText("Perito existente");
+            alertaExistente.setContentText("Ya se ha añadido ese perito anteriormente.");
+            alertaExistente.showAndWait();
+        }
     }
 
     @FXML
@@ -96,8 +107,8 @@ public class AnadirPeritoController implements Initializable {
         Stage stage = (Stage) btnCancelar.getScene().getWindow();
         stage.close();
     }
-    
-     public void setSession(Session session) {
+
+    public void setSession(Session session) {
         this.session = session;
 
     }

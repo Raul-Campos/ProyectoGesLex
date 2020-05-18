@@ -13,12 +13,14 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import map.Cliente;
+import org.hibernate.NonUniqueObjectException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -29,7 +31,6 @@ import org.hibernate.Transaction;
  * @author Jose Carlos PC
  */
 public class AnadirClienteController implements Initializable {
-
 
     private Session session;
     private SessionFactory sesion;
@@ -65,7 +66,6 @@ public class AnadirClienteController implements Initializable {
         cbSitLab.getItems().addAll("Empleado/a", "Desempleado/a");
     }
 
-
     public void setSession(Session session) {
         this.session = session;
 
@@ -79,7 +79,7 @@ public class AnadirClienteController implements Initializable {
     private void btnEnviar(ActionEvent event) {
         Cliente cliente = new Cliente();
         //falta control de errores
-        
+
         cliente.setDni(textfieldDni.getText());
         cliente.setApellidos(textfieldApellidos.getText());
         cliente.setFechaNacimiento(StringToDate(textfieldFecha.getText()));
@@ -93,13 +93,27 @@ public class AnadirClienteController implements Initializable {
         cliente.setSituacionLaboral(cbSitLab.getValue());
 
         Transaction tx = session.getTransaction();
+        
+        try {
+            tx.begin();
+            session.merge(cliente);
+            tx.commit();
 
-        tx.begin();
-        session.merge(cliente);
-        tx.commit();
-
-        Stage stage = (Stage) btnEnviar.getScene().getWindow();
-        stage.close();
+            Stage stage = (Stage) btnEnviar.getScene().getWindow();
+            stage.close();
+        } catch (NullPointerException ex) {
+            tx.rollback();
+            Alert alertaNuevoCliente = new Alert(Alert.AlertType.INFORMATION);
+            alertaNuevoCliente.setHeaderText("Error al añadir cliente.");
+            alertaNuevoCliente.setContentText("Porfavor rellene  los todos los campos para añadir el cliente.");
+            alertaNuevoCliente.showAndWait();
+        } catch (NonUniqueObjectException ex) {
+            tx.rollback();
+            Alert alertaClienteExistente = new Alert(Alert.AlertType.INFORMATION);
+            alertaClienteExistente.setHeaderText("Cliente existente");
+            alertaClienteExistente.setContentText("Ya se ha añadido ese cliente anteriormente.");
+            alertaClienteExistente.showAndWait();
+        }
     }
 
     private static Date StringToDate(String date) {

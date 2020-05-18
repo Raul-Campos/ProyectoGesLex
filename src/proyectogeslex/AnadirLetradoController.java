@@ -10,10 +10,12 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import map.Letrado;
+import org.hibernate.NonUniqueObjectException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -70,8 +72,8 @@ public class AnadirLetradoController implements Initializable {
 
     @FXML
     private void AceptarLetrado(ActionEvent event) {
-        Letrado letrado=new Letrado();
-        
+        Letrado letrado = new Letrado();
+
         letrado.setNombre(tfNombre.getText());
         letrado.setApellidos(tfApellidos.getText());
         letrado.setDniLetrado(tfDni.getText());
@@ -79,15 +81,23 @@ public class AnadirLetradoController implements Initializable {
         letrado.setTelefono(Integer.parseInt(tfNumero.getText()));
         letrado.setEmail(tfEmail.getText());
         letrado.setColegio(tfColegio.getText());
-        
-         Transaction tx = session.getTransaction();
 
-        tx.begin();
-        session.merge(letrado);
-        tx.commit();
+        Transaction tx = session.getTransaction();
 
-        Stage stage = (Stage) btnAceptar.getScene().getWindow();
-        stage.close();
+        try {
+            tx.begin();
+            session.merge(letrado);
+            tx.commit();
+
+            Stage stage = (Stage) btnAceptar.getScene().getWindow();
+            stage.close();
+        } catch (NonUniqueObjectException ex) {
+            tx.rollback();
+            Alert alertaExistente = new Alert(Alert.AlertType.INFORMATION);
+            alertaExistente.setHeaderText("Letrado existente");
+            alertaExistente.setContentText("Ya se ha añadido ese letrado anteriormente.");
+            alertaExistente.showAndWait();
+        }
     }
 
     @FXML

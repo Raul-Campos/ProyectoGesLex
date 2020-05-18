@@ -5,25 +5,14 @@
  */
 package proyectogeslex;
 
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.file.Files;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -43,19 +32,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import map.Cliente;
+import map.Aviso;
 import map.Documento;
-import map.DocumentoId;
 import map.Expediente;
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.Transaction;
-import map.Letrado;
-import map.Procurador;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-
 
 /**
  * FXML Controller class
@@ -91,13 +74,13 @@ public class VerExpedienteController implements Initializable {
     @FXML
     private Button btnEliminarSent;
     @FXML
-    private TableColumn<?, ?> columnAvisoID;
+    private TableColumn<Aviso, String> columnAvisoID;
     @FXML
-    private TableColumn<?, ?> columnAvisoFecha;
+    private TableColumn<Aviso, String> columnAvisoFecha;
     @FXML
-    private TableColumn<?, ?> columnAvisoEmail;
+    private TableColumn<Aviso, String> columnAvisoEmail;
     @FXML
-    private TableColumn<?, ?> columnAvisoDescrip;
+    private TableColumn<Aviso, String> columnAvisoDescrip;
     @FXML
     private Button btnAnadirAviso;
     @FXML
@@ -134,10 +117,10 @@ public class VerExpedienteController implements Initializable {
     @FXML
     private TableView<?> tableSentencias;
     @FXML
-    private TableView<?> tableAvisos;
+    private TableView<Aviso> tableAvisos;
     @FXML
     private TableView<?> tableHoja;
-        private SessionFactory sesion;
+    private SessionFactory sesion;
     @FXML
     private TableColumn<?, ?> columnHojaCod;
     @FXML
@@ -167,6 +150,12 @@ public class VerExpedienteController implements Initializable {
         columnDocFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
         columnDocDescrip.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
         columnDocAportador.setCellValueFactory(new PropertyValueFactory<>("aportadoPor"));
+
+        //Tabla avisos
+        columnAvisoID.setCellValueFactory(new PropertyValueFactory<>("idAviso"));
+        columnAvisoFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
+        columnAvisoEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        columnAvisoDescrip.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
 
         //Quita el color gris del header al tabpane asociado al principal
         tabPaneAsociado.getStyleClass().add("floating");
@@ -234,11 +223,54 @@ public class VerExpedienteController implements Initializable {
     }
 
     @FXML
-    private void anadirAviso(ActionEvent event) {
+    private void anadirAviso(ActionEvent event) throws IOException {
+
+        Expediente seleccionado = tableExpedientes.getSelectionModel().getSelectedItem();
+
+        if (seleccionado != null) {
+
+            //Abre ventana modal para añadir un documento al expediente seleccionado
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirAviso.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            AnadirAvisoController avisoController = (AnadirAvisoController) fxmlLoader.getController();
+            avisoController.setSession(session);
+            avisoController.setExpediente(seleccionado);
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Añadir avisos");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.show();
+
+
+        } else {
+
+            //Si no selecciona ningúno
+            Alert alertaNuevoAviso = new Alert(Alert.AlertType.INFORMATION);
+            alertaNuevoAviso.setHeaderText("Expediente no seleccionado");
+            alertaNuevoAviso.setContentText("Porfavor seleccione un expediente para añadir un aviso a ese expediente.");
+            alertaNuevoAviso.showAndWait();
+        }
+
     }
 
     @FXML
     private void eliminarAviso(ActionEvent event) {
+
+        Aviso avisoABorrar = tableAvisos.getSelectionModel().getSelectedItem();
+
+        if (avisoABorrar != null) {
+            Transaction tx = session.getTransaction();
+            tx.begin();
+            session.delete(avisoABorrar);
+            tx.commit();
+        } else {
+            Alert alertaBorrarDoc = new Alert(Alert.AlertType.INFORMATION);
+            alertaBorrarDoc.setHeaderText("Aviso no seleccionado");
+            alertaBorrarDoc.setContentText("Porfavor seleccione el aviso que desee eliminar");
+            alertaBorrarDoc.showAndWait();
+        }
     }
 
     @FXML
@@ -287,7 +319,7 @@ public class VerExpedienteController implements Initializable {
         AnadirExpedienteController anadirClientes = (AnadirExpedienteController) fxmlLoader.getController();
         anadirClientes.setSesion(sesion);
         anadirClientes.setSession(session);
-        
+
     }
 
     @FXML
@@ -298,6 +330,7 @@ public class VerExpedienteController implements Initializable {
         this.session = session;
         cargarExpedientes();
     }
+
     public void setSesion(SessionFactory sesion) {
         this.sesion = sesion;
     }
@@ -317,7 +350,6 @@ public class VerExpedienteController implements Initializable {
     @FXML
     private void eliminarHoja(ActionEvent event) {
     }
-
 
     //Devuelve una lista en función del campo en el que desea buscar y el valor que busca
     private List<Expediente> consultaExpediente(String campo, String valor) {
@@ -390,6 +422,7 @@ public class VerExpedienteController implements Initializable {
 
         expedienteSeleccionado = tableExpedientes.getSelectionModel().getSelectedItem();
         cargarDocumentos(expedienteSeleccionado);
+        cargarAvisos(expedienteSeleccionado);
 
         //columnDocDescrip.setCellValueFactory(v -> new SimpleStringProperty("hdfkjdskjflksd"));
         /*File file = new File("prueba.pdf");
@@ -406,5 +439,15 @@ public class VerExpedienteController implements Initializable {
         List<Documento> documentos = consulta.list();
 
         tableDocumentos.setItems(FXCollections.observableArrayList(documentos));
+    }
+
+    private void cargarAvisos(Expediente expediente) {
+
+        //Trae todos los avisos del expediente seleccionado
+        Query consulta = session.createQuery("select a from Aviso a JOIN "
+                + "a.expediente e where e.codigo = ?").setParameter(0, expediente.getCodigo());
+        List<Aviso> avisos = consulta.list();
+
+        tableAvisos.setItems(FXCollections.observableArrayList(avisos));
     }
 }
