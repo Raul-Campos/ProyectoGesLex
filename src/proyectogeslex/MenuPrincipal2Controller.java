@@ -84,8 +84,8 @@ public class MenuPrincipal2Controller implements Initializable {
         controladorProcuradoes.setSesion(sesion);
         controladorLetrados.setSession(session);
         controladorLetrados.setSesion(sesion);
-       controladorPeritos.setSession(session);
-       controladorPeritos.setSesion(sesion);
+        controladorPeritos.setSession(session);
+        controladorPeritos.setSesion(sesion);
 
         //Crea pestañas para cargar vista de actores
         TabPane tabPane = new TabPane();

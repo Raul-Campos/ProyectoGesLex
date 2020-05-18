@@ -95,7 +95,7 @@ public class AnadirClienteController implements Initializable {
         Transaction tx = session.getTransaction();
 
         tx.begin();
-        session.merge(cliente);
+        session.save(cliente);
         tx.commit();
 
         Stage stage = (Stage) btnEnviar.getScene().getWindow();

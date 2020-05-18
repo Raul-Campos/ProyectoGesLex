@@ -5,7 +5,6 @@
  */
 package proyectogeslex;
 
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -47,15 +46,17 @@ import map.Cliente;
 import map.Documento;
 import map.DocumentoId;
 import map.Expediente;
+import map.HojaEncargo;
+import map.Incidente;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import map.Letrado;
 import map.Procurador;
+import map.Sentencia;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-
 
 /**
  * FXML Controller class
@@ -81,11 +82,13 @@ public class VerExpedienteController implements Initializable {
     @FXML
     private Button btnEliminarDoc;
     @FXML
-    private TableColumn<?, ?> columnSentTitulo;
+    private TableView<Sentencia> tableSentencias;
     @FXML
-    private TableColumn<?, ?> columnSentFecha;
+    private TableColumn<Sentencia, String> columnSentTitulo;
     @FXML
-    private TableColumn<?, ?> columnSentDescrip;
+    private TableColumn<Sentencia, String> columnSentFecha;
+    @FXML
+    private TableColumn<Sentencia, String> columnSentDescrip;
     @FXML
     private Button btnAnadirSent;
     @FXML
@@ -130,14 +133,12 @@ public class VerExpedienteController implements Initializable {
     private Button btnAñadir;
     @FXML
     private Button btnBorrar;
-    private Session session;
-    @FXML
-    private TableView<?> tableSentencias;
+
     @FXML
     private TableView<?> tableAvisos;
     @FXML
-    private TableView<?> tableHoja;
-        private SessionFactory sesion;
+    private TableView<HojaEncargo> tableHoja;
+
     @FXML
     private TableColumn<?, ?> columnHojaCod;
     @FXML
@@ -146,7 +147,29 @@ public class VerExpedienteController implements Initializable {
     private Button btnAnadirHoja;
     @FXML
     private Button btnEliminarHoja;
+
+    @FXML
+    private TableView<Incidente> tableIncidente;
+    @FXML
+    private TableColumn<Incidente, String> columnIncidenteFecha;
+    @FXML
+    private TableColumn<Incidente, String> columnIncidenteLugar;
+    @FXML
+    private TableColumn<Incidente, String> columnIncidenteDefensa;
+    @FXML
+    private TableColumn<Incidente, String> columnIncidenteTipo;
+    @FXML
+    private TableColumn<Incidente, String> columnIncidenteFallecidos;
+    @FXML
+    private TableColumn<Incidente, String> columnIncidenteEnviado;
+    @FXML
+    private Button btnAnadirIncidente;
+    @FXML
+    private Button btnEliminarIncidente;
+
     private Expediente expedienteSeleccionado;
+    private SessionFactory sesion;
+    private Session session;
 
     /**
      * Initializes the controller class.
@@ -170,6 +193,20 @@ public class VerExpedienteController implements Initializable {
 
         //Quita el color gris del header al tabpane asociado al principal
         tabPaneAsociado.getStyleClass().add("floating");
+        
+        //Tabla Sentencias
+        columnSentTitulo.setCellValueFactory(new PropertyValueFactory<>("titulo"));
+        columnSentDescrip.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
+        columnSentFecha.setCellValueFactory(new PropertyValueFactory<>("fechaPublicacion"));
+        
+        //Tabla Incidente
+        columnIncidenteDefensa.setCellValueFactory(new PropertyValueFactory<>("defensa"));
+        columnIncidenteEnviado.setCellValueFactory(new PropertyValueFactory<>("enviadoPor"));
+        columnIncidenteFallecidos.setCellValueFactory(new PropertyValueFactory<>("fallecidos"));
+        columnIncidenteFecha.setCellValueFactory(new PropertyValueFactory<>("fechaHora"));
+        columnIncidenteLugar.setCellValueFactory(new PropertyValueFactory<>("lugar"));
+        columnIncidenteTipo.setCellValueFactory(new PropertyValueFactory<>("parte"));
+                
     }
 
     @FXML
@@ -226,13 +263,107 @@ public class VerExpedienteController implements Initializable {
     }
 
     @FXML
-    private void anadirSentencia(ActionEvent event) {
+    private void anadirSentencia(ActionEvent event) throws IOException {
+        Expediente seleccionado = tableExpedientes.getSelectionModel().getSelectedItem();
+
+        if (seleccionado != null) {
+
+            //Abre ventana modal para añadir un documento al expediente seleccionado
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirSentencia.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            AnadirSentenciaController sentenciaController = (AnadirSentenciaController) fxmlLoader.getController();
+            sentenciaController.setSession(session);
+            sentenciaController.setCodigoExpediente(seleccionado.getCodigo());
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Añadir Sentencias");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.show();
+
+            stage.setOnCloseRequest(e -> {
+                cargarSentencia(expedienteSeleccionado);
+            });
+
+        } else {
+
+            //Si no selecciona ningúno
+            Alert alertaNuevoSent = new Alert(Alert.AlertType.INFORMATION);
+            alertaNuevoSent.setHeaderText("Expediente no seleccionado");
+            alertaNuevoSent.setContentText("Porfavor seleccione un expediente para añadir un documento a ese expediente.");
+            alertaNuevoSent.showAndWait();
+        }
     }
 
     @FXML
     private void eliminarSentencia(ActionEvent event) {
+        Sentencia sentenciaABorrar = tableSentencias.getSelectionModel().getSelectedItem();
+
+        if (sentenciaABorrar != null) {
+            Transaction tx = session.getTransaction();
+            tx.begin();
+            session.delete(sentenciaABorrar);
+            tx.commit();
+        } else {
+            Alert alertaBorrarSent = new Alert(Alert.AlertType.INFORMATION);
+            alertaBorrarSent.setHeaderText("Sentencia no seleccionada");
+            alertaBorrarSent.setContentText("Porfavor seleccione la sentencia que desee eliminar");
+            alertaBorrarSent.showAndWait();
+        }
     }
 
+    @FXML
+    private void anadirIncidente(ActionEvent event) throws IOException {
+        Expediente seleccionado = tableExpedientes.getSelectionModel().getSelectedItem();
+
+        if (seleccionado != null) {
+
+            //Abre ventana modal para añadir un documento al expediente seleccionado
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirIncidente.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            AnadirIncidenteController incidenteController = (AnadirIncidenteController) fxmlLoader.getController();
+            incidenteController.setSession(session);
+            incidenteController.setExpediente(seleccionado);
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Añadir Incidente");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.show();
+
+            stage.setOnCloseRequest(e -> {
+                cargarIncidente(expedienteSeleccionado);
+            });
+
+        } else {
+
+            //Si no selecciona ningúno
+            Alert alertaNuevoSent = new Alert(Alert.AlertType.INFORMATION);
+            alertaNuevoSent.setHeaderText("Expediente no seleccionado");
+            alertaNuevoSent.setContentText("Porfavor seleccione un expediente para añadir un documento a ese expediente.");
+            alertaNuevoSent.showAndWait();
+        }
+    }
+
+    @FXML
+    private void eliminarIncidente(ActionEvent event) {
+        Incidente incidenteABorrar = tableIncidente.getSelectionModel().getSelectedItem();
+
+        if (incidenteABorrar != null) {
+            Transaction tx = session.getTransaction();
+            tx.begin();
+            session.delete(incidenteABorrar);
+            tx.commit();
+        } else {
+            Alert alertaBorrarSent = new Alert(Alert.AlertType.INFORMATION);
+            alertaBorrarSent.setHeaderText("Incidente no seleccionada");
+            alertaBorrarSent.setContentText("Porfavor seleccione el incidente que desee eliminar");
+            alertaBorrarSent.showAndWait();
+        }
+    }
+    
     @FXML
     private void anadirAviso(ActionEvent event) {
     }
@@ -287,7 +418,8 @@ public class VerExpedienteController implements Initializable {
         AnadirExpedienteController anadirClientes = (AnadirExpedienteController) fxmlLoader.getController();
         anadirClientes.setSesion(sesion);
         anadirClientes.setSession(session);
-        
+        cargarExpedientes();
+
     }
 
     @FXML
@@ -298,6 +430,7 @@ public class VerExpedienteController implements Initializable {
         this.session = session;
         cargarExpedientes();
     }
+
     public void setSesion(SessionFactory sesion) {
         this.sesion = sesion;
     }
@@ -317,7 +450,6 @@ public class VerExpedienteController implements Initializable {
     @FXML
     private void eliminarHoja(ActionEvent event) {
     }
-
 
     //Devuelve una lista en función del campo en el que desea buscar y el valor que busca
     private List<Expediente> consultaExpediente(String campo, String valor) {
@@ -390,6 +522,8 @@ public class VerExpedienteController implements Initializable {
 
         expedienteSeleccionado = tableExpedientes.getSelectionModel().getSelectedItem();
         cargarDocumentos(expedienteSeleccionado);
+        cargarIncidente(expedienteSeleccionado);
+        cargarSentencia(expedienteSeleccionado);
 
         //columnDocDescrip.setCellValueFactory(v -> new SimpleStringProperty("hdfkjdskjflksd"));
         /*File file = new File("prueba.pdf");
@@ -407,4 +541,23 @@ public class VerExpedienteController implements Initializable {
 
         tableDocumentos.setItems(FXCollections.observableArrayList(documentos));
     }
+
+    public void cargarSentencia(Expediente expediente) {
+        //Trae todos los documentos del expediente seleccionado
+        Query consulta = session.createQuery("select d from Sentencia d JOIN "
+                + "d.expediente e where e.codigo = ?").setParameter(0, expediente.getCodigo());
+        List<Sentencia> sentencias = consulta.list();
+
+        tableSentencias.setItems(FXCollections.observableArrayList(sentencias));
+    }
+    
+    public void cargarIncidente(Expediente expediente) {
+        //Trae todos los documentos del expediente seleccionado
+        Query consulta = session.createQuery("select d from Incidente d JOIN "
+                + "d.expediente e where e.codigo = ?").setParameter(0, expediente.getCodigo());
+        List<Incidente> incidente = consulta.list();
+
+        tableIncidente.setItems(FXCollections.observableArrayList(incidente));
+    }
+
 }

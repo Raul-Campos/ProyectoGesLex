@@ -83,7 +83,7 @@ public class AnadirLetradoController implements Initializable {
          Transaction tx = session.getTransaction();
 
         tx.begin();
-        session.merge(letrado);
+        session.save(letrado);
         tx.commit();
 
         Stage stage = (Stage) btnAceptar.getScene().getWindow();

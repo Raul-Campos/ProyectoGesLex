@@ -174,21 +174,52 @@
                      <children>
                         <TableView fx:id="tableHoja" prefHeight="256.0" prefWidth="857.0">
                            <columns>
-                              <TableColumn fx:id="columnHojaCod" prefWidth="384.0" text="Código de expediente" />
-                              <TableColumn fx:id="columnHojaEstado" prefWidth="462.0" text="Estado" />
+                              <TableColumn fx:id="columnHojaCod" prefWidth="370.0" text="Código de expediente" />
+                              <TableColumn fx:id="columnHojaEstado" prefWidth="476.0" text="Estado" />
                            </columns>
                            <HBox.margin>
                               <Insets bottom="5.0" left="5.0" top="5.0" />
                            </HBox.margin>
                         </TableView>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                        <VBox alignment="CENTER" prefHeight="256.0" prefWidth="167.0">
                            <children>
-                              <Button fx:id="btnAnadirHoja" mnemonicParsing="false" onAction="#anadirHoja" text=" Añadir ">
+                              <Button fx:id="btnAnadirHoja" mnemonicParsing="false" onAction="#anadirHoja" text="Cargar Hoja">
                                  <VBox.margin>
                                     <Insets bottom="10.0" />
                                  </VBox.margin>
                               </Button>
                               <Button fx:id="btnEliminarHoja" mnemonicParsing="false" onAction="#eliminarHoja" text="Eliminar" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </content>
+            </Tab>
+            <Tab text="Incidentes">
+               <content>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="tableIncidente" prefHeight="256.0" prefWidth="857.0">
+                           <columns>
+                              <TableColumn fx:id="columnIncidenteFecha" prefWidth="127.0" text="Fecha Incidente" />
+                              <TableColumn fx:id="columnIncidenteLugar" minWidth="0.0" prefWidth="141.0" text="Lugar del Indicente" />
+                              <TableColumn fx:id="columnIncidenteDefensa" minWidth="0.0" prefWidth="166.0" text="Defensa Juridica" />
+                              <TableColumn fx:id="columnIncidenteTipo" minWidth="9.0" prefWidth="118.0" text="Tipo de Parte" />
+                              <TableColumn fx:id="columnIncidenteFallecidos" minWidth="0.0" prefWidth="79.0" text="Fallecidos" />
+                              <TableColumn fx:id="columnIncidenteEnviado" prefWidth="164.0" text="Enviado Por" />
+                           </columns>
+                           <HBox.margin>
+                              <Insets bottom="5.0" left="5.0" top="5.0" />
+                           </HBox.margin>
+                        </TableView>
+                        <VBox alignment="CENTER" prefHeight="256.0" prefWidth="167.0">
+                           <children>
+                              <Button fx:id="btnAnadirIncidente" mnemonicParsing="false" onAction="#anadirIncidente" text="Añadir Incidente">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" />
+                                 </VBox.margin>
+                              </Button>
+                              <Button fx:id="btnEliminarIncidente" mnemonicParsing="false" onAction="#eliminarIncidente" text="Eliminar" />
                            </children>
                         </VBox>
                      </children>

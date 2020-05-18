@@ -11,8 +11,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -24,24 +22,22 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import map.Documento;
-import map.DocumentoId;
+import map.Sentencia;
+import map.SentenciaId;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 /**
  * FXML Controller class
  *
- * @author Raul
+ * @author Jose Carlos PC
  */
-public class AnadirDocumentoController implements Initializable {
+public class AnadirSentenciaController implements Initializable {
 
     @FXML
-    private TextField tfNombre;
+    private TextField tfTitulo;
     @FXML
-    private TextField tfAportador;
-    @FXML
-    private Button btnDocumento;
+    private Button btnSentencia;
     @FXML
     private TextArea txDesc;
     @FXML
@@ -50,6 +46,7 @@ public class AnadirDocumentoController implements Initializable {
     private Button btnAceptar;
     @FXML
     private Button btnCancelar;
+
     private File file;
     private Session session;
     private int codigoExpediente;
@@ -70,59 +67,56 @@ public class AnadirDocumentoController implements Initializable {
 
     @FXML
     private void Limpiar(ActionEvent event) {
-        file=null;
-        tfNombre.setText("");
-        tfAportador.setText("");
+        file = null;
+        tfTitulo.setText("");
         txDesc.setText("");
     }
 
     @FXML
-    private void aceptarDocumento(ActionEvent event) throws ParseException {
-        
-        Documento documento = new Documento();
-        DocumentoId id = new DocumentoId();
+    private void aceptarSentencia(ActionEvent event) throws ParseException {
+        Sentencia sentencia = new Sentencia();
+        SentenciaId id = new SentenciaId();
         Date fecha = new Date();
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
         String formatoFecha = formato.format(fecha);
         Date fecha2 = new SimpleDateFormat("yyyy-MM-dd").parse(formatoFecha);
 
-        id.setNombre(tfNombre.getText());
+        id.setTitulo(tfTitulo.getText());
         id.setCodExpediente(codigoExpediente);
-        documento.setId(id);
-        documento.setFecha(fecha2);
-        documento.setAportadoPor(tfAportador.getText());
-        documento.setDescripcion(txDesc.getText());
+        sentencia.setId(id);
+        sentencia.setFechaPublicacion(fecha2);
+        sentencia.setDescripcion(txDesc.getText());
 
         Transaction tx = session.getTransaction();
         try {
             //Convierte fichero a array de bytes
             byte[] pdf = Files.readAllBytes(file.toPath());
-            documento.setPdf(pdf);
+            sentencia.setPdf(pdf);
 
-            //Guarda el documento
+            //Guarda la sentencia
             tx.begin();
-            session.save(documento);
+            session.save(sentencia);
             tx.commit();
 
             //Cierra ventana
-            Stage cerrar = (Stage) tfAportador.getScene().getWindow();
+            Stage cerrar = (Stage) tfTitulo.getScene().getWindow();
             cerrar.close();
         } catch (IOException ex) {
             ex.printStackTrace();
-        }catch(NullPointerException ex){
+        } catch (NullPointerException ex) {
             Alert alertaNuevoDoc = new Alert(Alert.AlertType.INFORMATION);
             alertaNuevoDoc.setHeaderText("Archivo no seleccionado");
-            alertaNuevoDoc.setContentText("Porfavor seleccione un documento");
+            alertaNuevoDoc.setContentText("Porfavor seleccione una sentencia");
             alertaNuevoDoc.showAndWait();
         }
     }
 
     @FXML
-    private void cancelarDocumento(ActionEvent event) {
-        Stage stage = (Stage) tfAportador.getScene().getWindow();
-        stage.close();
+    private void cancelarSentencia(ActionEvent event) {
+        Stage cerrar = (Stage) tfTitulo.getScene().getWindow();
+        cerrar.close();
     }
-    
+
     public void setSession(Session session) {
         this.session = session;
     }

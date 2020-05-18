@@ -161,7 +161,7 @@ public class VerClientesController implements Initializable {
         this.sesion = sesion;
     }
 
-    private void cargarClientes() {
+    public void cargarClientes() {
 
         //Busca todos los clientes en la base de datos
         Query consulta = session.createQuery("from Cliente");
