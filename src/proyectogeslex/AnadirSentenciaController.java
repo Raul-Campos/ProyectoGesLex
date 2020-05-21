@@ -24,6 +24,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import map.Sentencia;
 import map.SentenciaId;
+import org.hibernate.NonUniqueObjectException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -74,40 +75,50 @@ public class AnadirSentenciaController implements Initializable {
 
     @FXML
     private void aceptarSentencia(ActionEvent event) throws ParseException {
-        Sentencia sentencia = new Sentencia();
-        SentenciaId id = new SentenciaId();
-        Date fecha = new Date();
-        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-        String formatoFecha = formato.format(fecha);
-        Date fecha2 = new SimpleDateFormat("yyyy-MM-dd").parse(formatoFecha);
 
-        id.setTitulo(tfTitulo.getText());
-        id.setCodExpediente(codigoExpediente);
-        sentencia.setId(id);
-        sentencia.setFechaPublicacion(fecha2);
-        sentencia.setDescripcion(txDesc.getText());
+        if (!tfTitulo.equals("") && txDesc.equals("") && file != null) {
+            Sentencia sentencia = new Sentencia();
+            SentenciaId id = new SentenciaId();
+            Date fecha = new Date();
+            SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+            String formatoFecha = formato.format(fecha);
+            Date fecha2 = new SimpleDateFormat("yyyy-MM-dd").parse(formatoFecha);
 
-        Transaction tx = session.getTransaction();
-        try {
-            //Convierte fichero a array de bytes
-            byte[] pdf = Files.readAllBytes(file.toPath());
-            sentencia.setPdf(pdf);
+            id.setTitulo(tfTitulo.getText());
+            id.setCodExpediente(codigoExpediente);
+            sentencia.setId(id);
+            sentencia.setFechaPublicacion(fecha2);
+            sentencia.setDescripcion(txDesc.getText());
 
-            //Guarda la sentencia
-            tx.begin();
-            session.save(sentencia);
-            tx.commit();
+            Transaction tx = session.getTransaction();
+            try {
+                //Convierte fichero a array de bytes
+                byte[] pdf = Files.readAllBytes(file.toPath());
+                sentencia.setPdf(pdf);
 
-            //Cierra ventana
-            Stage cerrar = (Stage) tfTitulo.getScene().getWindow();
-            cerrar.close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } catch (NullPointerException ex) {
-            Alert alertaNuevoDoc = new Alert(Alert.AlertType.INFORMATION);
-            alertaNuevoDoc.setHeaderText("Archivo no seleccionado");
-            alertaNuevoDoc.setContentText("Porfavor seleccione una sentencia");
-            alertaNuevoDoc.showAndWait();
+                //Guarda la sentencia
+                tx.begin();
+                session.save(sentencia);
+                tx.commit();
+
+                //Cierra ventana
+                Stage cerrar = (Stage) tfTitulo.getScene().getWindow();
+                cerrar.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            } catch (NonUniqueObjectException ex) {
+                tx.rollback();
+                Alert alertaDocExistente = new Alert(Alert.AlertType.INFORMATION);
+                alertaDocExistente.setHeaderText("Sentencia existente");
+                alertaDocExistente.setContentText("Ya se ha adjuntado esa sentencia anteriormente.");
+                alertaDocExistente.showAndWait();
+            }
+        } else {
+            Alert alertaNuevaSent = new Alert(Alert.AlertType.INFORMATION);
+            alertaNuevaSent.setHeaderText("Error al añadir sentencia");
+            alertaNuevaSent.setContentText("Porfavor rellene los campos necesarios "
+                    + "(título) y recurde adjuntar el archivo");
+            alertaNuevaSent.showAndWait();
         }
     }
 

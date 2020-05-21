@@ -71,7 +71,7 @@ public class AnadirDocumentoController implements Initializable {
 
     @FXML
     private void Limpiar(ActionEvent event) {
-        file=null;
+        file = null;
         tfNombre.setText("");
         tfAportador.setText("");
         txDesc.setText("");
@@ -79,49 +79,52 @@ public class AnadirDocumentoController implements Initializable {
 
     @FXML
     private void aceptarDocumento(ActionEvent event) throws ParseException {
-        
-        Documento documento = new Documento();
-        DocumentoId id = new DocumentoId();
-        Date fecha = new Date();
-        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-        String formatoFecha = formato.format(fecha);
-        Date fecha2 = new SimpleDateFormat("yyyy-MM-dd").parse(formatoFecha);
 
-        id.setNombre(tfNombre.getText());
-        id.setCodExpediente(codigoExpediente);
-        documento.setId(id);
-        documento.setFecha(fecha2);
-        documento.setAportadoPor(tfAportador.getText());
-        documento.setDescripcion(txDesc.getText());
+        if (!tfNombre.equals("") && !tfAportador.equals("") && file != null) {
+            Documento documento = new Documento();
+            DocumentoId id = new DocumentoId();
+            Date fecha = new Date();
+            SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+            String formatoFecha = formato.format(fecha);
+            java.sql.Date fecha2 =java.sql.Date.valueOf(formatoFecha);
 
-        Transaction tx = session.getTransaction();
-        try {
-            //Convierte fichero a array de bytes
-            byte[] pdf = Files.readAllBytes(file.toPath());
-            documento.setPdf(pdf);
+            id.setNombre(tfNombre.getText());
+            id.setCodExpediente(codigoExpediente);
+            documento.setId(id);
+            documento.setFecha(fecha2);
+            documento.setAportadoPor(tfAportador.getText());
+            documento.setDescripcion(txDesc.getText());
 
-            //Guarda el documento
-            tx.begin();
-            session.save(documento);
-            tx.commit();
+            Transaction tx = session.getTransaction();
+            try {
+                //Convierte fichero a array de bytes
+                byte[] pdf = Files.readAllBytes(file.toPath());
+                documento.setPdf(pdf);
 
-            //Cierra ventana
-            Stage cerrar = (Stage) tfAportador.getScene().getWindow();
-            cerrar.close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }catch(NullPointerException ex){
-            tx.rollback();
+                //Guarda el documento
+                tx.begin();
+                session.save(documento);
+                tx.commit();
+
+                //Cierra ventana
+                Stage cerrar = (Stage) tfAportador.getScene().getWindow();
+                cerrar.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            } catch (NonUniqueObjectException ex) {
+                tx.rollback();
+                Alert alertaDocExistente = new Alert(Alert.AlertType.INFORMATION);
+                alertaDocExistente.setHeaderText("Documento existente");
+                alertaDocExistente.setContentText("Ya se ha adjuntado ese documento anteriormente.");
+                alertaDocExistente.showAndWait();
+            }
+
+        } else {
             Alert alertaNuevoDoc = new Alert(Alert.AlertType.INFORMATION);
-            alertaNuevoDoc.setHeaderText("Archivo no seleccionado");
-            alertaNuevoDoc.setContentText("Porfavor seleccione un documento");
+            alertaNuevoDoc.setHeaderText("Error al añadir documento");
+            alertaNuevoDoc.setContentText("Porfavor rellene los campos necesarios "
+                    + "(nombre y aportador) y recurde adjuntar el archivo");
             alertaNuevoDoc.showAndWait();
-        }catch(NonUniqueObjectException ex){
-            tx.rollback();
-            Alert alertaDocExistente = new Alert(Alert.AlertType.INFORMATION);
-            alertaDocExistente.setHeaderText("Documento existente");
-            alertaDocExistente.setContentText("Ya se ha adjuntado ese documento anteriormente.");
-            alertaDocExistente.showAndWait();  
         }
     }
 
@@ -130,7 +133,7 @@ public class AnadirDocumentoController implements Initializable {
         Stage stage = (Stage) tfAportador.getScene().getWindow();
         stage.close();
     }
-    
+
     public void setSession(Session session) {
         this.session = session;
     }
