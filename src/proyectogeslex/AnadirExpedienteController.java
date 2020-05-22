@@ -15,6 +15,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
@@ -63,7 +64,7 @@ public class AnadirExpedienteController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         Calendar c = Calendar.getInstance();
-        tfFechaC.setText(Integer.toString(c.get(Calendar.DATE)) + "/" + Integer.toString(c.get(Calendar.MONTH) + 1) + "/" + Integer.toString(c.get(Calendar.YEAR)));
+        tfFechaC.setText(Integer.toString(c.get(Calendar.YEAR))+ "-" +  Integer.toString(c.get(Calendar.MONTH) + 1) + "-" + Integer.toString(c.get(Calendar.DATE))  );
     }
 
     @FXML
@@ -77,28 +78,55 @@ public class AnadirExpedienteController implements Initializable {
     @FXML
     private void AceptarExpediente(ActionEvent event) {
         Expediente expediente = new Expediente();
+        Query consulta;
+        boolean datosRellenos = true;
 
-        Query consulta = session.createQuery("from Cliente where dni = '" + chCliente.getValue().substring(0, 9) + "'");
-        Cliente cliente = (Cliente) consulta.list().get(0);
-        expediente.setCliente(cliente);
+        if (chCliente.getValue() != null) {
+            consulta = session.createQuery("from Cliente where dni = '" + chCliente.getValue().substring(0, 9) + "'");
+            Cliente cliente = (Cliente) consulta.list().get(0);
+            expediente.setCliente(cliente);
+        } else {
+            datosRellenos = false;
+        }
 
-        consulta = session.createQuery("from Letrado where dniLetrado = '" + chLetrado.getValue().substring(0, 9) + "'");
-        Letrado letrado = (Letrado) consulta.list().get(0);
-        expediente.setLetrado(letrado);
+        if (chLetrado.getValue() != null) {
+            consulta = session.createQuery("from Letrado where dniLetrado = '" + chLetrado.getValue().substring(0, 9) + "'");
+            Letrado letrado = (Letrado) consulta.list().get(0);
+            expediente.setLetrado(letrado);
+        } else {
+            datosRellenos = false;
+        }
 
-        consulta = session.createQuery("from Procurador where dniProcurador = '" + chProcurador.getValue().substring(0, 9) + "'");
-        Procurador procurador = (Procurador) consulta.list().get(0);
-        expediente.setProcurador(procurador);
+        if (chProcurador.getValue() != null) {
+            consulta = session.createQuery("from Procurador where dniProcurador = '" + chProcurador.getValue().substring(0, 9) + "'");
+            Procurador procurador = (Procurador) consulta.list().get(0);
+            expediente.setProcurador(procurador);
+        } else {
+            datosRellenos = false;
+        }
 
-        expediente.setFechaCreacion(StringToDate(tfFechaC.getText()));
-        Transaction tx = session.getTransaction();
+        if (!tfFechaC.getText().equals("")) {
+            java.sql.Date fecha = java.sql.Date.valueOf(tfFechaC.getText());
+            expediente.setFechaCreacion(fecha);
+        } else {
+            datosRellenos = false;
+        }
 
-        tx.begin();
-        session.merge(expediente);
-        tx.commit();
+        if (datosRellenos) {
+            Transaction tx = session.getTransaction();
 
-        Stage stage = (Stage) btnAceptar.getScene().getWindow();
-        stage.close();
+            tx.begin();
+            session.merge(expediente);
+            tx.commit();
+
+            Stage stage = (Stage) btnAceptar.getScene().getWindow();
+            stage.close();
+        } else {
+            Alert alertaNuevoExp = new Alert(Alert.AlertType.INFORMATION);
+            alertaNuevoExp.setHeaderText("Campos incompletos");
+            alertaNuevoExp.setContentText("Porfavor rellene todos los campos para crear el expediente.");
+            alertaNuevoExp.showAndWait();
+        }
     }
 
     @FXML

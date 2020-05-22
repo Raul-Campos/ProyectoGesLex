@@ -243,6 +243,7 @@ public class VerExpedienteController implements Initializable {
         columnAvisoEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         columnAvisoDescrip.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
 
+
         //Tabla Coche
         columnCocheMatricula.setCellValueFactory(new PropertyValueFactory<>("matricula"));
         columnCocheAseguradora.setCellValueFactory(new PropertyValueFactory<>("aseguradora"));
@@ -261,6 +262,7 @@ public class VerExpedienteController implements Initializable {
         columnPeritoNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         columnPeritoProvincia.setCellValueFactory(new PropertyValueFactory<>("provincia"));
         columnPeritoTlf.setCellValueFactory(new PropertyValueFactory<>("telefono"));
+
     }
 
     @FXML
@@ -375,23 +377,30 @@ public class VerExpedienteController implements Initializable {
 
         if (seleccionado != null) {
 
-            //Abre ventana modal para añadir un documento al expediente seleccionado
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirIncidente.fxml"));
-            Parent root = (Parent) fxmlLoader.load();
-            AnadirIncidenteController incidenteController = (AnadirIncidenteController) fxmlLoader.getController();
-            incidenteController.setSession(session);
-            incidenteController.setExpediente(seleccionado);
+            if (seleccionado.getIncidente() == null) {
+                //Abre ventana modal para añadir un documento al expediente seleccionado
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirIncidente.fxml"));
+                Parent root = (Parent) fxmlLoader.load();
+                AnadirIncidenteController incidenteController = (AnadirIncidenteController) fxmlLoader.getController();
+                incidenteController.setSession(session);
+                incidenteController.setExpediente(seleccionado);
 
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("Añadir Incidente");
-            stage.setScene(new Scene(root));
-            stage.setResizable(false);
-            stage.show();
+                Stage stage = new Stage();
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setTitle("Añadir Incidente");
+                stage.setScene(new Scene(root));
+                stage.setResizable(false);
+                stage.show();
 
-            stage.setOnCloseRequest(e -> {
-                cargarIncidente(expedienteSeleccionado);
-            });
+                stage.setOnCloseRequest(e -> {
+                    cargarIncidente(expedienteSeleccionado);
+                });
+            }else{
+                Alert alertaIncExistente = new Alert(Alert.AlertType.INFORMATION);
+                alertaIncExistente.setHeaderText("Incidente existente");
+                alertaIncExistente.setContentText("Ya hay un incidente añadido, si desea añadir uno nuevo elimine el actual.");
+                alertaIncExistente.showAndWait();
+            }
 
         } else {
 
@@ -441,7 +450,9 @@ public class VerExpedienteController implements Initializable {
             stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.show();
+
             cargarAvisos(seleccionado);
+
 
         } else {
 
@@ -626,8 +637,10 @@ public class VerExpedienteController implements Initializable {
         cargarIncidente(expedienteSeleccionado);
         cargarSentencia(expedienteSeleccionado);
         cargarAvisos(expedienteSeleccionado);
+
         cargarCoches(expedienteSeleccionado);
        // cargarPeritos(expedienteSeleccionado);
+
 
         //columnDocDescrip.setCellValueFactory(v -> new SimpleStringProperty("hdfkjdskjflksd"));
         /*File file = new File("prueba.pdf");
@@ -664,7 +677,9 @@ public class VerExpedienteController implements Initializable {
         tableIncidente.setItems(FXCollections.observableArrayList(incidente));
     }
 
+
     public void cargarAvisos(Expediente expediente) {
+
 
         //Trae todos los avisos del expediente seleccionado
         Query consulta = session.createQuery("select a from Aviso a JOIN "

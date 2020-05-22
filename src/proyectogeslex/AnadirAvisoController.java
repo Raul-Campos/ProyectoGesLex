@@ -73,9 +73,10 @@ public class AnadirAvisoController implements Initializable {
     @FXML
     private void aceptarAviso(ActionEvent event) {
 
-        Aviso aviso = new Aviso();
+        if (!tfEmail.getText().equals("") && dpFecha.getValue() != null) {
 
-        try {
+            Aviso aviso = new Aviso();
+
             java.sql.Date fecha = java.sql.Date.valueOf(dpFecha.getValue());
             aviso.setEmail(tfEmail.getText());
             aviso.setDescripcion(txDesc.getText());
@@ -92,8 +93,8 @@ public class AnadirAvisoController implements Initializable {
             //Cierra ventana
             Stage cerrar = (Stage) tfEmail.getScene().getWindow();
             cerrar.close();
-            
-        } catch (NullPointerException ex) {
+
+        } else {
             Alert alertaNuevoAviso = new Alert(Alert.AlertType.INFORMATION);
             alertaNuevoAviso.setHeaderText("Error al guardar aviso");
             alertaNuevoAviso.setContentText("Porfavor rellene todos los campos necesarios (email y fecha)");
