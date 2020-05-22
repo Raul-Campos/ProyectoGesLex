@@ -1,5 +1,5 @@
 package map;
-// Generated 30-abr-2020 20:44:27 by Hibernate Tools 4.3.1
+// Generated 22-may-2020 18:32:02 by Hibernate Tools 4.3.1
 
 
 import java.util.HashSet;
@@ -101,10 +101,7 @@ public class Letrado  implements java.io.Serializable {
         this.expedientes = expedientes;
     }
 
-    @Override
-    public String toString() {
-        return dniLetrado;
-    }
+
 
 
 }

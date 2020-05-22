@@ -1,16 +1,13 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 30-abr-2020 20:44:29 by Hibernate Tools 4.3.1 -->
+<!-- Generated 22-may-2020 18:32:02 by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="map.Vehiculo" table="vehiculo" catalog="geslexdb" optimistic-lock="version">
         <id name="matricula" type="string">
             <column name="matricula" length="7" />
             <generator class="assigned" />
         </id>
-        <many-to-one name="expediente" class="map.Expediente" fetch="select">
-            <column name="codigo_expediente" />
-        </many-to-one>
         <property name="marca" type="string">
             <column name="marca" length="15" not-null="true" />
         </property>
@@ -32,5 +29,13 @@
         <property name="rol" type="string">
             <column name="rol" length="11" not-null="true" />
         </property>
+        <set name="expedientes" table="expediente_vehiculo" inverse="false" lazy="true" fetch="select">
+            <key>
+                <column name="matricula" length="7" not-null="true" />
+            </key>
+            <many-to-many entity-name="map.Expediente">
+                <column name="cod_expediente" not-null="true" />
+            </many-to-many>
+        </set>
     </class>
 </hibernate-mapping>

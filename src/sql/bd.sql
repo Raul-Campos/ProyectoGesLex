@@ -88,9 +88,15 @@ create table vehiculo(
     numero_bastidor varchar(20) not null,
     aseguradora varchar(20) not null,
     numero_poliza varchar(20) not null,
-    codigo_expediente int,
-    rol enum('Cliente','Implicado/a') not null,
-    foreign key (codigo_expediente) references expediente(codigo)
+    rol enum('Cliente','Implicado/a') not null
+);
+
+create table expediente_vehiculo(
+    cod_expediente int,
+    matricula varchar(7),
+    primary key (cod_expediente, matricula),
+    foreign key (cod_expediente) references expediente(codigo),
+    foreign key (matricula) references vehiculo(matricula)
 );
 
 create table sentencia(

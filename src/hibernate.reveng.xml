@@ -41,17 +41,18 @@ Contributor(s):
 -->
 <hibernate-reverse-engineering>
   <schema-selection match-catalog="geslexdb"/>
-  <table-filter match-name="letrado"/>
-  <table-filter match-name="vehiculo"/>
-  <table-filter match-name="hoja_encargo"/>
-  <table-filter match-name="usuarios"/>
-  <table-filter match-name="expediente_perito"/>
-  <table-filter match-name="sentencia"/>
-  <table-filter match-name="incidente"/>
-  <table-filter match-name="aviso"/>
-  <table-filter match-name="documento"/>
-  <table-filter match-name="expediente"/>
-  <table-filter match-name="perito"/>
   <table-filter match-name="procurador"/>
+  <table-filter match-name="letrado"/>
+  <table-filter match-name="documento"/>
+  <table-filter match-name="vehiculo"/>
+  <table-filter match-name="usuarios"/>
+  <table-filter match-name="aviso"/>
+  <table-filter match-name="incidente"/>
+  <table-filter match-name="expediente"/>
+  <table-filter match-name="expediente_vehiculo"/>
+  <table-filter match-name="sentencia"/>
+  <table-filter match-name="perito"/>
   <table-filter match-name="cliente"/>
+  <table-filter match-name="hoja_encargo"/>
+  <table-filter match-name="expediente_perito"/>
 </hibernate-reverse-engineering>

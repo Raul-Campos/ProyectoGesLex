@@ -165,7 +165,7 @@ public class AnadirVehiculoController implements Initializable {
                 expedientes.forEach((expediente) -> {
 
                     if (expediente.getCodigo() == Integer.parseInt(tfExpediente.getText())) {
-                        vehiculo.setExpediente(expediente);
+                        
                     }
                 });
 
