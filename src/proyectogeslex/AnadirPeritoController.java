@@ -7,6 +7,8 @@ package proyectogeslex;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,7 +18,10 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javax.persistence.RollbackException;
+import map.Expediente;
 import map.Perito;
+import map.Procurador;
 import org.hibernate.NonUniqueObjectException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -52,6 +57,7 @@ public class AnadirPeritoController implements Initializable {
 
     private Session session;
     private SessionFactory sesion;
+    private Expediente expediente=null;
 
     /**
      * Initializes the controller class.
@@ -76,29 +82,113 @@ public class AnadirPeritoController implements Initializable {
     @FXML
     private void AceptarPerito(ActionEvent event) {
         Perito perito = new Perito();
-        perito.setNombre(tfNombre.getText());
-        perito.setApellidos(tfApellidos.getText());
-        perito.setDniPerito(tfDNI.getText());
-        perito.setDireccion(tfDireccion.getText());
-        perito.setProvincia(tfProvincia.getText());
-        perito.setTelefono(Integer.parseInt(tfTelefono.getText()));
-        perito.setEmail(tfEmail.getText());
+          Alert alerta;
+        boolean errorFormato = false;
+        boolean alert = true;
 
-        Transaction tx = session.getTransaction();
+        String dniRegexp = "(([X-Z]{1})([-]?)(\\d{7})([-]?)([A-Z]{1}))|((\\d{8})([-]?)([A-Z]{1}))";
+        Pattern pat = Pattern.compile(dniRegexp);
+        Matcher mat = pat.matcher(tfDNI.getText());
 
-        try {
-            tx.begin();
-            session.merge(perito);
-            tx.commit();
+        if (tfDNI.getText() != null && !tfDNI.getText().equals("") && (mat.matches())) {
+            perito.setDniPerito(tfDNI.getText());
 
-            Stage stage = (Stage) btnAceptar.getScene().getWindow();
-            stage.close();
-        } catch (NonUniqueObjectException ex) {
-            tx.rollback();
-            Alert alertaExistente = new Alert(Alert.AlertType.INFORMATION);
-            alertaExistente.setHeaderText("Perito existente");
-            alertaExistente.setContentText("Ya se ha añadido ese perito anteriormente.");
-            alertaExistente.showAndWait();
+            //comprueba nombre
+            String name = "[A-Za-z]*";
+            pat = Pattern.compile(name);
+            mat = pat.matcher(tfNombre.getText());
+            if (tfNombre.getText() != null && !tfNombre.getText().equals("") && (mat.matches())) {
+                perito.setNombre(tfNombre.getText());
+            } else if (alert) {
+                alerta = new Alert(Alert.AlertType.INFORMATION, "Introduce un nombre");
+                alerta.showAndWait();
+                errorFormato = true;
+                alert = false;
+            }
+
+            if (tfApellidos.getText() != null && !tfApellidos.getText().equals("") && (mat.matches())) {
+                perito.setApellidos(tfApellidos.getText());
+            } else if (alert) {
+                alerta = new Alert(Alert.AlertType.INFORMATION, "Introduce unos apellidos validos");
+                alerta.showAndWait();
+                errorFormato = true;
+                alert = false;
+            }
+            
+            if (tfProvincia.getText() != null && !tfProvincia.getText().equals("") && (mat.matches())) {
+                perito.setProvincia(tfProvincia.getText());
+            } else if (alert) {
+                alerta = new Alert(Alert.AlertType.INFORMATION, "Introduce una provincia");
+                alerta.showAndWait();
+                errorFormato = true;
+                alert = false;
+            }
+
+            if (tfDireccion.getText() != null && !tfDireccion.getText().equals("")) {
+                perito.setDireccion(tfDireccion.getText());
+            } else if (alert) {
+                alerta = new Alert(Alert.AlertType.INFORMATION, "Introduce una direccion valida");
+                alerta.showAndWait();
+                errorFormato = true;
+                alert = false;
+            }
+
+            if (tfTelefono.getText() != null && !tfTelefono.getText().isEmpty() && tfTelefono.getText().matches("[6|7|9][0-9]{8}$")) {
+                perito.setTelefono(Integer.parseInt(tfTelefono.getText()));
+
+            } else if (!tfTelefono.getText().matches("[6|7|9][0-9]{8}$") && alert) {
+                errorFormato = true;
+                alerta = new Alert(Alert.AlertType.INFORMATION, "Introduzca un número de teléfono valido");
+                alerta.showAndWait();
+                alert = false;
+            } else if (alert) {
+                errorFormato = true;
+                alerta = new Alert(Alert.AlertType.INFORMATION, "Introduzca un número de teléfono");
+                alerta.showAndWait();
+                alert = false;
+            }
+
+            if (tfEmail.getText() != null && !tfEmail.getText().equals("")) {
+                perito.setEmail(tfEmail.getText());
+            } else if (alert) {
+                alerta = new Alert(Alert.AlertType.INFORMATION, "Introduce un email valido");
+                alerta.showAndWait();
+                errorFormato = true;
+                alert = false;
+            }
+            perito.getExpedientes().add(expediente);
+            
+
+            if (!errorFormato) {
+                Transaction tx = session.getTransaction();
+
+                try {
+                    tx.begin();
+                    session.save(perito);
+                    tx.commit();
+
+                    Stage stage = (Stage) btnAceptar.getScene().getWindow();
+                    stage.close();
+                } catch (NonUniqueObjectException ex) {
+                    tx.rollback();
+                    Alert alertaExistente = new Alert(Alert.AlertType.INFORMATION);
+                    alertaExistente.setHeaderText("Procurador existente");
+                    alertaExistente.setContentText("Ya se ha añadido ese procurador anteriormente.");
+                    alertaExistente.showAndWait();
+
+                } catch (RollbackException e) {
+                    tx.rollback();
+                    alerta = new Alert(Alert.AlertType.INFORMATION, "Error al guardar los datos. Inténtelo de nuevo");
+                    alerta.setContentText(e.getLocalizedMessage());
+                    alerta.showAndWait();
+                }
+            }
+
+        } else if (alert) {
+            alerta = new Alert(Alert.AlertType.INFORMATION, "Introduce un DNI valido");
+            alerta.showAndWait();
+            errorFormato = true;
+            alert = false;
         }
     }
 
@@ -115,5 +205,9 @@ public class AnadirPeritoController implements Initializable {
 
     public void setSesion(SessionFactory sesion) {
         this.sesion = sesion;
+    }
+    
+     public void setExpediente(Expediente expediente) {
+        this.expediente = expediente;
     }
 }

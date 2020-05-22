@@ -83,11 +83,13 @@ public class AnadirIncidenteController implements Initializable {
 
     @FXML
     private void aceptarIncidente(ActionEvent event) throws ParseException, IOException {
+
         boolean camposRellenos = true;
 
         //Comprobación de campos
         if (datePickeFecha.getValue() == null) {
             camposRellenos = false;
+
         }
         if (tfHora.getText().equals("")) {
             camposRellenos = false;

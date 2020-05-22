@@ -10,6 +10,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -78,41 +80,109 @@ public class AnadirClienteController implements Initializable {
     @FXML
     private void btnEnviar(ActionEvent event) {
         Cliente cliente = new Cliente();
-        //falta control de errores
+        Alert alerta;
+        boolean errorFormato = false;
+        boolean alert = true;
 
-        cliente.setDni(textfieldDni.getText());
-        cliente.setApellidos(textfieldApellidos.getText());
-        cliente.setFechaNacimiento(StringToDate(textfieldFecha.getText()));
-        cliente.setNombre(textfieldNombre.getText());
-        if (radiobH.isSelected()) {
-            cliente.setSexo("Hombre");
-        } else if (radiobM.isSelected()) {
-            cliente.setSexo("Mujer");
-        }
-        cliente.setSituacionFamiliar(cbSitFam.getValue());
-        cliente.setSituacionLaboral(cbSitLab.getValue());
+        String dniRegexp = "(([X-Z]{1})([-]?)(\\d{7})([-]?)([A-Z]{1}))|((\\d{8})([-]?)([A-Z]{1}))";
+        Pattern pat = Pattern.compile(dniRegexp);
+        Matcher mat = pat.matcher(textfieldDni.getText());
 
-        Transaction tx = session.getTransaction();
-        
-        try {
-            tx.begin();
-            session.save(cliente);
-            tx.commit();
+        if (textfieldDni.getText() != null && !textfieldDni.getText().equals("") && (mat.matches())) {
 
-            Stage stage = (Stage) btnEnviar.getScene().getWindow();
-            stage.close();
-        } catch (NullPointerException ex) {
-            tx.rollback();
-            Alert alertaNuevoCliente = new Alert(Alert.AlertType.INFORMATION);
-            alertaNuevoCliente.setHeaderText("Error al añadir cliente.");
-            alertaNuevoCliente.setContentText("Porfavor rellene  los todos los campos para añadir el cliente.");
-            alertaNuevoCliente.showAndWait();
-        } catch (NonUniqueObjectException ex) {
-            tx.rollback();
-            Alert alertaClienteExistente = new Alert(Alert.AlertType.INFORMATION);
-            alertaClienteExistente.setHeaderText("Cliente existente");
-            alertaClienteExistente.setContentText("Ya se ha añadido ese cliente anteriormente.");
-            alertaClienteExistente.showAndWait();
+            cliente.setDni(textfieldDni.getText());
+
+            //comprueba nombre
+            String name = "[A-Za-z]*";
+            pat = Pattern.compile(name);
+            mat = pat.matcher(textfieldNombre.getText());
+            if (textfieldNombre.getText() != null && !textfieldNombre.getText().equals("") && (mat.matches())) {
+                cliente.setNombre(textfieldNombre.getText());
+            } else if (alert) {
+                alerta = new Alert(Alert.AlertType.INFORMATION, "Introduce un nombre");
+                alerta.showAndWait();
+                errorFormato = true;
+                alert = false;
+            }
+
+            mat = pat.matcher(textfieldApellidos.getText());
+            if (textfieldApellidos.getText() != null && !textfieldApellidos.getText().equals("") && (mat.matches())) {
+                cliente.setApellidos(textfieldApellidos.getText());
+            } else if (alert) {
+                alerta = new Alert(Alert.AlertType.INFORMATION, "Introduce los Apellidos");
+                alerta.showAndWait();
+                errorFormato = true;
+                alert = false;
+            }
+
+            if (cbSitFam.getValue() != null && !cbSitFam.getValue().isEmpty()) {
+                cliente.setSituacionFamiliar(cbSitFam.getValue());
+            } else if (alert) {
+                alerta = new Alert(Alert.AlertType.INFORMATION, "Seleccione su situacion familiar");
+                alerta.showAndWait();
+                errorFormato = true;
+                alert = false;
+            }
+
+            if (cbSitLab.getValue() != null && !cbSitLab.getValue().isEmpty()) {
+                cliente.setSituacionLaboral(cbSitLab.getValue());
+            } else if (alert) {
+                alerta = new Alert(Alert.AlertType.INFORMATION, "Seleccione su situacion laboral");
+                alerta.showAndWait();
+                errorFormato = true;
+                alert = false;
+            }
+
+            if (textfieldFecha.getText() != null && !textfieldFecha.getText().equals("")) {
+                cliente.setFechaNacimiento(StringToDate(textfieldFecha.getText()));
+            } else if (alert) {
+                alerta = new Alert(Alert.AlertType.INFORMATION, "Introduce una fecha de nacimiento valida");
+                alerta.showAndWait();
+                errorFormato = true;
+                alert = false;
+            }
+
+            if (radiobH.isSelected()) {
+                cliente.setSexo("Hombre");
+            } else if (radiobM.isSelected()) {
+                cliente.setSexo("Mujer");
+            } else if (!radiobH.isSelected() && !radiobM.isSelected() && alert) {
+                alerta = new Alert(Alert.AlertType.INFORMATION, "Seleccione tipo de sexo");
+                alerta.showAndWait();
+                errorFormato = true;
+                alert = false;
+            }
+
+            if (!errorFormato) {
+
+                Transaction tx = session.getTransaction();
+
+                try {
+                    tx.begin();
+                    session.save(cliente);
+                    tx.commit();
+
+                    Stage stage = (Stage) btnEnviar.getScene().getWindow();
+                    stage.close();
+                } catch (NullPointerException ex) {
+                    tx.rollback();
+                    Alert alertaNuevoCliente = new Alert(Alert.AlertType.INFORMATION);
+                    alertaNuevoCliente.setHeaderText("Error al añadir cliente.");
+                    alertaNuevoCliente.setContentText("Error al guardar los datos del cliente. Por favor, intentelo de nuevo.");
+                    alertaNuevoCliente.showAndWait();
+                } catch (NonUniqueObjectException ex) {
+                    tx.rollback();
+                    Alert alertaClienteExistente = new Alert(Alert.AlertType.INFORMATION);
+                    alertaClienteExistente.setHeaderText("Cliente existente");
+                    alertaClienteExistente.setContentText("Ya se ha añadido ese cliente anteriormente.");
+                    alertaClienteExistente.showAndWait();
+                }
+            }
+        } else if (alert) {
+            alerta = new Alert(Alert.AlertType.INFORMATION, "Introduce un DNI");
+            alerta.showAndWait();
+            errorFormato = true;
+            alert = false;
         }
 
     }

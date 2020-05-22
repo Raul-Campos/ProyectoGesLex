@@ -39,7 +39,9 @@ import map.HojaEncargo;
 import map.Incidente;
 import org.hibernate.Transaction;
 import map.Aviso;
+import map.Perito;
 import map.Sentencia;
+import map.Vehiculo;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -156,6 +158,48 @@ public class VerExpedienteController implements Initializable {
     private Expediente expedienteSeleccionado;
     private SessionFactory sesion;
     private Session session;
+    @FXML
+    private TableColumn<Vehiculo, String> columnCocheMatricula;
+    @FXML
+    private TableColumn<Vehiculo, String> columnCocheMarca;
+    @FXML
+    private TableColumn<Vehiculo, String> columnCocheModelo;
+    @FXML
+    private TableColumn<Vehiculo, String> columnCocheColor;
+    @FXML
+    private TableColumn<Vehiculo, String> columnCocheBastidor;
+    @FXML
+    private TableColumn<Vehiculo, String> columnCocheAseguradora;
+    @FXML
+    private TableColumn<Vehiculo, String> columnCochePoliza;
+    @FXML
+    private TableColumn<Vehiculo, String> columnCocheRol;
+    @FXML
+    private Button btnAnadirCoche;
+    @FXML
+    private Button btnEliminarCoche;
+    @FXML
+    private TableColumn<Perito, String> columnPeritoDni;
+    @FXML
+    private TableColumn<Perito, String> columnPeritoNombre;
+    @FXML
+    private TableColumn<Perito, String> columnPeritoApellidos;
+    @FXML
+    private TableColumn<Perito, String> columnPeritoDireccion;
+    @FXML
+    private TableColumn<Perito, String> columnPeritoProvincia;
+    @FXML
+    private TableColumn<Perito, String> columnPeritoTlf;
+    @FXML
+    private TableColumn<Perito, String> columnPeritoEmail;
+    @FXML
+    private Button btnAnadirPerito;
+    @FXML
+    private Button btnEliminarPerito;
+    @FXML
+    private TableView<Vehiculo> tableCoches;
+    @FXML
+    private TableView<Perito> tablePeritos;
 
     /**
      * Initializes the controller class.
@@ -198,6 +242,26 @@ public class VerExpedienteController implements Initializable {
         columnAvisoFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
         columnAvisoEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         columnAvisoDescrip.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
+
+
+        //Tabla Coche
+        columnCocheMatricula.setCellValueFactory(new PropertyValueFactory<>("matricula"));
+        columnCocheAseguradora.setCellValueFactory(new PropertyValueFactory<>("aseguradora"));
+        columnCocheBastidor.setCellValueFactory(new PropertyValueFactory<>("numeroBastidor"));
+        columnCocheColor.setCellValueFactory(new PropertyValueFactory<>("color"));
+        columnCocheMarca.setCellValueFactory(new PropertyValueFactory<>("marca"));
+        columnCocheModelo.setCellValueFactory(new PropertyValueFactory<>("modelo"));
+        columnCochePoliza.setCellValueFactory(new PropertyValueFactory<>("numeroPoliza"));
+        columnCocheRol.setCellValueFactory(new PropertyValueFactory<>("rol"));
+
+        //Tabla Perito
+        columnPeritoApellidos.setCellValueFactory(new PropertyValueFactory<>("apellidos"));
+        columnPeritoDireccion.setCellValueFactory(new PropertyValueFactory<>("direccion"));
+        columnPeritoDni.setCellValueFactory(new PropertyValueFactory<>("dniPerito"));
+        columnPeritoEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        columnPeritoNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        columnPeritoProvincia.setCellValueFactory(new PropertyValueFactory<>("provincia"));
+        columnPeritoTlf.setCellValueFactory(new PropertyValueFactory<>("telefono"));
 
     }
 
@@ -252,6 +316,7 @@ public class VerExpedienteController implements Initializable {
             alertaBorrarDoc.setContentText("Porfavor seleccione el documento que desee eliminar");
             alertaBorrarDoc.showAndWait();
         }
+        cargarDocumentos(expedienteSeleccionado);
     }
 
     @FXML
@@ -303,6 +368,7 @@ public class VerExpedienteController implements Initializable {
             alertaBorrarSent.setContentText("Porfavor seleccione la sentencia que desee eliminar");
             alertaBorrarSent.showAndWait();
         }
+        cargarSentencia(expedienteSeleccionado);
     }
 
     @FXML
@@ -361,6 +427,7 @@ public class VerExpedienteController implements Initializable {
             alertaBorrarSent.setContentText("Porfavor seleccione el incidente que desee eliminar");
             alertaBorrarSent.showAndWait();
         }
+        cargarIncidente(expedienteSeleccionado);
     }
 
     @FXML
@@ -383,6 +450,9 @@ public class VerExpedienteController implements Initializable {
             stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.show();
+
+            cargarAvisos(seleccionado);
+
 
         } else {
 
@@ -411,6 +481,7 @@ public class VerExpedienteController implements Initializable {
             alertaBorrarDoc.setContentText("Porfavor seleccione el aviso que desee eliminar");
             alertaBorrarDoc.showAndWait();
         }
+        cargarAvisos(expedienteSeleccionado);
     }
 
     @FXML
@@ -566,6 +637,11 @@ public class VerExpedienteController implements Initializable {
         cargarIncidente(expedienteSeleccionado);
         cargarSentencia(expedienteSeleccionado);
         cargarAvisos(expedienteSeleccionado);
+
+        cargarCoches(expedienteSeleccionado);
+       // cargarPeritos(expedienteSeleccionado);
+
+
         //columnDocDescrip.setCellValueFactory(v -> new SimpleStringProperty("hdfkjdskjflksd"));
         /*File file = new File("prueba.pdf");
         FileOutputStream os = new FileOutputStream(file);
@@ -601,7 +677,9 @@ public class VerExpedienteController implements Initializable {
         tableIncidente.setItems(FXCollections.observableArrayList(incidente));
     }
 
-    private void cargarAvisos(Expediente expediente) {
+
+    public void cargarAvisos(Expediente expediente) {
+
 
         //Trae todos los avisos del expediente seleccionado
         Query consulta = session.createQuery("select a from Aviso a JOIN "
@@ -609,6 +687,111 @@ public class VerExpedienteController implements Initializable {
         List<Aviso> avisos = consulta.list();
 
         tableAvisos.setItems(FXCollections.observableArrayList(avisos));
+    }
+
+    private void cargarCoches(Expediente expediente) {
+
+        //Trae todos los avisos del expediente seleccionado
+        Query consulta = session.createQuery("select a from Vehiculo a JOIN "
+                + "a.expediente e where e.codigo = ?").setParameter(0, expediente.getCodigo());
+        List<Vehiculo> coche = consulta.list();
+
+        tableCoches.setItems(FXCollections.observableArrayList(coche));
+    }
+
+    private void cargarPeritos(Expediente expediente) {
+
+        //Trae todos los peritos del expediente seleccionado
+        Query consulta = session.createQuery("select a from Perito a JOIN "
+                + "a.expediente e where e.codigo = ?").setParameter(0, expediente.getCodigo());
+        List<Perito> perito = consulta.list();
+
+        tablePeritos.setItems(FXCollections.observableArrayList(perito));
+    }
+
+    @FXML
+    private void anadirCoche(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirVehiculo.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Añadir Vehiculo");
+        stage.setScene(new Scene(root));
+        stage.setResizable(false);
+
+        stage.show();
+
+        AnadirVehiculoController anadirVehiculo = (AnadirVehiculoController) fxmlLoader.getController();
+        anadirVehiculo.setSesion(sesion);
+        anadirVehiculo.setSession(session);
+        cargarCoches(expedienteSeleccionado);
+    }
+
+    @FXML
+    private void eliminarCoche(ActionEvent event) {
+        Vehiculo cocheABorrar = tableCoches.getSelectionModel().getSelectedItem();
+
+        if (cocheABorrar != null) {
+            Transaction tx = session.getTransaction();
+            tx.begin();
+            session.delete(cocheABorrar);
+            tx.commit();
+        } else {
+            Alert alertaEliminarCoche = new Alert(Alert.AlertType.INFORMATION);
+            alertaEliminarCoche.setHeaderText("Coche no seleccionado");
+            alertaEliminarCoche.setContentText("Porfavor seleccione el coche que desee eliminar");
+            alertaEliminarCoche.showAndWait();
+        }
+        cargarCoches(expedienteSeleccionado);
+    }
+
+    @FXML
+    private void anadirPerito(ActionEvent event) throws IOException {
+        Expediente seleccionado = tableExpedientes.getSelectionModel().getSelectedItem();
+
+        if (seleccionado != null) {
+
+            //Abre ventana modal para añadir un documento al expediente seleccionado
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirPerito.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            AnadirPeritoController peritoController = (AnadirPeritoController) fxmlLoader.getController();
+            peritoController.setSession(session);
+            peritoController.setExpediente(seleccionado);
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Añadir Perito");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.show();
+            cargarPeritos(seleccionado);
+
+        } else {
+
+            //Si no selecciona ningúno
+            Alert alertaNuevoAviso = new Alert(Alert.AlertType.INFORMATION);
+            alertaNuevoAviso.setHeaderText("Expediente no seleccionado");
+            alertaNuevoAviso.setContentText("Porfavor seleccione un expediente para añadir un perito a ese expediente.");
+            alertaNuevoAviso.showAndWait();
+        }
+    }
+
+    @FXML
+    private void eliminarPerito(ActionEvent event) {
+        Perito peritoABorrar = tablePeritos.getSelectionModel().getSelectedItem();
+
+        if (peritoABorrar != null) {
+            Transaction tx = session.getTransaction();
+            tx.begin();
+            session.delete(peritoABorrar);
+            tx.commit();
+        } else {
+            Alert alertaBorrarPerito = new Alert(Alert.AlertType.INFORMATION);
+            alertaBorrarPerito.setHeaderText("Perito no seleccionado");
+            alertaBorrarPerito.setContentText("Porfavor seleccione el perito que desee eliminar");
+            alertaBorrarPerito.showAndWait();
+        }
     }
 
 }

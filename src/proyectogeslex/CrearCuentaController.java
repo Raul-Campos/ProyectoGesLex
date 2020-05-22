@@ -52,7 +52,7 @@ public class CrearCuentaController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
     }
 
     @FXML
@@ -64,28 +64,39 @@ public class CrearCuentaController implements Initializable {
     @FXML
     private void CrearCuenta(ActionEvent event) {
         Usuarios usuario = new Usuarios();
-        if (tfcontrasena.getText().equals(tfcontrasena2.getText())) {
+        Alert alerta;
+
+        boolean errorFormato = false;
+        boolean alert = true;
+
+        if (tfusuario.getText() != null && !tfusuario.getText().equals("")) {
             usuario.setNombre(tfusuario.getText());
+        } else if (alert) {
+            alerta = new Alert(Alert.AlertType.INFORMATION, "Introduce su nuevo usuario");
+            alerta.showAndWait();
+            errorFormato = true;
+            alert = false;
+        }
+
+        if ((tfcontrasena.getText().equals(tfcontrasena2.getText()) && tfcontrasena.getText() != null) && !tfcontrasena.getText().equals("")) {
+
             usuario.setContrasena(tfcontrasena.getText());
             Transaction tx = session.getTransaction();
 
             tx.begin();
             session.save(usuario);
             tx.commit();
-            Alert alerta = new Alert(Alert.AlertType.CONFIRMATION, "Cuenta creada con exito", ButtonType.OK);
+            alerta = new Alert(Alert.AlertType.CONFIRMATION, "Cuenta creada con exito", ButtonType.OK);
             alerta.setHeaderText("Crear Cuenta");
+            alerta.showAndWait();
 
-            Optional<ButtonType> result = alerta.showAndWait();
-
-            if (result.get() == ButtonType.OK) {
-                Stage stage = (Stage) btncancelar.getScene().getWindow();
-                stage.close();
-            }
+            Stage stage = (Stage) btncancelar.getScene().getWindow();
+            stage.close();
 
         } else {
-            Alert alerta = new Alert(Alert.AlertType.ERROR);
+            alerta = new Alert(Alert.AlertType.ERROR);
             alerta.setHeaderText("Error al Crear Cuenta");
-            alerta.setContentText("Las contraseñas no coinciden. Por favor reviselas.");
+            alerta.setContentText("Las contraseñas no coinciden o no validas. Por favor reviselas.");
             alerta.showAndWait();
         }
     }
