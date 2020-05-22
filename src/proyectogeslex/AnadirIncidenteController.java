@@ -16,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
@@ -69,7 +70,6 @@ public class AnadirIncidenteController implements Initializable {
         cbTipo.getItems().add("Asestado");
     }
 
-   
     @FXML
     private void Limpiar(ActionEvent event) {
         datePickeFecha.setValue(null);
@@ -83,32 +83,74 @@ public class AnadirIncidenteController implements Initializable {
 
     @FXML
     private void aceptarIncidente(ActionEvent event) throws ParseException, IOException {
-        Incidente incidente = new Incidente();
-        System.out.println(datePickeFecha.getValue().toString());
-        incidente.setFechaHora(DateToDateTime());
-        incidente.setLugar(tfLugar.getText());
-        incidente.setDefensa(tfDefensaJuridica.getText());
-        incidente.setEnviadoPor(tfEnviadoPor.getText());
-        if (chNo.isSelected()) {
-            incidente.setFallecidos("No");
-        } else if (chSi.isSelected()) {
-            incidente.setFallecidos("Si");
+        boolean camposRellenos = true;
+
+        //Comprobación de campos
+        if (datePickeFecha.getValue() == null) {
+            camposRellenos = false;
         }
-        
-        incidente.setParte(cbTipo.getValue());
-        incidente.setCodigoExpediente(expediente.getCodigo());
+        if (tfHora.getText().equals("")) {
+            camposRellenos = false;
+        }
+        if (tfLugar.getText().equals("")) {
+            camposRellenos = false;
+        }
+        if (tfEnviadoPor.getText().equals("")) {
+            camposRellenos = false;
+        }
+        if (cbTipo.getValue() == null) {
+            camposRellenos = false;
+        }
+        if (!chSi.isSelected() && !chNo.isSelected()) {
+            camposRellenos = false;
+        }
 
-        Transaction tx = session.getTransaction();
-        //Guarda el incidente
-        tx.begin();
-        session.merge(incidente);
-        tx.commit();
+        if (camposRellenos) {
 
-        //Cierra ventana
-        Stage cerrar = (Stage) tfDefensaJuridica.getScene().getWindow();
-        cerrar.close();
-        
-       
+            Incidente incidente = new Incidente();
+            System.out.println(datePickeFecha.getValue().toString());
+
+            incidente.setLugar(tfLugar.getText());
+            incidente.setDefensa(tfDefensaJuridica.getText());
+            incidente.setEnviadoPor(tfEnviadoPor.getText());
+            if (chNo.isSelected()) {
+                incidente.setFallecidos("No");
+            } else if (chSi.isSelected()) {
+                incidente.setFallecidos("Si");
+            }
+
+            incidente.setParte(cbTipo.getValue());
+            incidente.setCodigoExpediente(expediente.getCodigo());
+            incidente.setExpediente(expediente);
+
+            Transaction tx = session.getTransaction();
+            
+            try {
+                incidente.setFechaHora(DateToDateTime());
+
+                //Guarda el incidente
+                tx.begin();
+                session.save(incidente);
+                tx.commit();
+
+                //Cierra ventana
+                Stage cerrar = (Stage) tfDefensaJuridica.getScene().getWindow();
+                cerrar.close();
+            } catch (ParseException ex) {
+                tx.rollback();
+                Alert alertaNuevoDoc = new Alert(Alert.AlertType.INFORMATION);
+                alertaNuevoDoc.setHeaderText("Error de formato");
+                alertaNuevoDoc.setContentText("Porfavor intruzca la hora en el formato correcto(HH:MM:SS).");
+                alertaNuevoDoc.showAndWait();
+            }
+
+        } else {
+            Alert alertaNuevoInc = new Alert(Alert.AlertType.INFORMATION);
+            alertaNuevoInc.setHeaderText("Error al añadir incidente");
+            alertaNuevoInc.setContentText("Porfavor rellene los campos necesarios (todos exceptop defensa)");
+            alertaNuevoInc.showAndWait();
+        }
+
     }
 
     @FXML
@@ -127,25 +169,27 @@ public class AnadirIncidenteController implements Initializable {
 
     @FXML
     private void OpcionCheckBoxNo(ActionEvent event) {
-        if(chSi.isSelected())
+        if (chSi.isSelected()) {
             chSi.setSelected(false);
+        }
         chNo.setSelected(true);
     }
 
     @FXML
     private void OpcionCheckBoxSi(ActionEvent event) {
-        if(chNo.isSelected())
+        if (chNo.isSelected()) {
             chNo.setSelected(false);
+        }
         chSi.setSelected(true);
     }
-    
-    private Date DateToDateTime() throws ParseException{
+
+    private Date DateToDateTime() throws ParseException {
         Date fecha = null;
-        String datos=datePickeFecha.getValue().toString()+" "+tfHora.getText();
-        
-        String strDateFormat="yyyy-MM-dd hh:mm:ss";
+        String datos = datePickeFecha.getValue().toString() + " " + tfHora.getText();
+
+        String strDateFormat = "yyyy-MM-dd hh:mm:ss";
         SimpleDateFormat formato = new SimpleDateFormat(strDateFormat);
-        fecha=formato.parse(datos);
+        fecha = formato.parse(datos);
         System.out.println(fecha.toString());
         return fecha;
     }

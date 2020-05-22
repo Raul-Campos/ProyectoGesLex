@@ -179,12 +179,12 @@ public class VerExpedienteController implements Initializable {
 
         //Quita el color gris del header al tabpane asociado al principal
         tabPaneAsociado.getStyleClass().add("floating");
-        
+
         //Tabla Sentencias
         columnSentTitulo.setCellValueFactory(new PropertyValueFactory<>("titulo"));
         columnSentDescrip.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
         columnSentFecha.setCellValueFactory(new PropertyValueFactory<>("fechaPublicacion"));
-        
+
         //Tabla Incidente
         columnIncidenteDefensa.setCellValueFactory(new PropertyValueFactory<>("defensa"));
         columnIncidenteEnviado.setCellValueFactory(new PropertyValueFactory<>("enviadoPor"));
@@ -192,13 +192,13 @@ public class VerExpedienteController implements Initializable {
         columnIncidenteFecha.setCellValueFactory(new PropertyValueFactory<>("fechaHora"));
         columnIncidenteLugar.setCellValueFactory(new PropertyValueFactory<>("lugar"));
         columnIncidenteTipo.setCellValueFactory(new PropertyValueFactory<>("parte"));
-      
+
         //Tabla avisos
         columnAvisoID.setCellValueFactory(new PropertyValueFactory<>("idAviso"));
         columnAvisoFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
         columnAvisoEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         columnAvisoDescrip.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
-                
+
     }
 
     @FXML
@@ -311,23 +311,30 @@ public class VerExpedienteController implements Initializable {
 
         if (seleccionado != null) {
 
-            //Abre ventana modal para añadir un documento al expediente seleccionado
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirIncidente.fxml"));
-            Parent root = (Parent) fxmlLoader.load();
-            AnadirIncidenteController incidenteController = (AnadirIncidenteController) fxmlLoader.getController();
-            incidenteController.setSession(session);
-            incidenteController.setExpediente(seleccionado);
+            if (seleccionado.getIncidente() == null) {
+                //Abre ventana modal para añadir un documento al expediente seleccionado
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirIncidente.fxml"));
+                Parent root = (Parent) fxmlLoader.load();
+                AnadirIncidenteController incidenteController = (AnadirIncidenteController) fxmlLoader.getController();
+                incidenteController.setSession(session);
+                incidenteController.setExpediente(seleccionado);
 
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("Añadir Incidente");
-            stage.setScene(new Scene(root));
-            stage.setResizable(false);
-            stage.show();
+                Stage stage = new Stage();
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setTitle("Añadir Incidente");
+                stage.setScene(new Scene(root));
+                stage.setResizable(false);
+                stage.show();
 
-            stage.setOnCloseRequest(e -> {
-                cargarIncidente(expedienteSeleccionado);
-            });
+                stage.setOnCloseRequest(e -> {
+                    cargarIncidente(expedienteSeleccionado);
+                });
+            }else{
+                Alert alertaIncExistente = new Alert(Alert.AlertType.INFORMATION);
+                alertaIncExistente.setHeaderText("Incidente existente");
+                alertaIncExistente.setContentText("Ya hay un incidente añadido, si desea añadir uno nuevo elimine el actual.");
+                alertaIncExistente.showAndWait();
+            }
 
         } else {
 
@@ -355,10 +362,10 @@ public class VerExpedienteController implements Initializable {
             alertaBorrarSent.showAndWait();
         }
     }
-    
+
     @FXML
     private void anadirAviso(ActionEvent event) throws IOException {
-      
+
         Expediente seleccionado = tableExpedientes.getSelectionModel().getSelectedItem();
 
         if (seleccionado != null) {
@@ -377,7 +384,6 @@ public class VerExpedienteController implements Initializable {
             stage.setResizable(false);
             stage.show();
 
-
         } else {
 
             //Si no selecciona ningúno
@@ -391,7 +397,7 @@ public class VerExpedienteController implements Initializable {
 
     @FXML
     private void eliminarAviso(ActionEvent event) {
-      
+
         Aviso avisoABorrar = tableAvisos.getSelectionModel().getSelectedItem();
 
         if (avisoABorrar != null) {
@@ -560,7 +566,6 @@ public class VerExpedienteController implements Initializable {
         cargarIncidente(expedienteSeleccionado);
         cargarSentencia(expedienteSeleccionado);
         cargarAvisos(expedienteSeleccionado);
-
         //columnDocDescrip.setCellValueFactory(v -> new SimpleStringProperty("hdfkjdskjflksd"));
         /*File file = new File("prueba.pdf");
         FileOutputStream os = new FileOutputStream(file);
@@ -586,7 +591,7 @@ public class VerExpedienteController implements Initializable {
 
         tableSentencias.setItems(FXCollections.observableArrayList(sentencias));
     }
-    
+
     public void cargarIncidente(Expediente expediente) {
         //Trae todos los documentos del expediente seleccionado
         Query consulta = session.createQuery("select d from Incidente d JOIN "
@@ -595,7 +600,7 @@ public class VerExpedienteController implements Initializable {
 
         tableIncidente.setItems(FXCollections.observableArrayList(incidente));
     }
-  
+
     private void cargarAvisos(Expediente expediente) {
 
         //Trae todos los avisos del expediente seleccionado
