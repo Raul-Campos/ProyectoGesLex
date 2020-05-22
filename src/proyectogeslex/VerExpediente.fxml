@@ -83,6 +83,36 @@
    <bottom>
       <TabPane fx:id="tabPaneAsociado" prefHeight="285.0" prefWidth="917.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
+            <Tab text="Coches">
+               <content>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="tableCoches" prefHeight="256.0" prefWidth="857.0">
+                           <columns>
+                              <TableColumn fx:id="columnCocheMatricula" prefWidth="109.0" text="Matricula" />
+                              <TableColumn fx:id="columnCocheMarca" minWidth="0.0" prefWidth="77.0" text="Marca" />
+                              <TableColumn fx:id="columnCocheModelo" minWidth="0.0" prefWidth="114.0" text="Modelo" />
+                              <TableColumn fx:id="columnCocheColor" minWidth="9.0" prefWidth="66.0" text="Color" />
+                              <TableColumn fx:id="columnCocheBastidor" minWidth="0.0" prefWidth="132.0" text="Numero Bastidor" />
+                              <TableColumn fx:id="columnCocheAseguradora" prefWidth="92.0" text="Aseguradora" />
+                              <TableColumn fx:id="columnCochePoliza" minWidth="0.0" prefWidth="108.0" text="Numero Poliza" />
+                              <TableColumn fx:id="columnCocheRol" prefWidth="99.0" text="Rol" />
+                           </columns>
+                        </TableView>
+                        <VBox alignment="CENTER" prefHeight="256.0" prefWidth="167.0">
+                           <children>
+                              <Button fx:id="btnAnadirCoche" mnemonicParsing="false" onAction="#anadirCoche" text="Añadir Coche">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" />
+                                 </VBox.margin>
+                              </Button>
+                              <Button fx:id="btnEliminarCoche" mnemonicParsing="false" onAction="#eliminarCoche" text="Eliminar" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </content>
+            </Tab>
           <Tab text="Documentos">
                <content>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
@@ -220,6 +250,35 @@
                                  </VBox.margin>
                               </Button>
                               <Button fx:id="btnEliminarIncidente" mnemonicParsing="false" onAction="#eliminarIncidente" text="Eliminar" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </content>
+            </Tab>
+            <Tab text="Peritos">
+               <content>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="tablePeritos" prefHeight="256.0" prefWidth="857.0">
+                           <columns>
+                              <TableColumn fx:id="columnPeritoDni" prefWidth="90.0" text="DNI" />
+                              <TableColumn fx:id="columnPeritoNombre" minWidth="0.0" prefWidth="92.0" text="Nombre" />
+                              <TableColumn fx:id="columnPeritoApellidos" minWidth="0.0" prefWidth="173.0" text="Apellidos" />
+                              <TableColumn fx:id="columnPeritoDireccion" minWidth="9.0" prefWidth="123.0" text="Direccion" />
+                              <TableColumn fx:id="columnPeritoProvincia" minWidth="0.0" prefWidth="86.0" text="Provincia" />
+                              <TableColumn fx:id="columnPeritoTlf" prefWidth="104.0" text="Telefono" />
+                              <TableColumn fx:id="columnPeritoEmail" prefWidth="129.0" text="Email" />
+                           </columns>
+                        </TableView>
+                        <VBox alignment="CENTER" prefHeight="256.0" prefWidth="167.0">
+                           <children>
+                              <Button fx:id="btnAnadirPerito" mnemonicParsing="false" onAction="#anadirPerito" text="Añadir Perito">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" />
+                                 </VBox.margin>
+                              </Button>
+                              <Button fx:id="btnEliminarPerito" mnemonicParsing="false" onAction="#eliminarPerito" text="Eliminar" />
                            </children>
                         </VBox>
                      </children>

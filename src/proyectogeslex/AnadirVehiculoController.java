@@ -6,7 +6,10 @@
 package proyectogeslex;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,8 +18,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javax.persistence.RollbackException;
+import map.Cliente;
+import map.Expediente;
 import map.Vehiculo;
 import org.hibernate.NonUniqueObjectException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -81,32 +88,127 @@ public class AnadirVehiculoController implements Initializable {
     @FXML
     private void AceptarVehiculo(ActionEvent event) {
         Vehiculo vehiculo = new Vehiculo();
-        vehiculo.setMatricula(tfMatricula.getText());
-        //vehiculo.setExpediente(expediente);
-        vehiculo.setMarca(tfMarca.getText());
-        vehiculo.setModelo(tfModelo.getText());
-        vehiculo.setColor(tfColor.getText());
-        vehiculo.setNumeroBastidor(tfBastidor.getText());
-        vehiculo.setAseguradora(tfAseguradora.getText());
-        vehiculo.setNumeroPoliza(tfPoliza.getText());
-        vehiculo.setRol(cbRol.getValue());
+        Alert alerta;
+        boolean errorFormato = false;
+        boolean alert = true;
+        if (tfMatricula.getText() != null && !tfMatricula.getText().equals("")) {
+            vehiculo.setMatricula(tfMatricula.getText());
 
-        Transaction tx = session.getTransaction();
+            if (tfAseguradora.getText() != null && !tfAseguradora.getText().equals("")) {
+                vehiculo.setAseguradora(tfAseguradora.getText());
+            } else if (alert) {
+                alerta = new Alert(Alert.AlertType.INFORMATION, "Introduce una aseguradora");
+                alerta.showAndWait();
+                errorFormato = true;
+                alert = false;
+            }
 
-        try {
-            tx.begin();
-            session.merge(vehiculo);
-            tx.commit();
-        } catch (NonUniqueObjectException ex) {
-            tx.rollback();
-            Alert alertaExistente = new Alert(Alert.AlertType.INFORMATION);
-            alertaExistente.setHeaderText("Vehículo existente");
-            alertaExistente.setContentText("Ya se ha añadido ese vehículo anteriormente.");
-            alertaExistente.showAndWait();
+            if (tfBastidor.getText() != null && !tfBastidor.getText().equals("")) {
+                vehiculo.setNumeroBastidor(tfBastidor.getText());
+            } else if (alert) {
+                alerta = new Alert(Alert.AlertType.INFORMATION, "Introduce un numero de bastidor");
+                alerta.showAndWait();
+                errorFormato = true;
+                alert = false;
+            }
+
+            if (tfColor.getText() != null && !tfColor.getText().equals("")) {
+                vehiculo.setColor(tfColor.getText());
+            } else if (alert) {
+                alerta = new Alert(Alert.AlertType.INFORMATION, "Introduce un color");
+                alerta.showAndWait();
+                errorFormato = true;
+                alert = false;
+            }
+
+            if (tfMarca.getText() != null && !tfMarca.getText().equals("")) {
+                vehiculo.setMarca(tfMarca.getText());
+            } else if (alert) {
+                alerta = new Alert(Alert.AlertType.INFORMATION, "Introduce una marca");
+                alerta.showAndWait();
+                errorFormato = true;
+                alert = false;
+            }
+
+            if (tfModelo.getText() != null && !tfModelo.getText().equals("")) {
+                vehiculo.setModelo(tfModelo.getText());
+            } else if (alert) {
+                alerta = new Alert(Alert.AlertType.INFORMATION, "Introduce su modelo de coche");
+                alerta.showAndWait();
+                errorFormato = true;
+                alert = false;
+            }
+
+            if (tfPoliza.getText() != null && !tfPoliza.getText().equals("")) {
+                vehiculo.setNumeroPoliza(tfPoliza.getText());
+            } else if (alert) {
+                alerta = new Alert(Alert.AlertType.INFORMATION, "Introduce su numero de poliza");
+                alerta.showAndWait();
+                errorFormato = true;
+                alert = false;
+            }
+            if (cbRol.getValue() != null && !cbRol.getValue().isEmpty()) {
+                vehiculo.setRol(cbRol.getValue());
+            } else if (alert) {
+                alerta = new Alert(Alert.AlertType.INFORMATION, "Seleccione el rol del vehiculo");
+                alerta.showAndWait();
+                errorFormato = true;
+                alert = false;
+            }
+            String expRegexp = "[0,9]*";
+            Pattern pat = Pattern.compile(expRegexp);
+            Matcher mat = pat.matcher(tfExpediente.getText());
+            if (tfExpediente.getText() != null && !tfExpediente.getText().equals("") /*&& (mat.matches())*/) {
+                Query consulta = session.createQuery("from Expediente");
+                List<Expediente> expedientes = consulta.list();
+
+                expedientes.forEach((expediente) -> {
+
+                    if (expediente.getCodigo() == Integer.parseInt(tfExpediente.getText())) {
+                        vehiculo.setExpediente(expediente);
+                    }
+                });
+
+            } else if (alert) {
+                alerta = new Alert(Alert.AlertType.INFORMATION, "Introduzca correctamente el codigo de expediente al que desea añadir el coche");
+                alerta.showAndWait();
+                errorFormato = true;
+                alert = false;
+            }
+
+            if (!errorFormato) {
+                Transaction tx = session.getTransaction();
+
+                try {
+                    tx.begin();
+                    session.save(vehiculo);
+                    tx.commit();
+
+                    Stage stage = (Stage) btnAceptar.getScene().getWindow();
+                    stage.close();
+                } catch (NonUniqueObjectException ex) {
+                    tx.rollback();
+                    Alert alertaExistente = new Alert(Alert.AlertType.INFORMATION);
+                    alertaExistente.setHeaderText("Vehiculo existente");
+                    alertaExistente.setContentText("Ya se ha añadido ese vehiculo anteriormente.");
+                    alertaExistente.showAndWait();
+
+                } catch (RollbackException e) {
+                    tx.rollback();
+                    alerta = new Alert(Alert.AlertType.INFORMATION, "Error al guardar los datos. Inténtelo de nuevo");
+                    alerta.setContentText(e.getLocalizedMessage());
+                    alerta.showAndWait();
+                }
+            }
+
+        } else if (alert) {
+            alerta = new Alert(Alert.AlertType.INFORMATION, "Introduce una matricula valida");
+            alerta.showAndWait();
+            errorFormato = true;
+            alert = false;
         }
 
-        Stage stage = (Stage) btnAceptar.getScene().getWindow();
-        stage.close();
+        
     }
 
     @FXML

@@ -84,7 +84,7 @@ public class AnadirIncidenteController implements Initializable {
     @FXML
     private void aceptarIncidente(ActionEvent event) throws ParseException, IOException {
         Incidente incidente = new Incidente();
-        System.out.println(datePickeFecha.getValue().toString());
+        
         incidente.setFechaHora(DateToDateTime());
         incidente.setLugar(tfLugar.getText());
         incidente.setDefensa(tfDefensaJuridica.getText());

@@ -92,7 +92,7 @@ public class AnadirAvisoController implements Initializable {
             //Cierra ventana
             Stage cerrar = (Stage) tfEmail.getScene().getWindow();
             cerrar.close();
-
+            
         } catch (NullPointerException ex) {
             Alert alertaNuevoAviso = new Alert(Alert.AlertType.INFORMATION);
             alertaNuevoAviso.setHeaderText("Error al guardar aviso");
