@@ -54,7 +54,10 @@ public class DocumentoId  implements java.io.Serializable {
          return result;
    }   
 
-
+   @Override
+    public String toString() {
+        return nombre;
+    }
 }
 
 

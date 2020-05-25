@@ -101,9 +101,10 @@ public class Perito  implements java.io.Serializable {
         this.expedientes = expedientes;
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return dniPerito;
+    }
 }
 
 
