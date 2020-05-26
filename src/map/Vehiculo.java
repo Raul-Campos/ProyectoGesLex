@@ -19,7 +19,7 @@ public class Vehiculo  implements java.io.Serializable {
      private String aseguradora;
      private String numeroPoliza;
      private String rol;
-     private Set expedientes = new HashSet(0);
+     private Set expedientes = new HashSet(10);
 
     public Vehiculo() {
     }

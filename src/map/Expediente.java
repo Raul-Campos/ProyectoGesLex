@@ -143,6 +143,8 @@ public class Expediente  implements java.io.Serializable {
         this.sentencias = sentencias;
     }
 
+    
+
 
 
 

@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,6 +20,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -39,11 +41,11 @@ import map.Procurador;
 public class AnadirExpedienteController implements Initializable {
 
     @FXML
-    private ChoiceBox<String> chCliente;
+    private ComboBox<String> chCliente;
     @FXML
-    private ChoiceBox<String> chLetrado;
+    private ComboBox<String> chLetrado;
     @FXML
-    private ChoiceBox<String> chProcurador;
+    private ComboBox<String> chProcurador;
     @FXML
     private TextField tfFechaC;
     @FXML
@@ -65,6 +67,8 @@ public class AnadirExpedienteController implements Initializable {
 
         Calendar c = Calendar.getInstance();
         tfFechaC.setText(Integer.toString(c.get(Calendar.YEAR))+ "-" +  Integer.toString(c.get(Calendar.MONTH) + 1) + "-" + Integer.toString(c.get(Calendar.DATE))  );
+       
+       
     }
 
     @FXML
@@ -156,23 +160,30 @@ public class AnadirExpedienteController implements Initializable {
     @FXML
     private void cargarDatos(ActionEvent event) {
 
+
         Query consulta = session.createQuery("from Cliente");
         List<Cliente> clientes = consulta.list();
+       
         clientes.forEach((cliente) -> {
-            chCliente.getItems().add(cliente.getDni() + "  " + cliente.getApellidos() + "," + cliente.getNombre());
+            chCliente.getItems().add((cliente.getDni() + "  " + cliente.getApellidos() + "," + cliente.getNombre()));
         });
-
+        AutoFillBox.autoCompleteComboBoxPlus(chCliente, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()));
+        
         consulta = session.createQuery("from Letrado");
         List<Letrado> letrados = consulta.list();
         letrados.forEach((letrado) -> {
             chLetrado.getItems().add(letrado.getDniLetrado() + "  " + letrado.getApellidos() + "," + letrado.getNombre());
         });
+                AutoFillBox.autoCompleteComboBoxPlus(chLetrado, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()));
+
 
         consulta = session.createQuery("from Procurador");
         List<Procurador> procuradores = consulta.list();
         procuradores.forEach((procurador) -> {
             chProcurador.getItems().add(procurador.getDniProcurador() + "  " + procurador.getApellidos() + "," + procurador.getNombre());
         });
+                AutoFillBox.autoCompleteComboBoxPlus(chProcurador, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()));
+
     }
 
     private static Date StringToDate(String date) {
