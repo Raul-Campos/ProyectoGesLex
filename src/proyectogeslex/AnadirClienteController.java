@@ -58,6 +58,7 @@ public class AnadirClienteController implements Initializable {
     private Button btnCancelar;
     @FXML
     private TextField textfieldApellidos;
+    private Cliente existente;
 
     /**
      * Initializes the controller class.
@@ -158,9 +159,16 @@ public class AnadirClienteController implements Initializable {
                 Transaction tx = session.getTransaction();
 
                 try {
-                    tx.begin();
-                    session.save(cliente);
-                    tx.commit();
+
+                    if (existente == null) {
+                        tx.begin();
+                        session.save(cliente);
+                        tx.commit();
+                    } else {
+                        tx.begin();
+                        session.merge(cliente);
+                        tx.commit();
+                    }
 
                     Stage stage = (Stage) btnEnviar.getScene().getWindow();
                     stage.close();
@@ -214,5 +222,29 @@ public class AnadirClienteController implements Initializable {
     private void btnCancelar(ActionEvent event) {
         Stage stage = (Stage) btnCancelar.getScene().getWindow();
         stage.close();
+    }
+
+    public void setExistente(Cliente existente) {
+        this.existente = existente;
+    }
+
+    //Detecta que el cliente existe y carga sus datos desde la bd
+    public void cargarDatos() {
+
+        if (existente != null) {
+            //Muestra los datos
+            textfieldDni.setText(existente.getDni());
+            textfieldApellidos.setText(existente.getApellidos());
+            textfieldFecha.setText(existente.getFechaNacimiento().toString());
+            textfieldNombre.setText(existente.getNombre());
+            cbSitFam.setValue(existente.getSituacionFamiliar());
+            cbSitLab.setValue(existente.getSituacionLaboral());
+            if (existente.getSexo().equals("Hombre")) {
+                radiobH.setSelected(true);
+            } else {
+                radiobM.setSelected(true);
+            }
+        }
+
     }
 }

@@ -74,6 +74,8 @@ public class VerPeritoController implements Initializable {
     private Session session;
     @FXML
     private Button btnAñadir;
+    @FXML
+    private Button btnModificar;
 
     /**
      * Initializes the controller class.
@@ -214,5 +216,9 @@ public class VerPeritoController implements Initializable {
 
     public void setSesion(SessionFactory sesion) {
         this.sesion = sesion;
+    }
+
+    @FXML
+    private void modificarPerito(ActionEvent event) {
     }
 }

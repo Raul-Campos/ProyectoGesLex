@@ -75,6 +75,8 @@ public class VerVehiculosController implements Initializable {
     
     @FXML
     private Button btnAñadir;
+    @FXML
+    private Button btnModificar;
 
     /**
      * Initializes the controller class.
@@ -196,6 +198,10 @@ public class VerVehiculosController implements Initializable {
         
         Query consulta = session.createQuery("from Vehiculo where "+campo+" = ?").setParameter(0, valor);
         return consulta.list();
+    }
+
+    @FXML
+    private void modificarVehiculo(ActionEvent event) {
     }
     
 }

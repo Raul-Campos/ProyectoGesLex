@@ -44,6 +44,8 @@ public class LoginController implements Initializable {
     private PasswordField tfcontrasena;
     private Session session;
     private SessionFactory sesion;
+    private String emailUser;
+    private String emailPassword;
 
     /**
      * Initializes the controller class.
@@ -86,6 +88,8 @@ public class LoginController implements Initializable {
             
             controladorMenu.setSesion(sesion);
             controladorMenu.setSession(session);
+            controladorMenu.setEmailUser(emailUser);
+            controladorMenu.setEmailPassword(emailPassword);
             
             //Muestra menú
             Stage menu = new Stage();
@@ -122,4 +126,13 @@ public class LoginController implements Initializable {
         this.sesion = sesion;
     }
 
+    public void setEmailUser(String emailUser) {
+        this.emailUser = emailUser;
+    }
+
+    public void setEmailPassword(String emailPassword) {
+        this.emailPassword = emailPassword;
+    }
+    
+    
 }

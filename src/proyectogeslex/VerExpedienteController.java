@@ -6,6 +6,7 @@
  */
 package proyectogeslex;
 
+import email.EnviarAvisos;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -200,6 +201,8 @@ public class VerExpedienteController implements Initializable {
     private TableView<Vehiculo> tableCoches;
     @FXML
     private TableView<Perito> tablePeritos;
+    private String emailUser;
+    private String emailPassword;
 
     /**
      * Initializes the controller class.
@@ -243,7 +246,6 @@ public class VerExpedienteController implements Initializable {
         columnAvisoEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         columnAvisoDescrip.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
 
-
         //Tabla Coche
         columnCocheMatricula.setCellValueFactory(new PropertyValueFactory<>("matricula"));
         columnCocheAseguradora.setCellValueFactory(new PropertyValueFactory<>("aseguradora"));
@@ -283,11 +285,9 @@ public class VerExpedienteController implements Initializable {
             stage.setTitle("Añadir documentos");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
-            stage.show();
+            stage.showAndWait();
 
-            stage.setOnCloseRequest(e -> {
-                cargarDocumentos(expedienteSeleccionado);
-            });
+            cargarDocumentos(expedienteSeleccionado);
 
         } else {
 
@@ -337,11 +337,9 @@ public class VerExpedienteController implements Initializable {
             stage.setTitle("Añadir Sentencias");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
-            stage.show();
+            stage.showAndWait();
 
-            stage.setOnCloseRequest(e -> {
-                cargarSentencia(expedienteSeleccionado);
-            });
+            cargarSentencia(expedienteSeleccionado);
 
         } else {
 
@@ -390,12 +388,11 @@ public class VerExpedienteController implements Initializable {
                 stage.setTitle("Añadir Incidente");
                 stage.setScene(new Scene(root));
                 stage.setResizable(false);
-                stage.show();
+                stage.showAndWait();
 
-                stage.setOnCloseRequest(e -> {
-                    cargarIncidente(expedienteSeleccionado);
-                });
-            }else{
+                cargarIncidente(expedienteSeleccionado);
+                
+            } else {
                 Alert alertaIncExistente = new Alert(Alert.AlertType.INFORMATION);
                 alertaIncExistente.setHeaderText("Incidente existente");
                 alertaIncExistente.setContentText("Ya hay un incidente añadido, si desea añadir uno nuevo elimine el actual.");
@@ -449,10 +446,11 @@ public class VerExpedienteController implements Initializable {
             stage.setTitle("Añadir avisos");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
-            stage.show();
-
+            stage.showAndWait();
             cargarAvisos(seleccionado);
 
+            Thread comprobarAvisos = new Thread(new EnviarAvisos(emailUser, emailPassword, session));
+           // comprobarAvisos.start();
 
         } else {
 
@@ -525,7 +523,7 @@ public class VerExpedienteController implements Initializable {
         stage.setScene(new Scene(root));
         stage.setResizable(false);
 
-        stage.show();
+        stage.showAndWait();
 
         AnadirExpedienteController anadirClientes = (AnadirExpedienteController) fxmlLoader.getController();
         anadirClientes.setSesion(sesion);
@@ -545,6 +543,14 @@ public class VerExpedienteController implements Initializable {
 
     public void setSesion(SessionFactory sesion) {
         this.sesion = sesion;
+    }
+
+    public void setEmailUser(String emailUser) {
+        this.emailUser = emailUser;
+    }
+
+    public void setEmailPassword(String emailPassword) {
+        this.emailPassword = emailPassword;
     }
 
     public TabPane getTabPaneAsociado() {
@@ -639,8 +645,7 @@ public class VerExpedienteController implements Initializable {
         cargarAvisos(expedienteSeleccionado);
 
         cargarCoches(expedienteSeleccionado);
-       // cargarPeritos(expedienteSeleccionado);
-
+        // cargarPeritos(expedienteSeleccionado);
 
         //columnDocDescrip.setCellValueFactory(v -> new SimpleStringProperty("hdfkjdskjflksd"));
         /*File file = new File("prueba.pdf");
@@ -677,9 +682,7 @@ public class VerExpedienteController implements Initializable {
         tableIncidente.setItems(FXCollections.observableArrayList(incidente));
     }
 
-
     public void cargarAvisos(Expediente expediente) {
-
 
         //Trae todos los avisos del expediente seleccionado
         Query consulta = session.createQuery("select a from Aviso a JOIN "
@@ -720,7 +723,7 @@ public class VerExpedienteController implements Initializable {
         stage.setScene(new Scene(root));
         stage.setResizable(false);
 
-        stage.show();
+        stage.showAndWait();
 
         AnadirVehiculoController anadirVehiculo = (AnadirVehiculoController) fxmlLoader.getController();
         anadirVehiculo.setSesion(sesion);
@@ -764,7 +767,7 @@ public class VerExpedienteController implements Initializable {
             stage.setTitle("Añadir Perito");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
-            stage.show();
+            stage.showAndWait();
             cargarPeritos(seleccionado);
 
         } else {
