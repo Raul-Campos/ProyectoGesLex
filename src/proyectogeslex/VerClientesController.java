@@ -53,13 +53,9 @@ public class VerClientesController implements Initializable {
     private TextField tfBusqueda;
     private AnchorPane v;
     @FXML
-    private HBox idbajo;
-    @FXML
     private HBox idcentro;
     @FXML
     private Button btnBuscar;
-    @FXML
-    private Button btnBorrar;
     private Session session;
     private SessionFactory sesion;
     @FXML
@@ -78,6 +74,12 @@ public class VerClientesController implements Initializable {
     private TableColumn<Cliente, String> sitFamiliarColumn;
     @FXML
     private Button anadirCliente;
+    @FXML
+    private HBox idbajo1;
+    @FXML
+    private Button btnModificar;
+    @FXML
+    private Button btnBorrar1;
 
     /**
      * Initializes the controller class.
@@ -175,18 +177,17 @@ public class VerClientesController implements Initializable {
     private void anadirCliente(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirCliente.fxml"));
         Parent root = (Parent) fxmlLoader.load();
+        AnadirClienteController anadirClientes = (AnadirClienteController) fxmlLoader.getController();
+        anadirClientes.setSesion(sesion);
+        anadirClientes.setSession(session);
+        
         Stage stage = new Stage();
-
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Añadir Clientes");
         stage.setScene(new Scene(root));
         stage.setResizable(false);
+        stage.showAndWait();
 
-        stage.show();
-
-        AnadirClienteController anadirClientes = (AnadirClienteController) fxmlLoader.getController();
-        anadirClientes.setSesion(sesion);
-        anadirClientes.setSession(session);
         cargarClientes();
     }
 
@@ -219,5 +220,26 @@ public class VerClientesController implements Initializable {
 
         consulta = session.createQuery("from Cliente where " + campo + " = ?").setParameter(0, valor);
         return consulta.list();
+    }
+
+    @FXML
+    private void modificarCliente(ActionEvent event) throws IOException {
+        
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirCliente.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AnadirClienteController anadirClientes = (AnadirClienteController) fxmlLoader.getController();
+        anadirClientes.setSesion(sesion);
+        anadirClientes.setSession(session);
+        anadirClientes.setExistente(tableClientes.getSelectionModel().getSelectedItem());
+        anadirClientes.cargarDatos();
+        
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Añadir Clientes");
+        stage.setScene(new Scene(root));
+        stage.setResizable(false);
+        stage.showAndWait();
+        
+        cargarClientes();
     }
 }

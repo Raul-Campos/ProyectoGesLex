@@ -38,9 +38,9 @@
       </HBox>
    </top>
    <center>
-      <HBox fx:id="idcentro" alignment="CENTER" prefHeight="488.0" prefWidth="941.0" BorderPane.alignment="CENTER">
+      <HBox fx:id="idcentro" alignment="CENTER" prefHeight="522.0" prefWidth="941.0" BorderPane.alignment="CENTER">
          <children>
-            <TableView fx:id="tableLetrados" prefHeight="408.0" prefWidth="780.0">
+            <TableView fx:id="tableLetrados" prefHeight="444.0" prefWidth="780.0">
                <columns>
                   <TableColumn fx:id="columnDNI" prefWidth="81.0" text="DNI" />
                   <TableColumn fx:id="columnNombre" prefWidth="87.0" text=" Nombre" />
@@ -58,8 +58,13 @@
       </HBox>
    </center>
    <bottom>
-      <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER_RIGHT" prefHeight="145.0" prefWidth="941.0" BorderPane.alignment="CENTER">
          <children>
+            <Button fx:id="btnModificar" mnemonicParsing="false" onAction="#modificarLetrado" text=" Modificar ">
+               <HBox.margin>
+                  <Insets right="30.0" />
+               </HBox.margin>
+            </Button>
             <Button fx:id="btnAñadir" mnemonicParsing="false" onAction="#añadirLetrado" text="Añadir Letrado" textFill="#2f9e00">
                <HBox.margin>
                   <Insets right="30.0" />

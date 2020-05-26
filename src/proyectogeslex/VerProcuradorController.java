@@ -72,6 +72,8 @@ public class VerProcuradorController implements Initializable {
 
     @FXML
     private Button btnAñadir;
+    @FXML
+    private Button btnModificar;
 
     /**
      * Initializes the controller class.
@@ -211,5 +213,9 @@ public class VerProcuradorController implements Initializable {
 
         consulta = session.createQuery("from Procurador where " + campo + " = ?").setParameter(0, valor);
         return consulta.list();
+    }
+
+    @FXML
+    private void modificarProcurador(ActionEvent event) {
     }
 }
