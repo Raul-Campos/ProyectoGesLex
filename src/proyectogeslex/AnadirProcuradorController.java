@@ -51,6 +51,7 @@ public class AnadirProcuradorController implements Initializable {
 
     private Session session;
     private SessionFactory sesion;
+    private Procurador existente;
 
     /**
      * Initializes the controller class.
@@ -73,8 +74,8 @@ public class AnadirProcuradorController implements Initializable {
 
     @FXML
     private void AceptarProcurador(ActionEvent event) {
-         Alert alerta;
-         Procurador procurador=new Procurador();
+        Alert alerta;
+        Procurador procurador = new Procurador();
         boolean errorFormato = false;
         boolean alert = true;
 
@@ -140,15 +141,20 @@ public class AnadirProcuradorController implements Initializable {
                 alert = false;
             }
 
-           
-
             if (!errorFormato) {
                 Transaction tx = session.getTransaction();
 
                 try {
-                    tx.begin();
-                    session.save(procurador);
-                    tx.commit();
+
+                    if (existente == null) {
+                        tx.begin();
+                        session.save(procurador);
+                        tx.commit();
+                    } else {
+                        tx.begin();
+                        session.merge(procurador);
+                        tx.commit();
+                    }
 
                     Stage stage = (Stage) btnAceptar.getScene().getWindow();
                     stage.close();
@@ -181,6 +187,18 @@ public class AnadirProcuradorController implements Initializable {
         stage.close();
     }
 
+    public void cargarDatos() {
+            
+        if(existente != null){
+            tfDni.setText(existente.getDniProcurador());
+            tfNombre.setText(existente.getNombre());
+            tfApellidos.setText(existente.getApellidos());
+            tfDireccion.setText(existente.getDireccion());
+            tfEmail.setText(existente.getEmail());
+            tfNumero.setText(String.valueOf(existente.getTelefono()));
+        }
+    }
+
     public void setSession(Session session) {
         this.session = session;
 
@@ -189,4 +207,9 @@ public class AnadirProcuradorController implements Initializable {
     public void setSesion(SessionFactory sesion) {
         this.sesion = sesion;
     }
+
+    public void setExistente(Procurador existente) {
+        this.existente = existente;
+    }
+
 }

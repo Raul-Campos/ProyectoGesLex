@@ -14,14 +14,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javax.persistence.RollbackException;
 import map.Expediente;
 import map.Perito;
-import map.Procurador;
 import org.hibernate.NonUniqueObjectException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -57,7 +54,8 @@ public class AnadirPeritoController implements Initializable {
 
     private Session session;
     private SessionFactory sesion;
-    private Expediente expediente=null;
+    private Expediente expediente;
+    private Perito existente;
 
     /**
      * Initializes the controller class.
@@ -82,7 +80,7 @@ public class AnadirPeritoController implements Initializable {
     @FXML
     private void AceptarPerito(ActionEvent event) {
         Perito perito = new Perito();
-          Alert alerta;
+        Alert alerta;
         boolean errorFormato = false;
         boolean alert = true;
 
@@ -114,7 +112,7 @@ public class AnadirPeritoController implements Initializable {
                 errorFormato = true;
                 alert = false;
             }
-            
+
             if (tfProvincia.getText() != null && !tfProvincia.getText().equals("") && (mat.matches())) {
                 perito.setProvincia(tfProvincia.getText());
             } else if (alert) {
@@ -156,16 +154,21 @@ public class AnadirPeritoController implements Initializable {
                 errorFormato = true;
                 alert = false;
             }
-           // perito.getExpedientes().add(expediente);
-            
 
             if (!errorFormato) {
                 Transaction tx = session.getTransaction();
 
                 try {
-                    tx.begin();
-                    session.save(perito);
-                    tx.commit();
+
+                    if (existente == null) {
+                        tx.begin();
+                        session.save(perito);
+                        tx.commit();
+                    } else {
+                        tx.begin();
+                        session.merge(perito);
+                        tx.commit();
+                    }
 
                     Stage stage = (Stage) btnAceptar.getScene().getWindow();
                     stage.close();
@@ -206,8 +209,25 @@ public class AnadirPeritoController implements Initializable {
     public void setSesion(SessionFactory sesion) {
         this.sesion = sesion;
     }
-    
-     public void setExpediente(Expediente expediente) {
+
+    public void setExpediente(Expediente expediente) {
         this.expediente = expediente;
+    }
+
+    public void setExistente(Perito existente) {
+        this.existente = existente;
+    }
+
+    public void cargarDatos() {
+
+        if (existente != null) {
+            tfDNI.setText(existente.getDniPerito());
+            tfNombre.setText(existente.getNombre());
+            tfApellidos.setText(existente.getApellidos());
+            tfDireccion.setText(existente.getDireccion());
+            tfProvincia.setText(existente.getProvincia());
+            tfTelefono.setText(String.valueOf(existente.getTelefono()));
+            tfEmail.setText(existente.getEmail());
+        }
     }
 }
