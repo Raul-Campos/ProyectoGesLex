@@ -175,8 +175,8 @@ public class AnadirPeritoController implements Initializable {
                 } catch (NonUniqueObjectException ex) {
                     tx.rollback();
                     Alert alertaExistente = new Alert(Alert.AlertType.INFORMATION);
-                    alertaExistente.setHeaderText("Procurador existente");
-                    alertaExistente.setContentText("Ya se ha añadido ese procurador anteriormente.");
+                    alertaExistente.setHeaderText("Perito existente");
+                    alertaExistente.setContentText("Ya se ha añadido ese perito anteriormente.");
                     alertaExistente.showAndWait();
 
                 } catch (RollbackException e) {

@@ -1,5 +1,5 @@
 package map;
-// Generated 22-may-2020 18:32:02 by Hibernate Tools 4.3.1
+// Generated 26-may-2020 18:05:19 by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -18,8 +18,8 @@ public class Expediente  implements java.io.Serializable {
      private Procurador procurador;
      private Date fechaCreacion;
      private Date fechaCierre;
+     private byte[] hoja;
      private Set avisos = new HashSet(0);
-     private HojaEncargo hojaEncargo;
      private Set vehiculos = new HashSet(0);
      private Set peritos = new HashSet(0);
      private Incidente incidente;
@@ -36,14 +36,14 @@ public class Expediente  implements java.io.Serializable {
         this.procurador = procurador;
         this.fechaCreacion = fechaCreacion;
     }
-    public Expediente(Cliente cliente, Letrado letrado, Procurador procurador, Date fechaCreacion, Date fechaCierre, Set avisos, HojaEncargo hojaEncargo, Set vehiculos, Set peritos, Incidente incidente, Set documentos, Set sentencias) {
+    public Expediente(Cliente cliente, Letrado letrado, Procurador procurador, Date fechaCreacion, Date fechaCierre, byte[] hoja, Set avisos, Set vehiculos, Set peritos, Incidente incidente, Set documentos, Set sentencias) {
        this.cliente = cliente;
        this.letrado = letrado;
        this.procurador = procurador;
        this.fechaCreacion = fechaCreacion;
        this.fechaCierre = fechaCierre;
+       this.hoja = hoja;
        this.avisos = avisos;
-       this.hojaEncargo = hojaEncargo;
        this.vehiculos = vehiculos;
        this.peritos = peritos;
        this.incidente = incidente;
@@ -93,19 +93,19 @@ public class Expediente  implements java.io.Serializable {
     public void setFechaCierre(Date fechaCierre) {
         this.fechaCierre = fechaCierre;
     }
+    public byte[] getHoja() {
+        return this.hoja;
+    }
+    
+    public void setHoja(byte[] hoja) {
+        this.hoja = hoja;
+    }
     public Set getAvisos() {
         return this.avisos;
     }
     
     public void setAvisos(Set avisos) {
         this.avisos = avisos;
-    }
-    public HojaEncargo getHojaEncargo() {
-        return this.hojaEncargo;
-    }
-    
-    public void setHojaEncargo(HojaEncargo hojaEncargo) {
-        this.hojaEncargo = hojaEncargo;
     }
     public Set getVehiculos() {
         return this.vehiculos;

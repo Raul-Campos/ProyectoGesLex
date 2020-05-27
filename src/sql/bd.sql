@@ -55,6 +55,7 @@ create table expediente(
     dni varchar(9) not null,
     dni_letrado varchar(9) not null,
     dni_procurador varchar(9) not null,
+    hoja mediumblob,
     foreign key (dni) references cliente(dni),
     foreign key (dni_letrado) references letrado(dni_letrado),
     foreign key (dni_procurador) references procurador(dni_procurador)
@@ -104,7 +105,7 @@ create table sentencia(
 	titulo varchar(40),
     fecha_publicacion date not null,
     descripcion varchar(150),
-    pdf blob not null,
+    pdf mediumblob not null,
     primary key (cod_expediente, titulo),
     foreign key (cod_expediente) references expediente(codigo)
 );
@@ -114,15 +115,9 @@ create table documento(
 	nombre varchar(30),
     fecha date not null,
     descripcion varchar(150),
-    pdf blob not null,
+    pdf mediumblob not null,
     aportado_por varchar(80) not null,
     primary key (cod_expediente, nombre),
-    foreign key (cod_expediente) references expediente(codigo)
-);
-
-create table hoja_encargo(
-	cod_expediente int primary key,
-    hoja blob not null,
     foreign key (cod_expediente) references expediente(codigo)
 );
 
