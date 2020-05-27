@@ -111,7 +111,10 @@ public class Vehiculo  implements java.io.Serializable {
         this.expedientes = expedientes;
     }
 
-
+    @Override
+    public String toString() {
+        return matricula;
+    }
 
 
 }

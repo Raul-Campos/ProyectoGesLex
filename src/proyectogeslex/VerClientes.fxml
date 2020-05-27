@@ -58,6 +58,11 @@
    <bottom>
       <HBox fx:id="idbajo1" alignment="CENTER_RIGHT" prefHeight="145.0" prefWidth="941.0" BorderPane.alignment="CENTER">
          <children>
+            <Button fx:id="btnModificar" mnemonicParsing="false" onAction="#modificarCliente" text=" Modificar ">
+               <HBox.margin>
+                  <Insets right="30.0" />
+               </HBox.margin>
+            </Button>
             <Button fx:id="anadirCliente" mnemonicParsing="false" onAction="#anadirCliente" text="Añadir Cliente" textFill="#03b915">
                <HBox.margin>
                   <Insets right="30.0" />

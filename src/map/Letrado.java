@@ -101,7 +101,10 @@ public class Letrado  implements java.io.Serializable {
         this.expedientes = expedientes;
     }
 
-
+    @Override
+    public String toString() {
+        return dniLetrado;
+    }
 
 
 }

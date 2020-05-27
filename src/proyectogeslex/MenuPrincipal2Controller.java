@@ -48,6 +48,8 @@ public class MenuPrincipal2Controller implements Initializable {
     private Button btnVerVehiculos;
     private Stage escenario;
     private TabPane actual;
+    private String emailUser;
+    private String emailPassword;
 
     /**
      * Initializes the controller class.
@@ -125,6 +127,8 @@ public class MenuPrincipal2Controller implements Initializable {
 
         controladorExpedientes.setSession(session);
         controladorExpedientes.setSesion(sesion);
+        controladorExpedientes.setEmailPassword(emailPassword);
+        controladorExpedientes.setEmailUser(emailUser);
 
         principal.setCenter(verExpedientes);
         actual = controladorExpedientes.getTabPanePrincipal();
@@ -220,5 +224,13 @@ public class MenuPrincipal2Controller implements Initializable {
                 }
             });
         }
+    }
+    
+    public void setEmailUser(String emailUser) {
+        this.emailUser = emailUser;
+    }
+
+    public void setEmailPassword(String emailPassword) {
+        this.emailPassword = emailPassword;
     }
 }

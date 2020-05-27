@@ -6,6 +6,7 @@
  */
 package proyectogeslex;
 
+import email.EnviarAvisos;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -202,6 +203,9 @@ public class VerExpedienteController implements Initializable {
 
     List<Vehiculo> vehiculos = null;
     List<Perito> peritos = null;
+    private String emailUser;
+    private String emailPassword;
+
 
     /**
      * Initializes the controller class.
@@ -285,11 +289,9 @@ public class VerExpedienteController implements Initializable {
             stage.setTitle("Añadir documentos");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
-            stage.show();
+            stage.showAndWait();
 
-            stage.setOnCloseRequest(e -> {
-                cargarDocumentos(expedienteSeleccionado);
-            });
+            cargarDocumentos(expedienteSeleccionado);
 
         } else {
 
@@ -339,11 +341,9 @@ public class VerExpedienteController implements Initializable {
             stage.setTitle("Añadir Sentencias");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
-            stage.show();
+            stage.showAndWait();
 
-            stage.setOnCloseRequest(e -> {
-                cargarSentencia(expedienteSeleccionado);
-            });
+            cargarSentencia(expedienteSeleccionado);
 
         } else {
 
@@ -392,11 +392,10 @@ public class VerExpedienteController implements Initializable {
                 stage.setTitle("Añadir Incidente");
                 stage.setScene(new Scene(root));
                 stage.setResizable(false);
-                stage.show();
+                stage.showAndWait();
 
-                stage.setOnCloseRequest(e -> {
-                    cargarIncidente(expedienteSeleccionado);
-                });
+                cargarIncidente(expedienteSeleccionado);
+                
             } else {
                 Alert alertaIncExistente = new Alert(Alert.AlertType.INFORMATION);
                 alertaIncExistente.setHeaderText("Incidente existente");
@@ -451,10 +450,11 @@ public class VerExpedienteController implements Initializable {
             stage.setTitle("Añadir avisos");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
-            stage.show();
-
+            stage.showAndWait();
             cargarAvisos(seleccionado);
 
+            Thread comprobarAvisos = new Thread(new EnviarAvisos(emailUser, emailPassword, session));
+           // comprobarAvisos.start();
         } else {
 
             //Si no selecciona ningúno
@@ -526,7 +526,7 @@ public class VerExpedienteController implements Initializable {
         stage.setScene(new Scene(root));
         stage.setResizable(false);
 
-        stage.show();
+        stage.showAndWait();
 
         AnadirExpedienteController anadirClientes = (AnadirExpedienteController) fxmlLoader.getController();
         anadirClientes.setSesion(sesion);
@@ -560,6 +560,14 @@ public class VerExpedienteController implements Initializable {
 
     public void setSesion(SessionFactory sesion) {
         this.sesion = sesion;
+    }
+
+    public void setEmailUser(String emailUser) {
+        this.emailUser = emailUser;
+    }
+
+    public void setEmailPassword(String emailPassword) {
+        this.emailPassword = emailPassword;
     }
 
     public TabPane getTabPaneAsociado() {
@@ -646,6 +654,7 @@ public class VerExpedienteController implements Initializable {
         cargarAvisos(expedienteSeleccionado);
         cargarCoches(expedienteSeleccionado);
         cargarPeritos(expedienteSeleccionado);
+
 
         //columnDocDescrip.setCellValueFactory(v -> new SimpleStringProperty("hdfkjdskjflksd"));
         /*File file = new File("prueba.pdf");
@@ -764,6 +773,7 @@ public class VerExpedienteController implements Initializable {
 
                     }
 
+
                 });
             } else {
                 Alert alertaNuevoAviso = new Alert(Alert.AlertType.INFORMATION);
@@ -833,6 +843,7 @@ public class VerExpedienteController implements Initializable {
 
                     }
 
+
                 });
             } else {
                 Alert alertaNuevoAviso = new Alert(Alert.AlertType.INFORMATION);
@@ -840,6 +851,21 @@ public class VerExpedienteController implements Initializable {
                 alertaNuevoAviso.setContentText("Porfavor seleccione un perito para asociarlo a un expediente.");
                 alertaNuevoAviso.showAndWait();
             }
+
+            //Abre ventana modal para añadir un documento al expediente seleccionado
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirPerito.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            AnadirPeritoController peritoController = (AnadirPeritoController) fxmlLoader.getController();
+            peritoController.setSession(session);
+            peritoController.setExpediente(seleccionado);
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Añadir Perito");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.showAndWait();
+            cargarPeritos(seleccionado);
 
         } else {
 

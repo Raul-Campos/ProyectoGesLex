@@ -80,8 +80,10 @@ public class Documento  implements java.io.Serializable {
         this.aportadoPor = aportadoPor;
     }
 
-
-
+    @Override
+    public String toString() {
+        return id.getNombre();
+    }
 
 }
 
