@@ -3,7 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -15,7 +15,7 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="427.0" prefWidth="635.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectogeslex.AnadirExpedienteController">
    <children>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="600.0">
+      <HBox alignment="CENTER" prefHeight="83.0" prefWidth="635.0">
          <children>
             <VBox alignment="CENTER" prefHeight="58.0" prefWidth="301.0">
                <children>
@@ -29,7 +29,7 @@
             </VBox>
          </children>
       </HBox>
-      <HBox alignment="CENTER" prefHeight="52.0" prefWidth="600.0">
+      <HBox alignment="CENTER" prefHeight="51.0" prefWidth="635.0">
          <children>
             <GridPane prefHeight="86.0" prefWidth="554.0">
                <columnConstraints>
@@ -42,13 +42,13 @@
                </rowConstraints>
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Seleccione el DNI del Cliente :" wrappingWidth="162.623046875" />
-                  <ChoiceBox fx:id="chCliente" prefHeight="25.0" prefWidth="230.0" GridPane.columnIndex="1" />
+                  <ComboBox fx:id="chCliente" editable="true" prefHeight="25.0" prefWidth="230.0" visibleRowCount="5" GridPane.columnIndex="1" />
                   <Button fx:id="btnCargarDatos" mnemonicParsing="false" onAction="#cargarDatos" text="Cargar Datos" GridPane.columnIndex="2" />
                </children>
             </GridPane>
          </children>
       </HBox>
-      <HBox alignment="CENTER" prefHeight="56.0" prefWidth="600.0">
+      <HBox alignment="CENTER" prefHeight="44.0" prefWidth="635.0">
          <children>
             <GridPane prefHeight="86.0" prefWidth="554.0">
                <columnConstraints>
@@ -60,12 +60,12 @@
                </rowConstraints>
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Seleccione el DNI del Letrado :" />
-                  <ChoiceBox fx:id="chLetrado" prefHeight="25.0" prefWidth="229.0" GridPane.columnIndex="1" />
+                  <ComboBox fx:id="chLetrado" editable="true" prefHeight="25.0" prefWidth="230.0" visibleRowCount="5" GridPane.columnIndex="1" />
                </children>
             </GridPane>
          </children>
       </HBox>
-      <HBox alignment="CENTER" prefHeight="62.0" prefWidth="600.0">
+      <HBox alignment="CENTER" prefHeight="47.0" prefWidth="635.0">
          <children>
             <GridPane prefHeight="86.0" prefWidth="554.0">
                <columnConstraints>
@@ -77,12 +77,12 @@
                </rowConstraints>
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Seleccione el DNI del Procurador :" />
-                  <ChoiceBox fx:id="chProcurador" prefHeight="25.0" prefWidth="229.0" GridPane.columnIndex="1" />
+                  <ComboBox fx:id="chProcurador" editable="true" prefHeight="25.0" prefWidth="230.0" visibleRowCount="5" GridPane.columnIndex="1" />
                </children>
             </GridPane>
          </children>
       </HBox>
-      <HBox alignment="CENTER" prefHeight="62.0" prefWidth="600.0">
+      <HBox alignment="CENTER" prefHeight="47.0" prefWidth="635.0">
          <children>
             <GridPane prefHeight="45.0" prefWidth="561.0">
                <columnConstraints>
@@ -94,13 +94,32 @@
                   <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Fecha de Creacion del Expediente:" wrappingWidth="202.6171875" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Fecha de Creacion del Expediente:" wrappingWidth="197.6171875" />
                   <TextField fx:id="tfFechaC" disable="true" prefHeight="25.0" prefWidth="201.0" GridPane.columnIndex="1" />
                   <CheckBox fx:id="chbFecha" mnemonicParsing="false" onAction="#EditarFecha" text="Editar Fecha" GridPane.columnIndex="2">
                      <GridPane.margin>
                         <Insets left="30.0" />
                      </GridPane.margin>
                   </CheckBox>
+               </children>
+            </GridPane>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="61.0" prefWidth="635.0">
+         <children>
+            <GridPane alignment="CENTER" prefHeight="92.0" prefWidth="564.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="183.0" minWidth="10.0" prefWidth="137.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="298.0" minWidth="10.0" prefWidth="145.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="282.0" minWidth="10.0" prefWidth="282.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Text fx:id="labelHoja" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Añadir Hoja de Encargo" />
+                  <Button fx:id="btnSelecionarFic" mnemonicParsing="false" onAction="#SeleccionarFichero" text="Seleccionar Fichero" GridPane.columnIndex="1" />
                </children>
             </GridPane>
          </children>

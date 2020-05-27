@@ -43,20 +43,19 @@ Contributor(s):
   <session-factory>
     <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/geslexdb</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/geslexdb?zeroDateTimeBehavior=convertToNull</property>
     <property name="hibernate.connection.username">root</property>
     <property name="hibernate.connection.password">usuario</property>
-    <mapping resource="map/HojaEncargo.hbm.xml"/>
-    <mapping resource="map/Procurador.hbm.xml"/>
+    <mapping resource="map/Cliente.hbm.xml"/>
+    <mapping resource="map/Sentencia.hbm.xml"/>
+    <mapping resource="map/Perito.hbm.xml"/>
     <mapping resource="map/Expediente.hbm.xml"/>
     <mapping resource="map/Usuarios.hbm.xml"/>
-    <mapping resource="map/Documento.hbm.xml"/>
-    <mapping resource="map/Cliente.hbm.xml"/>
-    <mapping resource="map/Incidente.hbm.xml"/>
-    <mapping resource="map/Perito.hbm.xml"/>
     <mapping resource="map/Aviso.hbm.xml"/>
+    <mapping resource="map/Documento.hbm.xml"/>
     <mapping resource="map/Letrado.hbm.xml"/>
-    <mapping resource="map/Sentencia.hbm.xml"/>
     <mapping resource="map/Vehiculo.hbm.xml"/>
+    <mapping resource="map/Procurador.hbm.xml"/>
+    <mapping resource="map/Incidente.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>

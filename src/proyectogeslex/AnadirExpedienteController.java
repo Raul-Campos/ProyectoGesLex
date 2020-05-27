@@ -5,13 +5,17 @@
  */
 package proyectogeslex;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,8 +23,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -39,11 +46,11 @@ import map.Procurador;
 public class AnadirExpedienteController implements Initializable {
 
     @FXML
-    private ChoiceBox<String> chCliente;
+    private ComboBox<String> chCliente;
     @FXML
-    private ChoiceBox<String> chLetrado;
+    private ComboBox<String> chLetrado;
     @FXML
-    private ChoiceBox<String> chProcurador;
+    private ComboBox<String> chProcurador;
     @FXML
     private TextField tfFechaC;
     @FXML
@@ -59,12 +66,18 @@ public class AnadirExpedienteController implements Initializable {
     private SessionFactory sesion;
     @FXML
     private Button btnCargarDatos;
-
+    @FXML
+    private Text labelHoja;
+    @FXML
+    private Button btnSelecionarFic;
+    private File hoja;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
         Calendar c = Calendar.getInstance();
         tfFechaC.setText(Integer.toString(c.get(Calendar.YEAR))+ "-" +  Integer.toString(c.get(Calendar.MONTH) + 1) + "-" + Integer.toString(c.get(Calendar.DATE))  );
+        labelHoja.setText("");
+       
     }
 
     @FXML
@@ -76,7 +89,7 @@ public class AnadirExpedienteController implements Initializable {
     }
 
     @FXML
-    private void AceptarExpediente(ActionEvent event) {
+    private void AceptarExpediente(ActionEvent event) throws IOException {
         Expediente expediente = new Expediente();
         Query consulta;
         boolean datosRellenos = true;
@@ -111,7 +124,13 @@ public class AnadirExpedienteController implements Initializable {
         } else {
             datosRellenos = false;
         }
-
+        
+        
+        if(hoja!=null){
+             byte[] pdf = Files.readAllBytes(hoja.toPath());
+                expediente.setHoja(pdf);
+        }
+        
         if (datosRellenos) {
             Transaction tx = session.getTransaction();
 
@@ -156,23 +175,30 @@ public class AnadirExpedienteController implements Initializable {
     @FXML
     private void cargarDatos(ActionEvent event) {
 
+
         Query consulta = session.createQuery("from Cliente");
         List<Cliente> clientes = consulta.list();
+       
         clientes.forEach((cliente) -> {
-            chCliente.getItems().add(cliente.getDni() + "  " + cliente.getApellidos() + "," + cliente.getNombre());
+            chCliente.getItems().add((cliente.getDni() + "  " + cliente.getApellidos() + "," + cliente.getNombre()));
         });
-
+        AutoFillBox.autoCompleteComboBoxPlus(chCliente, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()));
+        
         consulta = session.createQuery("from Letrado");
         List<Letrado> letrados = consulta.list();
         letrados.forEach((letrado) -> {
             chLetrado.getItems().add(letrado.getDniLetrado() + "  " + letrado.getApellidos() + "," + letrado.getNombre());
         });
+                AutoFillBox.autoCompleteComboBoxPlus(chLetrado, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()));
+
 
         consulta = session.createQuery("from Procurador");
         List<Procurador> procuradores = consulta.list();
         procuradores.forEach((procurador) -> {
             chProcurador.getItems().add(procurador.getDniProcurador() + "  " + procurador.getApellidos() + "," + procurador.getNombre());
         });
+                AutoFillBox.autoCompleteComboBoxPlus(chProcurador, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()));
+
     }
 
     private static Date StringToDate(String date) {
@@ -184,5 +210,12 @@ public class AnadirExpedienteController implements Initializable {
             System.out.println(ex);
         }
         return fecha;
+    }
+
+    @FXML
+    private void SeleccionarFichero(ActionEvent event) {
+        FileChooser chooser = new FileChooser();
+        hoja = chooser.showOpenDialog(new Stage());
+        labelHoja.setText(hoja.getAbsolutePath());
     }
 }

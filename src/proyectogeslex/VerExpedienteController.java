@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,6 +26,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -34,12 +36,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javax.persistence.RollbackException;
 import map.Documento;
 import map.Expediente;
-import map.HojaEncargo;
+
 import map.Incidente;
 import org.hibernate.Transaction;
 import map.Aviso;
+import map.Cliente;
 import map.Perito;
 import map.Sentencia;
 import map.Vehiculo;
@@ -125,17 +129,6 @@ public class VerExpedienteController implements Initializable {
 
     @FXML
     private TableView<Aviso> tableAvisos;
-    @FXML
-    private TableView<HojaEncargo> tableHoja;
-
-    @FXML
-    private TableColumn<?, ?> columnHojaCod;
-    @FXML
-    private TableColumn<?, ?> columnHojaEstado;
-    @FXML
-    private Button btnAnadirHoja;
-    @FXML
-    private Button btnEliminarHoja;
 
     @FXML
     private TableView<Incidente> tableIncidente;
@@ -201,8 +194,18 @@ public class VerExpedienteController implements Initializable {
     private TableView<Vehiculo> tableCoches;
     @FXML
     private TableView<Perito> tablePeritos;
+    @FXML
+    private ComboBox<String> cbCoche;
+    @FXML
+    private ComboBox<String> cbPerito;
+    @FXML
+    private TableColumn<Expediente, String> columnHojaEncargo;
+
+    List<Vehiculo> vehiculos = null;
+    List<Perito> peritos = null;
     private String emailUser;
     private String emailPassword;
+
 
     /**
      * Initializes the controller class.
@@ -215,6 +218,7 @@ public class VerExpedienteController implements Initializable {
         columnDNICliente.setCellValueFactory(new PropertyValueFactory<>("cliente"));
         columnDNILetrado.setCellValueFactory(new PropertyValueFactory<>("letrado"));
         columnDNIProcurador.setCellValueFactory(new PropertyValueFactory<>("procurador"));
+        columnHojaEncargo.setCellValueFactory(new PropertyValueFactory<>("hoja"));
 
         cbColumna.getItems().addAll("Código", "Fecha de creación", "Fecha de cierre", "Cliente", "Letrado", "Procurador");
 
@@ -451,7 +455,6 @@ public class VerExpedienteController implements Initializable {
 
             Thread comprobarAvisos = new Thread(new EnviarAvisos(emailUser, emailPassword, session));
            // comprobarAvisos.start();
-
         } else {
 
             //Si no selecciona ningúno
@@ -534,6 +537,20 @@ public class VerExpedienteController implements Initializable {
 
     @FXML
     private void borrarExpediente(ActionEvent event) {
+        Expediente expedienteABorrar = tableExpedientes.getSelectionModel().getSelectedItem();
+
+        if (expedienteABorrar != null) {
+            Transaction tx = session.getTransaction();
+            tx.begin();
+            session.delete(expedienteABorrar);
+            tx.commit();
+        } else {
+            Alert alertaEliminarExpediente = new Alert(Alert.AlertType.INFORMATION);
+            alertaEliminarExpediente.setHeaderText("Expediente no seleccionado");
+            alertaEliminarExpediente.setContentText("Porfavor seleccione el expediente que desee eliminar");
+            alertaEliminarExpediente.showAndWait();
+        }
+        cargarExpedientes();
     }
 
     public void setSession(Session session) {
@@ -559,14 +576,6 @@ public class VerExpedienteController implements Initializable {
 
     public TabPane getTabPanePrincipal() {
         return tabPanePrincipal;
-    }
-
-    @FXML
-    private void anadirHoja(ActionEvent event) {
-    }
-
-    @FXML
-    private void eliminarHoja(ActionEvent event) {
     }
 
     //Devuelve una lista en función del campo en el que desea buscar y el valor que busca
@@ -643,9 +652,9 @@ public class VerExpedienteController implements Initializable {
         cargarIncidente(expedienteSeleccionado);
         cargarSentencia(expedienteSeleccionado);
         cargarAvisos(expedienteSeleccionado);
-
         cargarCoches(expedienteSeleccionado);
-        // cargarPeritos(expedienteSeleccionado);
+        cargarPeritos(expedienteSeleccionado);
+
 
         //columnDocDescrip.setCellValueFactory(v -> new SimpleStringProperty("hdfkjdskjflksd"));
         /*File file = new File("prueba.pdf");
@@ -696,39 +705,92 @@ public class VerExpedienteController implements Initializable {
 
         //Trae todos los avisos del expediente seleccionado
         Query consulta = session.createQuery("select a from Vehiculo a JOIN "
-                + "a.expediente e where e.codigo = ?").setParameter(0, expediente.getCodigo());
+                + "a.expedientes e where e.codigo = ?").setParameter(0, expediente.getCodigo());
         List<Vehiculo> coche = consulta.list();
 
         tableCoches.setItems(FXCollections.observableArrayList(coche));
+
+        if (vehiculos == null) {
+            consulta = session.createQuery("from Vehiculo");
+            vehiculos = consulta.list();
+
+            vehiculos.forEach((vehiculo) -> {
+                cbCoche.getItems().add((vehiculo.getMatricula() + "  " + vehiculo.getMarca() + " " + vehiculo.getModelo()));
+            });
+            AutoFillBox.autoCompleteComboBoxPlus(cbCoche, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()));
+        }
     }
 
     private void cargarPeritos(Expediente expediente) {
 
         //Trae todos los peritos del expediente seleccionado
         Query consulta = session.createQuery("select a from Perito a JOIN "
-                + "a.expediente e where e.codigo = ?").setParameter(0, expediente.getCodigo());
-        List<Perito> perito = consulta.list();
+                + "a.expedientes e where e.codigo = ?").setParameter(0, expediente.getCodigo());
+        List<Perito> peritot = consulta.list();
 
-        tablePeritos.setItems(FXCollections.observableArrayList(perito));
+        tablePeritos.setItems(FXCollections.observableArrayList(peritot));
+
+        if (peritos == null) {
+            consulta = session.createQuery("from Perito");
+            peritos = consulta.list();
+
+            peritos.forEach((perito) -> {
+                cbPerito.getItems().add((perito.getDniPerito() + "  " + perito.getNombre() + " " + perito.getApellidos()));
+            });
+            AutoFillBox.autoCompleteComboBoxPlus(cbPerito, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()));
+        }
     }
 
     @FXML
     private void anadirCoche(ActionEvent event) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirVehiculo.fxml"));
-        Parent root = (Parent) fxmlLoader.load();
-        Stage stage = new Stage();
+        Expediente seleccionado = tableExpedientes.getSelectionModel().getSelectedItem();
 
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setTitle("Añadir Vehiculo");
-        stage.setScene(new Scene(root));
-        stage.setResizable(false);
+        if (seleccionado != null) {
+            if (cbCoche.getValue() != null) {
+                vehiculos.forEach((vehiculo) -> {
 
-        stage.showAndWait();
+                    if (cbCoche.getValue().equals(vehiculo.getMatricula() + "  " + vehiculo.getMarca() + " " + vehiculo.getModelo())) {
+                        vehiculo.getExpedientes().add(seleccionado);
+                        Transaction tx = session.getTransaction();
 
-        AnadirVehiculoController anadirVehiculo = (AnadirVehiculoController) fxmlLoader.getController();
-        anadirVehiculo.setSesion(sesion);
-        anadirVehiculo.setSession(session);
-        cargarCoches(expedienteSeleccionado);
+                        try {
+                            
+                            tx.begin();
+                            session.update(vehiculo);
+                            tx.commit();
+                        } catch (RollbackException e) {
+                            tx.rollback();
+                            Alert alerta;
+                            alerta = new Alert(Alert.AlertType.INFORMATION, "Error al guardar los datos. Inténtelo de nuevo");
+                            alerta.setContentText(e.getLocalizedMessage());
+                            alerta.showAndWait();
+                        }
+                        Alert alertaNuevoAviso = new Alert(Alert.AlertType.INFORMATION);
+                        alertaNuevoAviso.setHeaderText("Vehiculo Guardado");
+                        alertaNuevoAviso.setContentText("Vehiculo asociado correctamente al expediente.");
+                        alertaNuevoAviso.showAndWait();
+                        cargarCoches(seleccionado);
+
+                    }
+
+
+                });
+            } else {
+                Alert alertaNuevoAviso = new Alert(Alert.AlertType.INFORMATION);
+                alertaNuevoAviso.setHeaderText("Vehiculo no seleccionado");
+                alertaNuevoAviso.setContentText("Porfavor seleccione un vehiculo para asociarlo a un expediente.");
+                alertaNuevoAviso.showAndWait();
+            }
+
+        } else {
+
+            //Si no selecciona ningúno
+            Alert alertaNuevoAviso = new Alert(Alert.AlertType.INFORMATION);
+            alertaNuevoAviso.setHeaderText("Expediente no seleccionado");
+            alertaNuevoAviso.setContentText("Porfavor seleccione un expediente para añadir un vehiculo a ese expediente.");
+            alertaNuevoAviso.showAndWait();
+        }
+
     }
 
     @FXML
@@ -754,6 +816,41 @@ public class VerExpedienteController implements Initializable {
         Expediente seleccionado = tableExpedientes.getSelectionModel().getSelectedItem();
 
         if (seleccionado != null) {
+            if (cbPerito.getValue() != null) {
+                peritos.forEach((perito) -> {
+
+                    if (cbPerito.getValue().equals(perito.getDniPerito()+ "  " + perito.getNombre() + " " + perito.getApellidos())) {
+                        perito.getExpedientes().add(seleccionado);
+                        Transaction tx = session.getTransaction();
+
+                        try {
+                            
+                            tx.begin();
+                            session.update(perito);
+                            tx.commit();
+                        } catch (RollbackException e) {
+                            tx.rollback();
+                            Alert alerta;
+                            alerta = new Alert(Alert.AlertType.INFORMATION, "Error al guardar los datos. Inténtelo de nuevo");
+                            alerta.setContentText(e.getLocalizedMessage());
+                            alerta.showAndWait();
+                        }
+                        Alert alertaNuevoAviso = new Alert(Alert.AlertType.INFORMATION);
+                        alertaNuevoAviso.setHeaderText("Perito Guardado");
+                        alertaNuevoAviso.setContentText("Perito asociado correctamente al expediente.");
+                        alertaNuevoAviso.showAndWait();
+                        cargarPeritos(seleccionado);
+
+                    }
+
+
+                });
+            } else {
+                Alert alertaNuevoAviso = new Alert(Alert.AlertType.INFORMATION);
+                alertaNuevoAviso.setHeaderText("Perito no seleccionado");
+                alertaNuevoAviso.setContentText("Porfavor seleccione un perito para asociarlo a un expediente.");
+                alertaNuevoAviso.showAndWait();
+            }
 
             //Abre ventana modal para añadir un documento al expediente seleccionado
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirPerito.fxml"));
