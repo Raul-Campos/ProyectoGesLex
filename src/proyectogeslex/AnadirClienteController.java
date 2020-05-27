@@ -196,13 +196,8 @@ public class AnadirClienteController implements Initializable {
     }
 
     private static Date StringToDate(String date) {
-        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-        Date fecha = null;
-        try {
-            fecha = formato.parse(date);
-        } catch (ParseException ex) {
-            System.out.println(ex);
-        }
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-DD");
+        java.sql.Date fecha = fecha = java.sql.Date.valueOf(date);
         return fecha;
     }
 

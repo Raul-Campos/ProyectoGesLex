@@ -161,6 +161,7 @@ public class VerPeritoController implements Initializable {
         List<Perito> peritos = consulta.list();
 
         //Muestra los peritos en la tabla
+        tablePeritos.getItems().clear();
         tablePeritos.setItems(FXCollections.observableArrayList(peritos));
     }
 
@@ -199,18 +200,17 @@ public class VerPeritoController implements Initializable {
     private void añadirPerito(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirPerito.fxml"));
         Parent root = (Parent) fxmlLoader.load();
-        Stage stage = new Stage();
+        AnadirPeritoController anadirPerito = (AnadirPeritoController) fxmlLoader.getController();
+        anadirPerito.setSesion(sesion);
+        anadirPerito.setSession(session);
 
+        Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Añadir Perito");
         stage.setScene(new Scene(root));
         stage.setResizable(false);
+        stage.showAndWait();
 
-        stage.show();
-
-        AnadirPeritoController anadirPerito = (AnadirPeritoController) fxmlLoader.getController();
-        anadirPerito.setSesion(sesion);
-        anadirPerito.setSession(session);
         cargarPeritos();
     }
 
@@ -218,7 +218,29 @@ public class VerPeritoController implements Initializable {
         this.sesion = sesion;
     }
 
+    //Detecta que el perito existe y carga sus datos desde la bd
     @FXML
-    private void modificarPerito(ActionEvent event) {
+    private void modificarPerito(ActionEvent event) throws IOException, InterruptedException {
+
+        Perito perito = tablePeritos.getSelectionModel().getSelectedItem();
+
+        if (perito != null) {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirPerito.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            AnadirPeritoController anadirPerito = (AnadirPeritoController) fxmlLoader.getController();
+            anadirPerito.setSesion(sesion);
+            anadirPerito.setSession(session);
+            anadirPerito.setExistente(perito);
+            anadirPerito.cargarDatos();
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Añadir Perito");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.showAndWait();
+
+            cargarPeritos();
+        }
     }
 }

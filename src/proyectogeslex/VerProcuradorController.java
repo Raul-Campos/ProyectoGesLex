@@ -162,6 +162,7 @@ public class VerProcuradorController implements Initializable {
         List<Procurador> procuradores = consulta.list();
 
         //Muestra los procuradores en la tabla
+        tableProcurador.getItems().clear();
         tableProcurador.setItems(FXCollections.observableArrayList(procuradores));
     }
 
@@ -169,18 +170,17 @@ public class VerProcuradorController implements Initializable {
     private void añadirProcurador(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirProcurador.fxml"));
         Parent root = (Parent) fxmlLoader.load();
-        Stage stage = new Stage();
+        AnadirProcuradorController anadirProcurador = (AnadirProcuradorController) fxmlLoader.getController();
+        anadirProcurador.setSesion(sesion);
+        anadirProcurador.setSession(session);
 
+        Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Añadir Procurador");
         stage.setScene(new Scene(root));
         stage.setResizable(false);
+        stage.showAndWait();
 
-        stage.show();
-
-        AnadirProcuradorController anadirProcurador = (AnadirProcuradorController) fxmlLoader.getController();
-        anadirProcurador.setSesion(sesion);
-        anadirProcurador.setSession(session);
         cargarProcuradores();
     }
 
@@ -216,6 +216,27 @@ public class VerProcuradorController implements Initializable {
     }
 
     @FXML
-    private void modificarProcurador(ActionEvent event) {
+    private void modificarProcurador(ActionEvent event) throws IOException {
+
+        Procurador procurador = tableProcurador.getSelectionModel().getSelectedItem();
+
+        if (procurador != null) {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirProcurador.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            AnadirProcuradorController anadirProcurador = (AnadirProcuradorController) fxmlLoader.getController();
+            anadirProcurador.setSesion(sesion);
+            anadirProcurador.setSession(session);
+            anadirProcurador.setExistente(procurador);
+            anadirProcurador.cargarDatos();
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Añadir Procurador");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.showAndWait();
+
+            cargarProcuradores();
+        }
     }
 }
