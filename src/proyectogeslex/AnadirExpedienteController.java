@@ -5,7 +5,10 @@
  */
 package proyectogeslex;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -23,6 +26,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -61,13 +66,17 @@ public class AnadirExpedienteController implements Initializable {
     private SessionFactory sesion;
     @FXML
     private Button btnCargarDatos;
-
+    @FXML
+    private Text labelHoja;
+    @FXML
+    private Button btnSelecionarFic;
+    private File hoja;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
         Calendar c = Calendar.getInstance();
         tfFechaC.setText(Integer.toString(c.get(Calendar.YEAR))+ "-" +  Integer.toString(c.get(Calendar.MONTH) + 1) + "-" + Integer.toString(c.get(Calendar.DATE))  );
-       
+        labelHoja.setText("");
        
     }
 
@@ -80,7 +89,7 @@ public class AnadirExpedienteController implements Initializable {
     }
 
     @FXML
-    private void AceptarExpediente(ActionEvent event) {
+    private void AceptarExpediente(ActionEvent event) throws IOException {
         Expediente expediente = new Expediente();
         Query consulta;
         boolean datosRellenos = true;
@@ -115,7 +124,13 @@ public class AnadirExpedienteController implements Initializable {
         } else {
             datosRellenos = false;
         }
-
+        
+        
+        if(hoja!=null){
+             byte[] pdf = Files.readAllBytes(hoja.toPath());
+                expediente.setHoja(pdf);
+        }
+        
         if (datosRellenos) {
             Transaction tx = session.getTransaction();
 
@@ -195,5 +210,12 @@ public class AnadirExpedienteController implements Initializable {
             System.out.println(ex);
         }
         return fecha;
+    }
+
+    @FXML
+    private void SeleccionarFichero(ActionEvent event) {
+        FileChooser chooser = new FileChooser();
+        hoja = chooser.showOpenDialog(new Stage());
+        labelHoja.setText(hoja.getAbsolutePath());
     }
 }

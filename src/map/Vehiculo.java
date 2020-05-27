@@ -1,5 +1,5 @@
 package map;
-// Generated 22-may-2020 18:32:02 by Hibernate Tools 4.3.1
+// Generated 26-may-2020 18:05:19 by Hibernate Tools 4.3.1
 
 
 import java.util.HashSet;
@@ -19,7 +19,7 @@ public class Vehiculo  implements java.io.Serializable {
      private String aseguradora;
      private String numeroPoliza;
      private String rol;
-     private Set expedientes = new HashSet(10);
+     private Set expedientes = new HashSet(0);
 
     public Vehiculo() {
     }

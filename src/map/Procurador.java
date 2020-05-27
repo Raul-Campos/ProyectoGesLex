@@ -1,5 +1,5 @@
 package map;
-// Generated 22-may-2020 18:32:02 by Hibernate Tools 4.3.1
+// Generated 26-may-2020 18:05:19 by Hibernate Tools 4.3.1
 
 
 import java.util.HashSet;
