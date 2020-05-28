@@ -80,6 +80,7 @@ public class VerClientesController implements Initializable {
     private Button btnModificar;
     @FXML
     private Button btnBorrar1;
+    
 
     /**
      * Initializes the controller class.
@@ -235,7 +236,7 @@ public class VerClientesController implements Initializable {
         
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setTitle("Añadir Clientes");
+        stage.setTitle("Modificar Clientes");
         stage.setScene(new Scene(root));
         stage.setResizable(false);
         stage.showAndWait();

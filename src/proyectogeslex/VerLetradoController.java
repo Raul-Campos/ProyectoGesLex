@@ -72,6 +72,8 @@ public class VerLetradoController implements Initializable {
     private Button btnAñadir;
     @FXML
     private Button btnBorrar;
+    @FXML
+    private Button btnModificar;
 
     /**
      * Initializes the controller class.
@@ -212,6 +214,10 @@ public class VerLetradoController implements Initializable {
         anadirLetrado.setSesion(sesion);
         anadirLetrado.setSession(session);
         cargarLetrado();
+    }
+
+    @FXML
+    private void modificarLetrado(ActionEvent event) {
     }
 
 }
