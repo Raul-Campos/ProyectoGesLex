@@ -171,6 +171,7 @@ public class VerClientesController implements Initializable {
         List<Cliente> clientes = consulta.list();
 
         //Muestra los clientes en la tabla
+        tableClientes.getItems().clear();
         tableClientes.setItems(FXCollections.observableArrayList(clientes));
     }
 
@@ -181,7 +182,7 @@ public class VerClientesController implements Initializable {
         AnadirClienteController anadirClientes = (AnadirClienteController) fxmlLoader.getController();
         anadirClientes.setSesion(sesion);
         anadirClientes.setSession(session);
-        
+
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Añadir Clientes");
@@ -225,22 +226,28 @@ public class VerClientesController implements Initializable {
 
     @FXML
     private void modificarCliente(ActionEvent event) throws IOException {
-        
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirCliente.fxml"));
-        Parent root = (Parent) fxmlLoader.load();
-        AnadirClienteController anadirClientes = (AnadirClienteController) fxmlLoader.getController();
-        anadirClientes.setSesion(sesion);
-        anadirClientes.setSession(session);
-        anadirClientes.setExistente(tableClientes.getSelectionModel().getSelectedItem());
-        anadirClientes.cargarDatos();
-        
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setTitle("Modificar Clientes");
-        stage.setScene(new Scene(root));
-        stage.setResizable(false);
-        stage.showAndWait();
-        
-        cargarClientes();
+
+
+        Cliente cliente = tableClientes.getSelectionModel().getSelectedItem();
+
+        if (cliente != null) {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirCliente.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            AnadirClienteController anadirClientes = (AnadirClienteController) fxmlLoader.getController();
+            anadirClientes.setSesion(sesion);
+            anadirClientes.setSession(session);
+            anadirClientes.setExistente(cliente);
+            anadirClientes.cargarDatos();
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Añadir Clientes");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.showAndWait();
+
+            cargarClientes();
+        }
+
     }
 }

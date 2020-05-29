@@ -14,7 +14,10 @@
    <bottom>
       <HBox fx:id="idbajo" alignment="CENTER_RIGHT" prefHeight="145.0" prefWidth="941.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btnModificar" mnemonicParsing="false" onAction="#modificarProcurador" text=" Modificar " />
+            <Button fx:id="btnModificar" mnemonicParsing="false" onAction="#modificarProcurador" text=" Modificar ">
+               <HBox.margin>
+                  <Insets right="30.0" />
+               </HBox.margin></Button>
             <Button fx:id="btnAñadir" mnemonicParsing="false" onAction="#añadirProcurador" text="Añadir Procurador" textFill="#2f9e00">
                <HBox.margin>
                   <Insets right="30.0" />

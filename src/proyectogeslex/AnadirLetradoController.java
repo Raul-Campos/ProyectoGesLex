@@ -55,6 +55,7 @@ public class AnadirLetradoController implements Initializable {
 
     private Session session;
     private SessionFactory sesion;
+    private Letrado existente;
 
     /**
      * Initializes the controller class.
@@ -160,9 +161,16 @@ public class AnadirLetradoController implements Initializable {
                 Transaction tx = session.getTransaction();
 
                 try {
-                    tx.begin();
-                    session.save(letrado);
-                    tx.commit();
+
+                    if (existente == null ){
+                        tx.begin();
+                        session.save(letrado);
+                        tx.commit();
+                    }else{
+                        tx.begin();
+                        session.merge(letrado);
+                        tx.commit();
+                    }
 
                     Stage stage = (Stage) btnAceptar.getScene().getWindow();
                     stage.close();
@@ -203,5 +211,22 @@ public class AnadirLetradoController implements Initializable {
 
     public void setSesion(SessionFactory sesion) {
         this.sesion = sesion;
+    }
+
+    public void setExistente(Letrado existente) {
+        this.existente = existente;
+    }
+
+    public void cargarDatos() {
+
+        if (existente != null) {
+            tfDni.setText(existente.getDniLetrado());
+            tfNombre.setText(existente.getNombre());
+            tfApellidos.setText(existente.getApellidos());
+            tfColegio.setText(existente.getColegio());
+            tfDireccion.setText(existente.getDireccion());
+            tfEmail.setText(existente.getEmail());
+            tfNumero.setText(String.valueOf(existente.getTelefono()));
+        }
     }
 }

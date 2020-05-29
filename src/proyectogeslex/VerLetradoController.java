@@ -163,6 +163,7 @@ public class VerLetradoController implements Initializable {
         List<Letrado> letrados = consulta.list();
 
         //Muestra los letrados en la tabla
+        tableLetrados.getItems().clear();
         tableLetrados.setItems(FXCollections.observableArrayList(letrados));
     }
 
@@ -217,7 +218,30 @@ public class VerLetradoController implements Initializable {
     }
 
     @FXML
-    private void modificarLetrado(ActionEvent event) {
+
+    private void modificarLetrado(ActionEvent event) throws IOException {
+
+        Letrado letrado = tableLetrados.getSelectionModel().getSelectedItem();
+        
+        if (letrado != null) {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirLetrado.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            AnadirLetradoController anadirLetrado = (AnadirLetradoController) fxmlLoader.getController();
+            anadirLetrado.setSesion(sesion);
+            anadirLetrado.setSession(session);
+            anadirLetrado.setExistente(letrado);
+            anadirLetrado.cargarDatos();
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Añadir Letrado");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.showAndWait();
+
+            cargarLetrado();
+        }
+
     }
 
 }
