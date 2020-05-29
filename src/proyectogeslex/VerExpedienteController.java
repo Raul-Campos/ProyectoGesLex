@@ -212,6 +212,9 @@ public class VerExpedienteController implements Initializable {
     private Button btnVerSent;
     @FXML
     private Button btnModificar;
+    @FXML
+    private Button btnModificarExp;
+
 
     /**
      * Initializes the controller class.
@@ -274,6 +277,8 @@ public class VerExpedienteController implements Initializable {
         columnPeritoNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         columnPeritoProvincia.setCellValueFactory(new PropertyValueFactory<>("provincia"));
         columnPeritoTlf.setCellValueFactory(new PropertyValueFactory<>("telefono"));
+        AutoFillBox.autoCompleteComboBoxPlus(cbCoche, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()));
+        AutoFillBox.autoCompleteComboBoxPlus(cbPerito, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()));
 
     }
 
@@ -1010,6 +1015,26 @@ public class VerExpedienteController implements Initializable {
             alertaNuevoDoc.setContentText("Porfavor seleccione el documento que desea modificar");
             alertaNuevoDoc.showAndWait();
         }
+    }
+
+    @FXML
+    private void ModificarExpediente(ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirExpediente.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AnadirExpedienteController anadirExp = (AnadirExpedienteController) fxmlLoader.getController();
+        anadirExp.setSesion(sesion);
+        anadirExp.setSession(session);
+        anadirExp.setExistente(tableExpedientes.getSelectionModel().getSelectedItem());
+        anadirExp.cargarDatosExp();
+        
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Modificar Expediente");
+        stage.setScene(new Scene(root));
+        stage.setResizable(false);
+        stage.showAndWait();
+        
+        cargarExpedientes();
     }
 
 }
