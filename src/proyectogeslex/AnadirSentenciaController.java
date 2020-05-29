@@ -76,13 +76,13 @@ public class AnadirSentenciaController implements Initializable {
     @FXML
     private void aceptarSentencia(ActionEvent event) throws ParseException {
 
-        if (!tfTitulo.equals("") && txDesc.equals("") && file != null) {
+        if (!tfTitulo.equals("") && file != null) {
             Sentencia sentencia = new Sentencia();
             SentenciaId id = new SentenciaId();
             Date fecha = new Date();
             SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
             String formatoFecha = formato.format(fecha);
-            Date fecha2 = new SimpleDateFormat("yyyy-MM-dd").parse(formatoFecha);
+            java.sql.Date fecha2 = java.sql.Date.valueOf(formatoFecha);
 
             id.setTitulo(tfTitulo.getText());
             id.setCodExpediente(codigoExpediente);

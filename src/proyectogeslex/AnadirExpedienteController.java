@@ -175,7 +175,6 @@ public class AnadirExpedienteController implements Initializable {
     @FXML
     private void cargarDatos(ActionEvent event) {
 
-
         Query consulta = session.createQuery("from Cliente");
         List<Cliente> clientes = consulta.list();
        
