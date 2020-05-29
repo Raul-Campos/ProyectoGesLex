@@ -62,6 +62,7 @@ public class AnadirVehiculoController implements Initializable {
     private SessionFactory sesion;
     @FXML
     private ChoiceBox<String> cbRol;
+    private Vehiculo existente;
 
     /**
      * Initializes the controller class.
@@ -225,5 +226,24 @@ public class AnadirVehiculoController implements Initializable {
     public void setSesion(SessionFactory sesion) {
         this.sesion = sesion;
     }
+ public void setExistente(Vehiculo existente) {
+        this.existente = existente;
+    }
+  public void cargarDatos() {
 
+        if (existente != null) {
+            //Muestra los datos
+            tfMatricula.setText(existente.getMatricula());
+            tfMatricula.setDisable(true);
+            tfExpediente.setDisable(true);
+            tfMarca.setText(existente.getMarca());
+            tfModelo.setText(existente.getModelo());
+            tfColor.setText(existente.getColor());
+            tfAseguradora.setText(existente.getAseguradora());
+            tfBastidor.setText(existente.getNumeroBastidor());
+            tfPoliza.setText(existente.getNumeroPoliza());
+            cbRol.setValue(existente.getRol());
+        }
+
+    }
 }

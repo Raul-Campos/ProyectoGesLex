@@ -201,7 +201,24 @@ public class VerVehiculosController implements Initializable {
     }
 
     @FXML
-    private void modificarVehiculo(ActionEvent event) {
+    private void modificarVehiculo(ActionEvent event) throws IOException {
+         
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirVehiculo.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AnadirVehiculoController anadirVehiculo = (AnadirVehiculoController) fxmlLoader.getController();
+        anadirVehiculo.setSesion(sesion);
+        anadirVehiculo.setSession(session);
+        anadirVehiculo.setExistente(tableVehiculos.getSelectionModel().getSelectedItem());
+        anadirVehiculo.cargarDatos();
+        
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Modificar Vehiculo");
+        stage.setScene(new Scene(root));
+        stage.setResizable(false);
+        stage.showAndWait();
+        
+        cargarVehiculos();
     }
     
 }

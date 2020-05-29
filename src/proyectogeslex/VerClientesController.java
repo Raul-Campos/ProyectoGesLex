@@ -80,6 +80,7 @@ public class VerClientesController implements Initializable {
     private Button btnModificar;
     @FXML
     private Button btnBorrar1;
+    
 
     /**
      * Initializes the controller class.
@@ -226,6 +227,7 @@ public class VerClientesController implements Initializable {
     @FXML
     private void modificarCliente(ActionEvent event) throws IOException {
 
+
         Cliente cliente = tableClientes.getSelectionModel().getSelectedItem();
 
         if (cliente != null) {
@@ -246,5 +248,6 @@ public class VerClientesController implements Initializable {
 
             cargarClientes();
         }
+
     }
 }

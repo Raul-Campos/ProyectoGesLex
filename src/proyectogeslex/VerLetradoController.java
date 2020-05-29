@@ -218,6 +218,7 @@ public class VerLetradoController implements Initializable {
     }
 
     @FXML
+
     private void modificarLetrado(ActionEvent event) throws IOException {
 
         Letrado letrado = tableLetrados.getSelectionModel().getSelectedItem();
@@ -240,6 +241,7 @@ public class VerLetradoController implements Initializable {
 
             cargarLetrado();
         }
+
     }
 
 }
