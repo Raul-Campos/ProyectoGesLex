@@ -6,6 +6,8 @@
 package proyectogeslex;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -54,6 +56,7 @@ public class AnadirDocumentoController implements Initializable {
     private File file;
     private Session session;
     private int codigoExpediente;
+    private Documento existente;
 
     /**
      * Initializes the controller class.
@@ -86,7 +89,7 @@ public class AnadirDocumentoController implements Initializable {
             Date fecha = new Date();
             SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
             String formatoFecha = formato.format(fecha);
-            java.sql.Date fecha2 =java.sql.Date.valueOf(formatoFecha);
+            java.sql.Date fecha2 = java.sql.Date.valueOf(formatoFecha);
 
             id.setNombre(tfNombre.getText());
             id.setCodExpediente(codigoExpediente);
@@ -97,14 +100,23 @@ public class AnadirDocumentoController implements Initializable {
 
             Transaction tx = session.getTransaction();
             try {
-                //Convierte fichero a array de bytes
-                byte[] pdf = Files.readAllBytes(file.toPath());
-                documento.setPdf(pdf);
 
-                //Guarda el documento
-                tx.begin();
-                session.save(documento);
-                tx.commit();
+                if (existente == null) {
+                    //Convierte fichero a array de bytes
+                    byte[] pdf = Files.readAllBytes(file.toPath());
+                    documento.setPdf(pdf);
+
+                    //Guarda el documento
+                    tx.begin();
+                    session.save(documento);
+                    tx.commit();
+                } else {
+                    //Guarda el documento
+                    tx.begin();
+                    session.merge(documento);
+                    tx.commit();
+                    file.delete();
+                }
 
                 //Cierra ventana
                 Stage cerrar = (Stage) tfAportador.getScene().getWindow();
@@ -140,5 +152,19 @@ public class AnadirDocumentoController implements Initializable {
 
     public void setCodigoExpediente(int codigoExpediente) {
         this.codigoExpediente = codigoExpediente;
+    }
+
+    public void setExistente(Documento existente) {
+        this.existente = existente;
+    }
+
+    public void cargarDatos() throws FileNotFoundException, IOException {
+
+        if (existente != null) {
+            tfNombre.setText(existente.getId().getNombre());
+            tfNombre.setDisable(true);
+            tfAportador.setText(existente.getAportadoPor());
+
+        }
     }
 }

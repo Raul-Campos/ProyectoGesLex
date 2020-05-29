@@ -7,6 +7,10 @@
 package proyectogeslex;
 
 import email.EnviarAvisos;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,7 +19,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Set;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -37,13 +40,12 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.persistence.RollbackException;
+import javax.xml.parsers.ParserConfigurationException;
 import map.Documento;
 import map.Expediente;
-
 import map.Incidente;
 import org.hibernate.Transaction;
 import map.Aviso;
-import map.Cliente;
 import map.Perito;
 import map.Sentencia;
 import map.Vehiculo;
@@ -200,11 +202,16 @@ public class VerExpedienteController implements Initializable {
     private ComboBox<String> cbPerito;
     @FXML
     private TableColumn<Expediente, String> columnHojaEncargo;
-
     List<Vehiculo> vehiculos = null;
     List<Perito> peritos = null;
     private String emailUser;
     private String emailPassword;
+    @FXML
+    private Button btnVerDoc;
+    @FXML
+    private Button btnVerSent;
+    @FXML
+    private Button btnModificar;
     @FXML
     private Button btnModificarExp;
 
@@ -399,7 +406,7 @@ public class VerExpedienteController implements Initializable {
                 stage.showAndWait();
 
                 cargarIncidente(expedienteSeleccionado);
-                
+
             } else {
                 Alert alertaIncExistente = new Alert(Alert.AlertType.INFORMATION);
                 alertaIncExistente.setHeaderText("Incidente existente");
@@ -458,7 +465,7 @@ public class VerExpedienteController implements Initializable {
             cargarAvisos(seleccionado);
 
             Thread comprobarAvisos = new Thread(new EnviarAvisos(emailUser, emailPassword, session));
-           // comprobarAvisos.start();
+            // comprobarAvisos.start();
         } else {
 
             //Si no selecciona ningúno
@@ -658,13 +665,6 @@ public class VerExpedienteController implements Initializable {
         cargarAvisos(expedienteSeleccionado);
         cargarCoches(expedienteSeleccionado);
         cargarPeritos(expedienteSeleccionado);
-
-
-        //columnDocDescrip.setCellValueFactory(v -> new SimpleStringProperty("hdfkjdskjflksd"));
-        /*File file = new File("prueba.pdf");
-        FileOutputStream os = new FileOutputStream(file);
-        os.write(documentos.get(0).getPdf());
-        os.close();*/
     }
 
     private void cargarDocumentos(Expediente expediente) {
@@ -758,7 +758,7 @@ public class VerExpedienteController implements Initializable {
                         Transaction tx = session.getTransaction();
 
                         try {
-                            
+
                             tx.begin();
                             session.update(vehiculo);
                             tx.commit();
@@ -776,7 +776,6 @@ public class VerExpedienteController implements Initializable {
                         cargarCoches(seleccionado);
 
                     }
-
 
                 });
             } else {
@@ -823,12 +822,12 @@ public class VerExpedienteController implements Initializable {
             if (cbPerito.getValue() != null) {
                 peritos.forEach((perito) -> {
 
-                    if (cbPerito.getValue().equals(perito.getDniPerito()+ "  " + perito.getNombre() + " " + perito.getApellidos())) {
+                    if (cbPerito.getValue().equals(perito.getDniPerito() + "  " + perito.getNombre() + " " + perito.getApellidos())) {
                         perito.getExpedientes().add(seleccionado);
                         Transaction tx = session.getTransaction();
 
                         try {
-                            
+
                             tx.begin();
                             session.update(perito);
                             tx.commit();
@@ -846,7 +845,6 @@ public class VerExpedienteController implements Initializable {
                         cargarPeritos(seleccionado);
 
                     }
-
 
                 });
             } else {
@@ -895,6 +893,127 @@ public class VerExpedienteController implements Initializable {
             alertaBorrarPerito.setHeaderText("Perito no seleccionado");
             alertaBorrarPerito.setContentText("Porfavor seleccione el perito que desee eliminar");
             alertaBorrarPerito.showAndWait();
+        }
+    }
+
+    @FXML
+    private void verDocumento(ActionEvent event) throws FileNotFoundException, IOException, ParserConfigurationException {
+
+        Documento doc = tableDocumentos.getSelectionModel().getSelectedItem();
+
+        if (doc != null) {
+            File ficheroPdf = File.createTempFile(doc.getId().getNombre(), ".pdf", new File("src"));
+            
+            //Lo elimina al cerrar la aplicación
+            ficheroPdf.deleteOnExit();
+
+            //Copia el fichero del documento seleccionado en la máquina
+            FileOutputStream os = new FileOutputStream(ficheroPdf);
+            os.write(doc.getPdf());
+            os.close();
+            
+            //Muestra el fichero
+            if(Desktop.isDesktopSupported())
+                Desktop.getDesktop().open(ficheroPdf);
+
+        } else {
+            Alert alertaVerDocumento = new Alert(Alert.AlertType.INFORMATION);
+            alertaVerDocumento.setHeaderText("Documento no seleccionado");
+            alertaVerDocumento.setContentText("Porfavor seleccione el documente que desee visualizar");
+            alertaVerDocumento.showAndWait();
+        }
+    }
+
+    @FXML
+    private void verSentencia(ActionEvent event) throws FileNotFoundException, IOException, ParserConfigurationException {
+
+        Sentencia sent = tableSentencias.getSelectionModel().getSelectedItem();
+
+        if (sent != null) {
+
+            File ficheroPdf = File.createTempFile("sent" + sent.getId().getCodExpediente(), ".pdf");
+            String ficheroHtml = "sent" + sent.getId().getCodExpediente() + ".html";
+
+            //Copia el fichero del documento seleccionado en la máquina
+            FileOutputStream os = new FileOutputStream(ficheroPdf);
+            os.write(sent.getPdf());
+            os.close();
+            
+            //Muestra fichero
+            if(Desktop.isDesktopSupported())
+                Desktop.getDesktop().open(ficheroPdf);
+            
+            //Convierte el fichero pdf en html
+            /*PDDocument pdf = PDDocument.load(ficheroPdf);
+            Writer output = new PrintWriter("src\\proyectogeslex\\" + ficheroHtml, "utf-8");
+            new PDFDomTree().writeText(pdf, output);
+
+            WebView browser = new WebView();
+            WebEngine webEngine = browser.getEngine();
+
+            webEngine.getLoadWorker().stateProperty().addListener((observable, oldState, newState) -> {
+                if (newState == State.SUCCEEDED) {
+                    Document d = webEngine.getDocument();
+                }
+            });
+
+            //Muestra el fichero html
+            webEngine.load(this.getClass().getResource(ficheroHtml).toExternalForm());
+
+            Scene scene = new Scene(browser);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Ver sentencia");
+            stage.setScene(scene);
+            stage.showAndWait();
+
+            //Elimina los ficheros pdf y html
+            output.close();
+            pdf.close();
+            ficheroPdf.delete();
+            File file2 = new File("src\\proyectogeslex\\" + ficheroHtml);
+            file2.delete();*/
+        } else {
+            Alert alertaVerSentencia = new Alert(Alert.AlertType.INFORMATION);
+            alertaVerSentencia.setHeaderText("Sentencia no seleccionada");
+            alertaVerSentencia.setContentText("Porfavor seleccione la sentencia que desee visualizar");
+            alertaVerSentencia.showAndWait();
+        }
+    }
+
+    @FXML
+    private void modificarDocumento(ActionEvent event) throws IOException {
+
+        Expediente seleccionado = tableExpedientes.getSelectionModel().getSelectedItem();
+        Documento documento = tableDocumentos.getSelectionModel().getSelectedItem();
+
+        if (documento != null) {
+
+            //Abre ventana modal para añadir un documento al expediente seleccionado
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirDocumento.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            AnadirDocumentoController documentoController = (AnadirDocumentoController) fxmlLoader.getController();
+            documentoController.setSession(session);
+            documentoController.setCodigoExpediente(seleccionado.getCodigo());
+            documentoController.setExistente(documento);
+            documentoController.cargarDatos();
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Añadir documentos");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.showAndWait();
+
+            cargarDocumentos(expedienteSeleccionado);
+
+        } else {
+
+            //Si no selecciona ningúno
+            Alert alertaNuevoDoc = new Alert(Alert.AlertType.INFORMATION);
+            alertaNuevoDoc.setHeaderText("Documento no seleccionado");
+            alertaNuevoDoc.setContentText("Porfavor seleccione el documento que desea modificar");
+            alertaNuevoDoc.showAndWait();
         }
     }
 
