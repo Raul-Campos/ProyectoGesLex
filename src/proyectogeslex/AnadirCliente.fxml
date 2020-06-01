@@ -29,7 +29,7 @@
             <Font name="System Bold" size="16.0" />
          </font>
       </Text>
-      <TextField fx:id="textfieldFecha" layoutX="426.0" layoutY="128.0" />
+      <TextField fx:id="textfieldFecha" layoutX="426.0" layoutY="128.0" promptText="yyyy-mm-dd" />
       <TextField fx:id="textfieldNombre" layoutX="115.0" layoutY="177.0" prefHeight="25.0" prefWidth="151.0" />
       <Text layoutX="33.0" layoutY="196.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre :">
          <font>
@@ -53,8 +53,8 @@
       </Text>
       <ChoiceBox fx:id="cbSitFam" layoutX="178.0" layoutY="221.0" prefWidth="150.0" />
       <ChoiceBox fx:id="cbSitLab" layoutX="178.0" layoutY="271.0" prefWidth="150.0" />
-      <RadioButton fx:id="radiobH" layoutX="425.0" layoutY="225.0" mnemonicParsing="false" text="Hombre" />
-      <RadioButton fx:id="radiobM" layoutX="501.0" layoutY="225.0" mnemonicParsing="false" text="Mujer" />
+      <RadioButton fx:id="radiobH" layoutX="425.0" layoutY="225.0" mnemonicParsing="false" onAction="#OpcionChHombre" text="Hombre" />
+      <RadioButton fx:id="radiobM" layoutX="501.0" layoutY="225.0" mnemonicParsing="false" onAction="#OpcionChMujer" text="Mujer" />
       <Button fx:id="btnEnviar" layoutX="520.0" layoutY="352.0" mnemonicParsing="false" onAction="#btnEnviar" text="Enviar" textFill="#206f1e">
          <font>
             <Font size="14.0" />

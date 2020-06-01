@@ -26,6 +26,9 @@
         <property name="hoja" type="binary">
             <column name="hoja" />
         </property>
+        <property name="estadoHoja" type="string">
+            <column name="estadoHoja" />
+        </property>
         <set name="avisos" table="aviso" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="cod_expediente" not-null="true" />

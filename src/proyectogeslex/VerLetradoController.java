@@ -202,18 +202,17 @@ public class VerLetradoController implements Initializable {
     private void añadirLetrado(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirLetrado.fxml"));
         Parent root = (Parent) fxmlLoader.load();
+        AnadirLetradoController anadirLetrado = (AnadirLetradoController) fxmlLoader.getController();
+        anadirLetrado.setSesion(sesion);
+        anadirLetrado.setSession(session);
+        
         Stage stage = new Stage();
-
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Añadir Letrado");
         stage.setScene(new Scene(root));
         stage.setResizable(false);
+        stage.showAndWait();
 
-        stage.show();
-
-        AnadirLetradoController anadirLetrado = (AnadirLetradoController) fxmlLoader.getController();
-        anadirLetrado.setSesion(sesion);
-        anadirLetrado.setSession(session);
         cargarLetrado();
     }
 
@@ -240,6 +239,13 @@ public class VerLetradoController implements Initializable {
             stage.showAndWait();
 
             cargarLetrado();
+        }
+         else
+        {
+            Alert seleccionarLetrado = new Alert(Alert.AlertType.INFORMATION);
+                    seleccionarLetrado.setHeaderText("Error al cargar Letrado");
+                    seleccionarLetrado.setContentText("Seleccione un letrado para modificarlo");
+                    seleccionarLetrado.showAndWait();
         }
 
     }

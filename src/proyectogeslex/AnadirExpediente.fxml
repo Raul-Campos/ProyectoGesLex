@@ -43,7 +43,6 @@
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Seleccione el DNI del Cliente :" wrappingWidth="162.623046875" />
                   <ComboBox fx:id="chCliente" editable="true" prefHeight="25.0" prefWidth="230.0" visibleRowCount="5" GridPane.columnIndex="1" />
-                  <Button fx:id="btnCargarDatos" mnemonicParsing="false" onAction="#cargarDatos" text="Cargar Datos" GridPane.columnIndex="2" />
                </children>
             </GridPane>
          </children>

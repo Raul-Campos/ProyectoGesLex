@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -126,8 +127,6 @@ public class VerExpedienteController implements Initializable {
     private HBox idbajo;
     @FXML
     private Button btnAñadir;
-    @FXML
-    private Button btnBorrar;
 
     @FXML
     private TableView<Aviso> tableAvisos;
@@ -214,6 +213,10 @@ public class VerExpedienteController implements Initializable {
     private Button btnModificar;
     @FXML
     private Button btnModificarExp;
+    @FXML
+    private Button btnModificarIncidente;
+    @FXML
+    private Button btnCerrarExp;
 
 
     /**
@@ -227,7 +230,7 @@ public class VerExpedienteController implements Initializable {
         columnDNICliente.setCellValueFactory(new PropertyValueFactory<>("cliente"));
         columnDNILetrado.setCellValueFactory(new PropertyValueFactory<>("letrado"));
         columnDNIProcurador.setCellValueFactory(new PropertyValueFactory<>("procurador"));
-        columnHojaEncargo.setCellValueFactory(new PropertyValueFactory<>("hoja"));
+        columnHojaEncargo.setCellValueFactory(new PropertyValueFactory<>("estadoHoja"));
 
         cbColumna.getItems().addAll("Código", "Fecha de creación", "Fecha de cierre", "Cliente", "Letrado", "Procurador");
 
@@ -537,31 +540,13 @@ public class VerExpedienteController implements Initializable {
         stage.setScene(new Scene(root));
         stage.setResizable(false);
 
+        AnadirExpedienteController anadirExpediente = (AnadirExpedienteController) fxmlLoader.getController();
+        anadirExpediente.setSesion(sesion);
+        anadirExpediente.setSession(session); 
+        anadirExpediente.cargaDato();
         stage.showAndWait();
-
-        AnadirExpedienteController anadirClientes = (AnadirExpedienteController) fxmlLoader.getController();
-        anadirClientes.setSesion(sesion);
-        anadirClientes.setSession(session);
         cargarExpedientes();
 
-    }
-
-    @FXML
-    private void borrarExpediente(ActionEvent event) {
-        Expediente expedienteABorrar = tableExpedientes.getSelectionModel().getSelectedItem();
-
-        if (expedienteABorrar != null) {
-            Transaction tx = session.getTransaction();
-            tx.begin();
-            session.delete(expedienteABorrar);
-            tx.commit();
-        } else {
-            Alert alertaEliminarExpediente = new Alert(Alert.AlertType.INFORMATION);
-            alertaEliminarExpediente.setHeaderText("Expediente no seleccionado");
-            alertaEliminarExpediente.setContentText("Porfavor seleccione el expediente que desee eliminar");
-            alertaEliminarExpediente.showAndWait();
-        }
-        cargarExpedientes();
     }
 
     public void setSession(Session session) {
@@ -601,7 +586,7 @@ public class VerExpedienteController implements Initializable {
             } else {
                 campo = "fechaCierre";
             }
-            Date fecha;
+               Date fecha;
 
             try {
                 fecha = new SimpleDateFormat("yyyy-MM-dd").parse(valor);
@@ -650,6 +635,7 @@ public class VerExpedienteController implements Initializable {
         List<Expediente> expedientes = consulta.list();
 
         //Muestra los clientes en la tabla
+        tableExpedientes.getItems().clear();
         tableExpedientes.setItems(FXCollections.observableArrayList(expedientes));
     }
 
@@ -673,7 +659,7 @@ public class VerExpedienteController implements Initializable {
         Query consulta = session.createQuery("select d from Documento d JOIN "
                 + "d.expediente e where e.codigo = ?").setParameter(0, expediente.getCodigo());
         List<Documento> documentos = consulta.list();
-
+        tableDocumentos.getItems().clear();
         tableDocumentos.setItems(FXCollections.observableArrayList(documentos));
     }
 
@@ -682,7 +668,7 @@ public class VerExpedienteController implements Initializable {
         Query consulta = session.createQuery("select d from Sentencia d JOIN "
                 + "d.expediente e where e.codigo = ?").setParameter(0, expediente.getCodigo());
         List<Sentencia> sentencias = consulta.list();
-
+        tableSentencias.getItems().clear();
         tableSentencias.setItems(FXCollections.observableArrayList(sentencias));
     }
 
@@ -691,7 +677,7 @@ public class VerExpedienteController implements Initializable {
         Query consulta = session.createQuery("select d from Incidente d JOIN "
                 + "d.expediente e where e.codigo = ?").setParameter(0, expediente.getCodigo());
         List<Incidente> incidente = consulta.list();
-
+        tableIncidente.getItems().clear();
         tableIncidente.setItems(FXCollections.observableArrayList(incidente));
     }
 
@@ -701,7 +687,7 @@ public class VerExpedienteController implements Initializable {
         Query consulta = session.createQuery("select a from Aviso a JOIN "
                 + "a.expediente e where e.codigo = ?").setParameter(0, expediente.getCodigo());
         List<Aviso> avisos = consulta.list();
-
+        tableAvisos.getItems().clear();
         tableAvisos.setItems(FXCollections.observableArrayList(avisos));
     }
 
@@ -711,7 +697,7 @@ public class VerExpedienteController implements Initializable {
         Query consulta = session.createQuery("select a from Vehiculo a JOIN "
                 + "a.expedientes e where e.codigo = ?").setParameter(0, expediente.getCodigo());
         List<Vehiculo> coche = consulta.list();
-
+        tableCoches.getItems().clear();
         tableCoches.setItems(FXCollections.observableArrayList(coche));
 
         if (vehiculos == null) {
@@ -731,7 +717,8 @@ public class VerExpedienteController implements Initializable {
         Query consulta = session.createQuery("select a from Perito a JOIN "
                 + "a.expedientes e where e.codigo = ?").setParameter(0, expediente.getCodigo());
         List<Perito> peritot = consulta.list();
-
+        
+        tablePeritos.getItems().clear();
         tablePeritos.setItems(FXCollections.observableArrayList(peritot));
 
         if (peritos == null) {
@@ -801,9 +788,10 @@ public class VerExpedienteController implements Initializable {
         Vehiculo cocheABorrar = tableCoches.getSelectionModel().getSelectedItem();
 
         if (cocheABorrar != null) {
+            expedienteSeleccionado.getVehiculos().remove(cocheABorrar);
             Transaction tx = session.getTransaction();
             tx.begin();
-            session.delete(cocheABorrar);
+            session.update(expedienteSeleccionado);
             tx.commit();
         } else {
             Alert alertaEliminarCoche = new Alert(Alert.AlertType.INFORMATION);
@@ -855,18 +843,6 @@ public class VerExpedienteController implements Initializable {
             }
 
             //Abre ventana modal para añadir un documento al expediente seleccionado
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirPerito.fxml"));
-            Parent root = (Parent) fxmlLoader.load();
-            AnadirPeritoController peritoController = (AnadirPeritoController) fxmlLoader.getController();
-            peritoController.setSession(session);
-            peritoController.setExpediente(seleccionado);
-
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("Añadir Perito");
-            stage.setScene(new Scene(root));
-            stage.setResizable(false);
-            stage.showAndWait();
             cargarPeritos(seleccionado);
 
         } else {
@@ -884,9 +860,10 @@ public class VerExpedienteController implements Initializable {
         Perito peritoABorrar = tablePeritos.getSelectionModel().getSelectedItem();
 
         if (peritoABorrar != null) {
+            expedienteSeleccionado.getPeritos().remove(peritoABorrar);
             Transaction tx = session.getTransaction();
             tx.begin();
-            session.delete(peritoABorrar);
+            session.update(expedienteSeleccionado);
             tx.commit();
         } else {
             Alert alertaBorrarPerito = new Alert(Alert.AlertType.INFORMATION);
@@ -894,6 +871,7 @@ public class VerExpedienteController implements Initializable {
             alertaBorrarPerito.setContentText("Porfavor seleccione el perito que desee eliminar");
             alertaBorrarPerito.showAndWait();
         }
+        cargarPeritos(expedienteSeleccionado);
     }
 
     @FXML
@@ -1005,7 +983,7 @@ public class VerExpedienteController implements Initializable {
             stage.setResizable(false);
             stage.showAndWait();
 
-            cargarDocumentos(expedienteSeleccionado);
+           
 
         } else {
 
@@ -1015,10 +993,14 @@ public class VerExpedienteController implements Initializable {
             alertaNuevoDoc.setContentText("Porfavor seleccione el documento que desea modificar");
             alertaNuevoDoc.showAndWait();
         }
+        cargarDocumentos(expedienteSeleccionado);
     }
 
     @FXML
     private void ModificarExpediente(ActionEvent event) throws IOException {
+         Expediente expediente = tableExpedientes.getSelectionModel().getSelectedItem();
+
+        if (expediente != null) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirExpediente.fxml"));
         Parent root = (Parent) fxmlLoader.load();
         AnadirExpedienteController anadirExp = (AnadirExpedienteController) fxmlLoader.getController();
@@ -1035,6 +1017,65 @@ public class VerExpedienteController implements Initializable {
         stage.showAndWait();
         
         cargarExpedientes();
+         }else
+        {
+            Alert seleccionarExp = new Alert(Alert.AlertType.INFORMATION);
+                    seleccionarExp.setHeaderText("Error al modificar Expediente");
+                    seleccionarExp.setContentText("Seleccione un expediente para modificarlo");
+                    seleccionarExp.showAndWait();
+        }
     }
+    
+    @FXML
+    private void ModificarIncidente(ActionEvent event) throws IOException {
+        Incidente incidente = tableIncidente.getSelectionModel().getSelectedItem();
 
+        if (incidente != null) {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirIncidente.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        AnadirIncidenteController anadirIncidente = (AnadirIncidenteController) fxmlLoader.getController();
+        anadirIncidente.setSesion(sesion);
+        anadirIncidente.setSession(session);
+        anadirIncidente.setExistente(incidente);
+        anadirIncidente.setExpediente(expedienteSeleccionado);
+        anadirIncidente.cargarDatos();
+        
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Modificar Incidente");
+        stage.setScene(new Scene(root));
+        stage.setResizable(false);
+        stage.showAndWait();
+        
+       
+    }else
+        {
+            Alert seleccionarVehiculo = new Alert(Alert.AlertType.INFORMATION);
+                    seleccionarVehiculo.setHeaderText("Error al cargar Incidente");
+                    seleccionarVehiculo.setContentText("Seleccione un incidente para modificarlo");
+                    seleccionarVehiculo.showAndWait();
+        }
+        cargarIncidente(expedienteSeleccionado);
+    } 
+
+    @FXML
+    private void CerrarExpediente(ActionEvent event) {
+         Expediente expedienteACerrar = tableExpedientes.getSelectionModel().getSelectedItem();
+        Calendar c = Calendar.getInstance();
+        java.sql.Date fecha = java.sql.Date.valueOf(Integer.toString(c.get(Calendar.YEAR)) + "-" + Integer.toString(c.get(Calendar.MONTH) + 1) + "-" + Integer.toString(c.get(Calendar.DATE)));
+        if (expedienteACerrar != null) {
+            expedienteACerrar.setFechaCierre(fecha);
+            Transaction tx = session.getTransaction();
+            tx.begin();
+            session.update(expedienteACerrar);
+            tx.commit();
+            cargarExpedientes();
+        } else {
+            Alert alertaEliminarExpediente = new Alert(Alert.AlertType.INFORMATION);
+            alertaEliminarExpediente.setHeaderText("Expediente no seleccionado");
+            alertaEliminarExpediente.setContentText("Porfavor seleccione el expediente que desee eliminar");
+            alertaEliminarExpediente.showAndWait();
+        }
+       
+    }
 }
