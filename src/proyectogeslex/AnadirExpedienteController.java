@@ -69,8 +69,6 @@ public class AnadirExpedienteController implements Initializable {
     private Session session;
     private SessionFactory sesion;
     @FXML
-    private Button btnCargarDatos;
-    @FXML
     private Text labelHoja;
     @FXML
     private Button btnSelecionarFic;
@@ -84,7 +82,6 @@ public class AnadirExpedienteController implements Initializable {
         Calendar c = Calendar.getInstance();
         tfFechaC.setText(Integer.toString(c.get(Calendar.YEAR)) + "-" + Integer.toString(c.get(Calendar.MONTH) + 1) + "-" + Integer.toString(c.get(Calendar.DATE)));
         labelHoja.setText("");
-
     }
 
     @FXML
@@ -97,7 +94,11 @@ public class AnadirExpedienteController implements Initializable {
 
     @FXML
     private void AceptarExpediente(ActionEvent event) throws IOException {
+        
         Expediente expediente = new Expediente();
+        if(existente!=null)
+            expediente=existente;
+        
         Query consulta;
         boolean datosRellenos = true;
 
@@ -135,8 +136,9 @@ public class AnadirExpedienteController implements Initializable {
         if (hoja != null) {
             byte[] pdf = Files.readAllBytes(hoja.toPath());
             expediente.setHoja(pdf);
+   
         }
-
+        expediente.setEstadoHoja(expediente.estadoHoja());
         if (datosRellenos) {
             Transaction tx = session.getTransaction();
             try {
@@ -147,7 +149,7 @@ public class AnadirExpedienteController implements Initializable {
                     tx.commit();
                 } else {
                     tx.begin();
-                    session.merge(expediente);
+                    session.update(expediente);
                     tx.commit();
                 }
 
@@ -202,10 +204,8 @@ public class AnadirExpedienteController implements Initializable {
         }
     }
 
-    @FXML
-    private void cargarDatos(ActionEvent event) {
-
-        Query consulta = session.createQuery("from Cliente");
+    public void cargaDato(){
+         Query consulta = session.createQuery("from Cliente");
         List<Cliente> clientes = consulta.list();
 
         clientes.forEach((cliente) -> {
@@ -226,9 +226,8 @@ public class AnadirExpedienteController implements Initializable {
             chProcurador.getItems().add(procurador.getDniProcurador() + "  " + procurador.getApellidos() + "," + procurador.getNombre());
         });
         AutoFillBox.autoCompleteComboBoxPlus(chProcurador, (typedText, itemToCompare) -> itemToCompare.toLowerCase().contains(typedText.toLowerCase()));
-
+        
     }
-
     private static Date StringToDate(String date) {
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
         Date fecha = null;

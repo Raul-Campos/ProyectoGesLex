@@ -26,6 +26,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import map.Cliente;
 import map.Vehiculo;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -69,10 +70,10 @@ public class VerVehiculosController implements Initializable {
     private TableColumn<Vehiculo, String> nPolizaColumn;
     @FXML
     private TableColumn<Vehiculo, String> rolColumn;
-    
+
     private Session session;
     private SessionFactory sesion;
-    
+
     @FXML
     private Button btnAñadir;
     @FXML
@@ -83,7 +84,7 @@ public class VerVehiculosController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
         //Enlaza las columnas con los campos de vehiculos
         matriculaColumn.setCellValueFactory(new PropertyValueFactory<>("matricula"));
         marcaColumn.setCellValueFactory(new PropertyValueFactory<>("marca"));
@@ -93,7 +94,7 @@ public class VerVehiculosController implements Initializable {
         aseguradoraColumn.setCellValueFactory(new PropertyValueFactory<>("aseguradora"));
         nPolizaColumn.setCellValueFactory(new PropertyValueFactory<>("numeroPoliza"));
         rolColumn.setCellValueFactory(new PropertyValueFactory<>("rol"));
-        
+
         //Añade opciones
         cbColumna.getItems().addAll("Matricula", "Expediente", "Marca", "Modelo",
                 "Color", "Nº de bastidor", "Aseguradora", "Nº de poliza", "Rol");
@@ -101,15 +102,15 @@ public class VerVehiculosController implements Initializable {
 
     @FXML
     private void buscarVehiculo(ActionEvent event) {
-        
+
         //Comprueba si hay una opción seleccionada
         if (cbColumna.getValue() != null) {
 
             //Comprueba si se ha introducido un parámetro de busqueda
             if (tfBusqueda.getText() != null) {
-                
+
                 List<Vehiculo> vehiculos = consultaVehiculo(cbColumna.getValue(), tfBusqueda.getText());
-                 
+
                 //Comprueba si encuentra datos relacionados con la búsqueda
                 if (!vehiculos.isEmpty()) {
                     tableVehiculos.setItems(FXCollections.observableArrayList(vehiculos));
@@ -132,93 +133,104 @@ public class VerVehiculosController implements Initializable {
     @FXML
     private void borrarVehiculo(ActionEvent event) {
         Vehiculo vehiculoABorrar = (Vehiculo) tableVehiculos.getSelectionModel().getSelectedItem();
-        
-        if(vehiculoABorrar != null){
-            
+
+        if (vehiculoABorrar != null) {
+
             //Elimina el vehiculo seleccionado
             Transaction tx = session.getTransaction();
-            
+
             tx.begin();
             session.delete(vehiculoABorrar);
             tx.commit();
-            
+
             cargarVehiculos();
-        }else{
+        } else {
             Alert alerta = new Alert(Alert.AlertType.INFORMATION);
             alerta.setHeaderText("Vehículo no seleccionado");
             alerta.setContentText("Porfavor seleccione el vehículo que desee eliminar");
             alerta.showAndWait();
         }
     }
-    
+
     public void setSession(Session session) {
         this.session = session;
         cargarVehiculos();
     }
-    
+
     public void setSesion(SessionFactory sesion) {
         this.sesion = sesion;
     }
-    
-    private void cargarVehiculos(){
-        
+
+    private void cargarVehiculos() {
+
         //Busca todos los vehiculos en la base de datos
         Query consulta = session.createQuery("from Vehiculo");
         List<Vehiculo> vehiculos = consulta.list();
-        
+
         //Muestra los vehiculos en la tabla
+        tableVehiculos.getItems().clear();
         tableVehiculos.setItems(FXCollections.observableArrayList(vehiculos));
     }
 
     @FXML
     private void AñadirVehiculo(ActionEvent event) throws IOException {
-         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirVehiculo.fxml"));
-        Parent root = (Parent) fxmlLoader.load();
-        Stage stage = new Stage();
-
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setTitle("Añadir Vehiculo");
-        stage.setScene(new Scene(root));
-        stage.setResizable(false);
-
-        stage.show();
-
-        AnadirVehiculoController anadirVehiculo = (AnadirVehiculoController) fxmlLoader.getController();
-        anadirVehiculo.setSesion(sesion);
-        anadirVehiculo.setSession(session);
-        cargarVehiculos();
-    }
-    
-     //Devuelve una lista en función del campo en el que desea buscar y el valor que busca
-    private List<Vehiculo> consultaVehiculo(String campo, String valor){
-        if(campo.equals("Nº de bastidor"))
-            campo = "numeroBastidor";
-        else if(campo.equals("Nº de poliza"))
-            campo = "numeroPoliza";
-        
-        Query consulta = session.createQuery("from Vehiculo where "+campo+" = ?").setParameter(0, valor);
-        return consulta.list();
-    }
-
-    @FXML
-    private void modificarVehiculo(ActionEvent event) throws IOException {
-         
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirVehiculo.fxml"));
         Parent root = (Parent) fxmlLoader.load();
         AnadirVehiculoController anadirVehiculo = (AnadirVehiculoController) fxmlLoader.getController();
         anadirVehiculo.setSesion(sesion);
         anadirVehiculo.setSession(session);
-        anadirVehiculo.setExistente(tableVehiculos.getSelectionModel().getSelectedItem());
-        anadirVehiculo.cargarDatos();
-        
+
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setTitle("Modificar Vehiculo");
+        stage.setTitle("Añadir Vehiculo");
         stage.setScene(new Scene(root));
         stage.setResizable(false);
         stage.showAndWait();
         
         cargarVehiculos();
     }
-    
+
+    //Devuelve una lista en función del campo en el que desea buscar y el valor que busca
+    private List<Vehiculo> consultaVehiculo(String campo, String valor) {
+        if (campo.equals("Nº de bastidor")) {
+            campo = "numeroBastidor";
+        } else if (campo.equals("Nº de poliza")) {
+            campo = "numeroPoliza";
+        }
+
+        Query consulta = session.createQuery("from Vehiculo where " + campo + " = ?").setParameter(0, valor);
+        return consulta.list();
+    }
+
+    @FXML
+    private void modificarVehiculo(ActionEvent event) throws IOException {
+
+        Vehiculo vehiculo = tableVehiculos.getSelectionModel().getSelectedItem();
+
+        if (vehiculo != null) {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirVehiculo.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            AnadirVehiculoController anadirVehiculo = (AnadirVehiculoController) fxmlLoader.getController();
+            anadirVehiculo.setSesion(sesion);
+            anadirVehiculo.setSession(session);
+            anadirVehiculo.setExistente(vehiculo);
+            anadirVehiculo.cargarDatos();
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Modificar Vehiculo");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.showAndWait();
+
+            cargarVehiculos();
+        } else {
+            Alert seleccionarVehiculo = new Alert(Alert.AlertType.INFORMATION);
+            seleccionarVehiculo.setHeaderText("Error al cargar vehiculo");
+            seleccionarVehiculo.setContentText("Seleccione un coche para modificarlo");
+            seleccionarVehiculo.showAndWait();
+        }
+    }
+
+   
 }

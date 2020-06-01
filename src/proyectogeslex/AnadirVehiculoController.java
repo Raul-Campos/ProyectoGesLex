@@ -36,8 +36,6 @@ import org.hibernate.Transaction;
 public class AnadirVehiculoController implements Initializable {
 
     @FXML
-    private TextField tfExpediente;
-    @FXML
     private TextField tfMatricula;
     @FXML
     private TextField tfModelo;
@@ -76,7 +74,7 @@ public class AnadirVehiculoController implements Initializable {
     @FXML
     private void LimpiarVehiculo(ActionEvent event) {
         tfMatricula.setText("");
-        tfExpediente.setText("");
+
         tfMarca.setText("");
         tfModelo.setText("");
         tfColor.setText("");
@@ -88,7 +86,12 @@ public class AnadirVehiculoController implements Initializable {
 
     @FXML
     private void AceptarVehiculo(ActionEvent event) {
+
         Vehiculo vehiculo = new Vehiculo();
+        if (existente != null) {
+            vehiculo = existente;
+        }
+
         Alert alerta;
         boolean errorFormato = false;
         boolean alert = true;
@@ -156,35 +159,19 @@ public class AnadirVehiculoController implements Initializable {
                 errorFormato = true;
                 alert = false;
             }
-            String expRegexp = "[0,9]*";
-            Pattern pat = Pattern.compile(expRegexp);
-            Matcher mat = pat.matcher(tfExpediente.getText());
-            if (tfExpediente.getText() != null && !tfExpediente.getText().equals("") /*&& (mat.matches())*/) {
-                Query consulta = session.createQuery("from Expediente");
-                List<Expediente> expedientes = consulta.list();
-
-                expedientes.forEach((expediente) -> {
-
-                    if (expediente.getCodigo() == Integer.parseInt(tfExpediente.getText())) {
-                        vehiculo.getExpedientes().add(expediente);
-                    }
-                });
-
-            } else if (alert) {
-                alerta = new Alert(Alert.AlertType.INFORMATION, "Introduzca correctamente el codigo de expediente al que desea añadir el coche");
-                alerta.showAndWait();
-                errorFormato = true;
-                alert = false;
-            }
 
             if (!errorFormato) {
                 Transaction tx = session.getTransaction();
-
                 try {
-                    tx.begin();
-                    session.save(vehiculo);
-                    tx.commit();
-
+                    if (existente == null) {
+                        tx.begin();
+                        session.save(vehiculo);
+                        tx.commit();
+                    } else {
+                        tx.begin();
+                        session.merge(vehiculo);
+                        tx.commit();
+                    }
                     Stage stage = (Stage) btnAceptar.getScene().getWindow();
                     stage.close();
                 } catch (NonUniqueObjectException ex) {
@@ -209,7 +196,6 @@ public class AnadirVehiculoController implements Initializable {
             alert = false;
         }
 
-        
     }
 
     @FXML
@@ -226,16 +212,17 @@ public class AnadirVehiculoController implements Initializable {
     public void setSesion(SessionFactory sesion) {
         this.sesion = sesion;
     }
- public void setExistente(Vehiculo existente) {
+
+    public void setExistente(Vehiculo existente) {
         this.existente = existente;
     }
-  public void cargarDatos() {
+
+    public void cargarDatos() {
 
         if (existente != null) {
             //Muestra los datos
             tfMatricula.setText(existente.getMatricula());
             tfMatricula.setDisable(true);
-            tfExpediente.setDisable(true);
             tfMarca.setText(existente.getMarca());
             tfModelo.setText(existente.getModelo());
             tfColor.setText(existente.getColor());

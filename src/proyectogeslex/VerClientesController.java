@@ -248,6 +248,13 @@ public class VerClientesController implements Initializable {
 
             cargarClientes();
         }
+         else
+        {
+            Alert seleccionarCliente = new Alert(Alert.AlertType.INFORMATION);
+                    seleccionarCliente.setHeaderText("Error al cargar Cliente");
+                    seleccionarCliente.setContentText("Seleccione un cliente para modificarlo");
+                    seleccionarCliente.showAndWait();
+        }
 
     }
 }
