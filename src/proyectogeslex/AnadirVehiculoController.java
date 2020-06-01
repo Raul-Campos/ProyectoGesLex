@@ -235,6 +235,7 @@ public class AnadirVehiculoController implements Initializable {
             //Muestra los datos
             tfMatricula.setText(existente.getMatricula());
             tfMatricula.setDisable(true);
+            tfMatricula.setDisable(true);
             tfExpediente.setDisable(true);
             tfMarca.setText(existente.getMarca());
             tfModelo.setText(existente.getModelo());

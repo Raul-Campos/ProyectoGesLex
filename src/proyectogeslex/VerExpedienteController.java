@@ -215,7 +215,6 @@ public class VerExpedienteController implements Initializable {
     @FXML
     private Button btnModificarExp;
 
-
     /**
      * Initializes the controller class.
      */
@@ -241,7 +240,7 @@ public class VerExpedienteController implements Initializable {
         tabPaneAsociado.getStyleClass().add("floating");
 
         //Tabla Sentencias
-        columnSentTitulo.setCellValueFactory(new PropertyValueFactory<>("titulo"));
+        columnSentTitulo.setCellValueFactory(new PropertyValueFactory<>("id"));
         columnSentDescrip.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
         columnSentFecha.setCellValueFactory(new PropertyValueFactory<>("fechaPublicacion"));
 
@@ -754,26 +753,47 @@ public class VerExpedienteController implements Initializable {
                 vehiculos.forEach((vehiculo) -> {
 
                     if (cbCoche.getValue().equals(vehiculo.getMatricula() + "  " + vehiculo.getMarca() + " " + vehiculo.getModelo())) {
-                        vehiculo.getExpedientes().add(seleccionado);
-                        Transaction tx = session.getTransaction();
-
-                        try {
-
-                            tx.begin();
-                            session.update(vehiculo);
-                            tx.commit();
-                        } catch (RollbackException e) {
-                            tx.rollback();
-                            Alert alerta;
-                            alerta = new Alert(Alert.AlertType.INFORMATION, "Error al guardar los datos. Inténtelo de nuevo");
-                            alerta.setContentText(e.getLocalizedMessage());
-                            alerta.showAndWait();
+                        
+                        //Comprueba si existe un vehiculo con rol de cliente 
+                        //en el expediente
+                        boolean existe = false;
+                        for (Object vehiculoActual : seleccionado.getVehiculos()) {
+                            Vehiculo ve = (Vehiculo) vehiculoActual;
+                            if (ve.getRol().equals("Cliente") && vehiculo.getRol().equals("Cliente")) {
+                                existe = true;
+                            }
                         }
-                        Alert alertaNuevoAviso = new Alert(Alert.AlertType.INFORMATION);
-                        alertaNuevoAviso.setHeaderText("Vehiculo Guardado");
-                        alertaNuevoAviso.setContentText("Vehiculo asociado correctamente al expediente.");
-                        alertaNuevoAviso.showAndWait();
-                        cargarCoches(seleccionado);
+
+                        //Añade el vehiculo exceptio si tiene el rol de cliente 
+                        //y existe ya alguno asociado
+                        if (existe == false) {
+                            vehiculo.getExpedientes().add(seleccionado);
+                            Transaction tx = session.getTransaction();
+
+                            try {
+
+                                tx.begin();
+                                session.update(vehiculo);
+                                tx.commit();
+                            } catch (RollbackException e) {
+                                tx.rollback();
+                                Alert alerta;
+                                alerta = new Alert(Alert.AlertType.INFORMATION, "Error al guardar los datos. Inténtelo de nuevo");
+                                alerta.setContentText(e.getLocalizedMessage());
+                                alerta.showAndWait();
+                            }
+
+                            Alert alertaNuevoAviso = new Alert(Alert.AlertType.INFORMATION);
+                            alertaNuevoAviso.setHeaderText("Vehiculo Guardado");
+                            alertaNuevoAviso.setContentText("Vehiculo asociado correctamente al expediente.");
+                            alertaNuevoAviso.showAndWait();
+                            cargarCoches(seleccionado);
+                        } else {
+                            Alert alertaClienteExistente = new Alert(Alert.AlertType.INFORMATION);
+                            alertaClienteExistente.setHeaderText("Vehiculo de cliente existente");
+                            alertaClienteExistente.setContentText("Ya hay un vehiculo del cliente asociado, si desea cambiarlo por otro elimine el actual");
+                            alertaClienteExistente.showAndWait();
+                        }
 
                     }
 
@@ -903,7 +923,7 @@ public class VerExpedienteController implements Initializable {
 
         if (doc != null) {
             File ficheroPdf = File.createTempFile(doc.getId().getNombre(), ".pdf", new File("src"));
-            
+
             //Lo elimina al cerrar la aplicación
             ficheroPdf.deleteOnExit();
 
@@ -911,10 +931,11 @@ public class VerExpedienteController implements Initializable {
             FileOutputStream os = new FileOutputStream(ficheroPdf);
             os.write(doc.getPdf());
             os.close();
-            
+
             //Muestra el fichero
-            if(Desktop.isDesktopSupported())
+            if (Desktop.isDesktopSupported()) {
                 Desktop.getDesktop().open(ficheroPdf);
+            }
 
         } else {
             Alert alertaVerDocumento = new Alert(Alert.AlertType.INFORMATION);
@@ -938,41 +959,11 @@ public class VerExpedienteController implements Initializable {
             FileOutputStream os = new FileOutputStream(ficheroPdf);
             os.write(sent.getPdf());
             os.close();
-            
+
             //Muestra fichero
-            if(Desktop.isDesktopSupported())
+            if (Desktop.isDesktopSupported()) {
                 Desktop.getDesktop().open(ficheroPdf);
-            
-            //Convierte el fichero pdf en html
-            /*PDDocument pdf = PDDocument.load(ficheroPdf);
-            Writer output = new PrintWriter("src\\proyectogeslex\\" + ficheroHtml, "utf-8");
-            new PDFDomTree().writeText(pdf, output);
-
-            WebView browser = new WebView();
-            WebEngine webEngine = browser.getEngine();
-
-            webEngine.getLoadWorker().stateProperty().addListener((observable, oldState, newState) -> {
-                if (newState == State.SUCCEEDED) {
-                    Document d = webEngine.getDocument();
-                }
-            });
-
-            //Muestra el fichero html
-            webEngine.load(this.getClass().getResource(ficheroHtml).toExternalForm());
-
-            Scene scene = new Scene(browser);
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("Ver sentencia");
-            stage.setScene(scene);
-            stage.showAndWait();
-
-            //Elimina los ficheros pdf y html
-            output.close();
-            pdf.close();
-            ficheroPdf.delete();
-            File file2 = new File("src\\proyectogeslex\\" + ficheroHtml);
-            file2.delete();*/
+            }
         } else {
             Alert alertaVerSentencia = new Alert(Alert.AlertType.INFORMATION);
             alertaVerSentencia.setHeaderText("Sentencia no seleccionada");
@@ -1026,14 +1017,14 @@ public class VerExpedienteController implements Initializable {
         anadirExp.setSession(session);
         anadirExp.setExistente(tableExpedientes.getSelectionModel().getSelectedItem());
         anadirExp.cargarDatosExp();
-        
+
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Modificar Expediente");
         stage.setScene(new Scene(root));
         stage.setResizable(false);
         stage.showAndWait();
-        
+
         cargarExpedientes();
     }
 

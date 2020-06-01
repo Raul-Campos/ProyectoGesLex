@@ -92,7 +92,7 @@ public class AnadirLetradoController implements Initializable {
             letrado.setDniLetrado(tfDni.getText());
 
             //comprueba nombre
-            String name = "[A-Za-z]*";
+            String name = "[A-Za-z \\p{L}]*";
             pat = Pattern.compile(name);
             mat = pat.matcher(tfNombre.getText());
             if (tfNombre.getText() != null && !tfNombre.getText().equals("") && (mat.matches())) {
@@ -221,6 +221,7 @@ public class AnadirLetradoController implements Initializable {
 
         if (existente != null) {
             tfDni.setText(existente.getDniLetrado());
+            tfDni.setDisable(true);
             tfNombre.setText(existente.getNombre());
             tfApellidos.setText(existente.getApellidos());
             tfColegio.setText(existente.getColegio());

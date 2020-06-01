@@ -70,8 +70,10 @@ public class Sentencia  implements java.io.Serializable {
         this.pdf = pdf;
     }
 
-
-
+    @Override
+    public String toString() {
+        return id.getTitulo();
+    }
 
 }
 
