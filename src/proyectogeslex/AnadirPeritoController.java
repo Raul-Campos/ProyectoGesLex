@@ -92,7 +92,7 @@ public class AnadirPeritoController implements Initializable {
             perito.setDniPerito(tfDNI.getText());
 
             //comprueba nombre
-            String name = "[A-Za-z]*";
+            String name = "[A-Za-z \\p{L}]*";
             pat = Pattern.compile(name);
             mat = pat.matcher(tfNombre.getText());
             if (tfNombre.getText() != null && !tfNombre.getText().equals("") && (mat.matches())) {
@@ -222,6 +222,7 @@ public class AnadirPeritoController implements Initializable {
 
         if (existente != null) {
             tfDNI.setText(existente.getDniPerito());
+            tfDNI.setDisable(true);
             tfNombre.setText(existente.getNombre());
             tfApellidos.setText(existente.getApellidos());
             tfDireccion.setText(existente.getDireccion());

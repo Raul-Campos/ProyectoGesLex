@@ -54,7 +54,13 @@ public class SentenciaId  implements java.io.Serializable {
          return result;
    }   
 
+    @Override
+    public String toString() {
+        return titulo;
+    }
 
+
+   
 }
 
 

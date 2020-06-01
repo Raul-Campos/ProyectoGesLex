@@ -164,7 +164,7 @@ public class AnadirDocumentoController implements Initializable {
             tfNombre.setText(existente.getId().getNombre());
             tfNombre.setDisable(true);
             tfAportador.setText(existente.getAportadoPor());
-
+            txDesc.setText(existente.getDescripcion());
         }
     }
 }

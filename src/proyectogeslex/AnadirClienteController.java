@@ -97,7 +97,7 @@ public class AnadirClienteController implements Initializable {
             cliente.setDni(textfieldDni.getText());
 
             //comprueba nombre
-            String name = "[A-Za-z]*";
+            String name = "[A-Za-z \\p{L}]*";
             pat = Pattern.compile(name);
             mat = pat.matcher(textfieldNombre.getText());
             if (textfieldNombre.getText() != null && !textfieldNombre.getText().equals("") && (mat.matches())) {
@@ -232,6 +232,7 @@ public class AnadirClienteController implements Initializable {
         if (existente != null) {
             //Muestra los datos
             textfieldDni.setText(existente.getDni());
+            textfieldDni.setDisable(true);
             textfieldApellidos.setText(existente.getApellidos());
             textfieldFecha.setText(existente.getFechaNacimiento().toString());
             textfieldNombre.setText(existente.getNombre());
