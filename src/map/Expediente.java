@@ -25,6 +25,7 @@ public class Expediente  implements java.io.Serializable {
      private Incidente incidente;
      private Set documentos = new HashSet(0);
      private Set sentencias = new HashSet(0);
+     private String estadoHoja;
 
     public Expediente() {
     }
@@ -35,6 +36,7 @@ public class Expediente  implements java.io.Serializable {
         this.letrado = letrado;
         this.procurador = procurador;
         this.fechaCreacion = fechaCreacion;
+         estadoHoja=estadoHoja();
     }
     public Expediente(Cliente cliente, Letrado letrado, Procurador procurador, Date fechaCreacion, Date fechaCierre, byte[] hoja, Set avisos, Set vehiculos, Set peritos, Incidente incidente, Set documentos, Set sentencias) {
        this.cliente = cliente;
@@ -49,6 +51,7 @@ public class Expediente  implements java.io.Serializable {
        this.incidente = incidente;
        this.documentos = documentos;
        this.sentencias = sentencias;
+       estadoHoja=estadoHoja();
     }
    
     public Integer getCodigo() {
@@ -142,7 +145,23 @@ public class Expediente  implements java.io.Serializable {
     public void setSentencias(Set sentencias) {
         this.sentencias = sentencias;
     }
+    
+    public String estadoHoja(){
+        String estado;
+        if(hoja==null)
+            estado="No adjunta";
+        else
+            estado="Adjuntado";
+       return estado;
+    }
 
+    public String getEstadoHoja() {
+        return estadoHoja;
+    }
+
+    public void setEstadoHoja(String estadoHoja) {
+        this.estadoHoja = estadoHoja;
+    }
 
 
 

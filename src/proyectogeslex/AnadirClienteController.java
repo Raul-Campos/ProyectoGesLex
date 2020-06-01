@@ -81,6 +81,9 @@ public class AnadirClienteController implements Initializable {
     @FXML
     private void btnEnviar(ActionEvent event) {
         Cliente cliente = new Cliente();
+        if(existente!=null)
+            cliente=existente;
+        
         Alert alerta;
         boolean errorFormato = false;
         boolean alert = true;
@@ -196,7 +199,7 @@ public class AnadirClienteController implements Initializable {
     }
 
     private static Date StringToDate(String date) {
-        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-DD");
+        SimpleDateFormat formato = new SimpleDateFormat("");
         java.sql.Date fecha = fecha = java.sql.Date.valueOf(date);
         return fecha;
     }
@@ -242,5 +245,21 @@ public class AnadirClienteController implements Initializable {
             }
         }
 
+    }
+
+    @FXML
+    private void OpcionChHombre(ActionEvent event) {
+          if (radiobM.isSelected()) {
+            radiobM.setSelected(false);
+        }
+        radiobH.setSelected(true);
+    }
+
+    @FXML
+    private void OpcionChMujer(ActionEvent event) {
+          if (radiobH.isSelected()) {
+            radiobH.setSelected(false);
+        }
+        radiobH.setSelected(true);
     }
 }

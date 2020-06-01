@@ -80,6 +80,9 @@ public class AnadirLetradoController implements Initializable {
     private void AceptarLetrado(ActionEvent event) {
         Letrado letrado = new Letrado();
         Alert alerta;
+        
+        if(existente!=null)
+            letrado=existente;
 
         boolean errorFormato = false;
         boolean alert = true;

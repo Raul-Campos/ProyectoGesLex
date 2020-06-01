@@ -20,6 +20,10 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -46,6 +50,8 @@ public class LoginController implements Initializable {
     private SessionFactory sesion;
     private String emailUser;
     private String emailPassword;
+    @FXML
+    private AnchorPane anchorGeneral;
 
     /**
      * Initializes the controller class.
@@ -132,6 +138,52 @@ public class LoginController implements Initializable {
 
     public void setEmailPassword(String emailPassword) {
         this.emailPassword = emailPassword;
+    }
+
+    @FXML
+    private void CapturarEnter(KeyEvent event) throws IOException {
+       if (event.getCode().equals(KeyCode.ENTER))
+       {
+           Usuarios usuario = (Usuarios) session.createQuery("from Usuarios where nombre = ?").setParameter(0, tfusuario.getText()).uniqueResult();
+
+        if (usuario != null && tfcontrasena.getText().equals(usuario.getContrasena())) {
+
+            //Carga Menú
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("MenuPrincipal2.fxml"));
+            Parent root = fxmlLoader.load();
+            MenuPrincipal2Controller controladorMenu = (MenuPrincipal2Controller) fxmlLoader.getController();
+            
+            controladorMenu.setSesion(sesion);
+            controladorMenu.setSession(session);
+            controladorMenu.setEmailUser(emailUser);
+            controladorMenu.setEmailPassword(emailPassword);
+            
+            //Muestra menú
+            Stage menu = new Stage();
+            menu.setScene(new Scene(root, 1200, 775));
+            menu.setTitle("GesLex");
+            menu.show();
+            
+            menu.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    session.close();
+                    sesion.close();
+                    menu.close();
+                }
+            });
+            
+            //Cierra login
+            Stage actual = (Stage) tfusuario.getScene().getWindow();
+            actual.close();
+
+        }else{
+            Alert alerta = new Alert(AlertType.ERROR);
+            alerta.setHeaderText("Error al iniciar sesión");
+            alerta.setContentText("Usuario o contraseña erróneos.");
+            alerta.showAndWait();
+        }
+       }
     }
     
     

@@ -7,8 +7,11 @@ package proyectogeslex;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -26,6 +29,7 @@ import javafx.stage.Stage;
 import map.Expediente;
 import map.Incidente;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 /**
@@ -57,9 +61,12 @@ public class AnadirIncidenteController implements Initializable {
     private Button btnCancelar;
 
     private Session session;
+    private SessionFactory sesion;
+    
     private Expediente expediente;
     @FXML
     private TextField tfHora;
+    private Incidente existente;
 
     /**
      * Initializes the controller class.
@@ -110,7 +117,9 @@ public class AnadirIncidenteController implements Initializable {
         if (camposRellenos) {
 
             Incidente incidente = new Incidente();
-            System.out.println(datePickeFecha.getValue().toString());
+            if (existente != null) {
+                incidente = existente;
+            }
 
             incidente.setLugar(tfLugar.getText());
             incidente.setDefensa(tfDefensaJuridica.getText());
@@ -126,14 +135,19 @@ public class AnadirIncidenteController implements Initializable {
             incidente.setExpediente(expediente);
 
             Transaction tx = session.getTransaction();
-            
+
             try {
                 incidente.setFechaHora(DateToDateTime());
 
-                //Guarda el incidente
-                tx.begin();
-                session.save(incidente);
-                tx.commit();
+                if (existente == null) {
+                    tx.begin();
+                    session.save(incidente);
+                    tx.commit();
+                } else {
+                    tx.begin();
+                    session.merge(incidente);
+                    tx.commit();
+                }
 
                 //Cierra ventana
                 Stage cerrar = (Stage) tfDefensaJuridica.getScene().getWindow();
@@ -165,6 +179,10 @@ public class AnadirIncidenteController implements Initializable {
         this.session = session;
     }
 
+    public void setSesion(SessionFactory sesion) {
+        this.sesion = sesion;
+    }
+
     public void setExpediente(Expediente expediente) {
         this.expediente = expediente;
     }
@@ -194,5 +212,41 @@ public class AnadirIncidenteController implements Initializable {
         fecha = formato.parse(datos);
         System.out.println(fecha.toString());
         return fecha;
+    }
+
+    private void Cargarfechas() {
+        String hora = "hh:mm:ss";
+        String fecha = "yyyy-MM-dd";
+        DateFormat df = new SimpleDateFormat(hora);
+        tfHora.setText(df.format(existente.getFechaHora()));
+        df = new SimpleDateFormat(fecha);
+
+        String fecha1 = df.format(existente.getFechaHora());
+        LocalDate fec = LocalDate.parse(fecha1);
+        datePickeFecha.setValue(fec);
+    }
+
+    //Detecta que el incidente existe y carga sus datos desde la bd
+    public void cargarDatos() {
+
+        if (existente != null) {
+            //Muestra los datos
+            Cargarfechas();
+            tfLugar.setText(existente.getLugar());
+            tfDefensaJuridica.setText(existente.getDefensa());
+            tfEnviadoPor.setText(existente.getEnviadoPor());
+            cbTipo.setValue(existente.getParte());
+
+            if (existente.getFallecidos().equals("Si")) {
+                chSi.setSelected(true);
+            } else {
+                chNo.setSelected(true);
+            }
+        }
+
+    }
+
+    public void setExistente(Incidente existente) {
+        this.existente = existente;
     }
 }
