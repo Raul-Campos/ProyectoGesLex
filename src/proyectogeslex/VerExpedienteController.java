@@ -240,7 +240,7 @@ public class VerExpedienteController implements Initializable {
         columnDocAportador.setCellValueFactory(new PropertyValueFactory<>("aportadoPor"));
 
         //Quita el color gris del header al tabpane asociado al principal
-        tabPaneAsociado.getStyleClass().add("floating");
+       // tabPaneAsociado.getStyleClass().add("floating");
 
         //Tabla Sentencias
         columnSentTitulo.setCellValueFactory(new PropertyValueFactory<>("id"));

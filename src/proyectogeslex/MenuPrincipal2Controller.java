@@ -282,4 +282,5 @@ public class MenuPrincipal2Controller implements Initializable {
         this.user = user;
     }
 
+
 }
