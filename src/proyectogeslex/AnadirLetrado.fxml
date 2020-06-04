@@ -3,6 +3,8 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -130,21 +132,35 @@
             <GridPane alignment="CENTER_RIGHT" prefHeight="67.0" prefWidth="599.0">
               <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="108.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="361.0" minWidth="10.0" prefWidth="330.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="208.0" minWidth="10.0" prefWidth="79.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="127.0" minWidth="10.0" prefWidth="79.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="361.0" minWidth="10.0" prefWidth="290.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="208.0" minWidth="10.0" prefWidth="95.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="127.0" minWidth="10.0" prefWidth="105.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints maxHeight="57.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="btnLimpiar" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#LimpiarLetrado" text="Limpiar" textAlignment="RIGHT">
+                  <Button fx:id="btnLimpiar" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#LimpiarLetrado" prefHeight="30.0" prefWidth="64.0" text="Limpiar" textAlignment="RIGHT">
                      <GridPane.margin>
                         <Insets left="20.0" />
                      </GridPane.margin>
                   </Button>
-                  <Button fx:id="btnAceptar" mnemonicParsing="false" onAction="#AceptarLetrado" text="Aceptar" textAlignment="CENTER" textFill="#00b50c" GridPane.columnIndex="2" />
-                  <Button fx:id="btnCancelar" mnemonicParsing="false" onAction="#CancelarLetrado" text="Cancelar" textFill="#ee0000" GridPane.columnIndex="3" />
+                  <Button fx:id="btnAceptar" contentDisplay="RIGHT" graphicTextGap="1.0" mnemonicParsing="false" onAction="#AceptarLetrado" text="Aceptar" textAlignment="CENTER" GridPane.columnIndex="2">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" smooth="false">
+                           <image>
+                              <Image url="@../recursos/icons8-ok-48.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+                  <Button fx:id="btnCancelar" contentDisplay="RIGHT" graphicTextGap="1.0" mnemonicParsing="false" onAction="#CancelarLetrado" prefHeight="32.0" prefWidth="96.0" text="Cancelar" GridPane.columnIndex="3">
+                     <graphic>
+                        <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" smooth="false">
+                           <image>
+                              <Image url="@../recursos/icons8-delete-48.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
                </children>
             </GridPane>
          </children>

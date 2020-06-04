@@ -6,11 +6,13 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="784.0" prefWidth="941.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectogeslex.VerClientesController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="784.0" prefWidth="941.0" style="-fx-background-color: #D9E3FF;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectogeslex.VerClientesController">
    <top>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
@@ -25,10 +27,17 @@
                <HBox.margin>
                   <Insets left="5.0" />
                </HBox.margin></TextField>
-            <Button fx:id="btnBuscar" mnemonicParsing="false" onAction="#buscarCliente" text="Buscar">
+            <Button fx:id="btnBuscar" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#buscarCliente" prefHeight="33.0" prefWidth="88.0" text="Buscar">
                <HBox.margin>
                   <Insets left="15.0" />
-               </HBox.margin></Button>
+               </HBox.margin>
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" smooth="false">
+                     <image>
+                        <Image url="@../recursos/icons8-search-64.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
          </children>
          <BorderPane.margin>
             <Insets top="20.0" />
@@ -58,20 +67,41 @@
    <bottom>
       <HBox fx:id="idbajo1" alignment="CENTER_RIGHT" prefHeight="145.0" prefWidth="941.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btnModificar" mnemonicParsing="false" onAction="#modificarCliente" text=" Modificar ">
+            <Button fx:id="btnModificar" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#modificarCliente" text=" Modificar ">
                <HBox.margin>
                   <Insets right="30.0" />
                </HBox.margin>
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" smooth="false">
+                     <image>
+                        <Image url="@../recursos/icons8-edit-64.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </Button>
-            <Button fx:id="anadirCliente" mnemonicParsing="false" onAction="#anadirCliente" text="Añadir Cliente" textFill="#03b915">
+            <Button fx:id="anadirCliente" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#anadirCliente" text="Añadir Cliente">
                <HBox.margin>
                   <Insets right="30.0" />
                </HBox.margin>
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" smooth="false">
+                     <image>
+                        <Image url="@../recursos/icons8-add-user-group-woman-man-48.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </Button>
-            <Button fx:id="btnBorrar1" mnemonicParsing="false" onAction="#borrarCliente" text="Borrar Cliente" textFill="#f20000">
+            <Button fx:id="btnBorrar1" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#borrarCliente" text="Borrar Cliente">
                <HBox.margin>
                   <Insets right="75.0" />
                </HBox.margin>
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" smooth="false">
+                     <image>
+                        <Image url="@../recursos/icons8-delete-48.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </Button>
          </children>
       </HBox>
