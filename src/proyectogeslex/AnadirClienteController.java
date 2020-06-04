@@ -67,6 +67,7 @@ public class AnadirClienteController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         cbSitFam.getItems().addAll("Soltero/a", "Casado/a", "Divorciado/a", "Viudo/a");
         cbSitLab.getItems().addAll("Empleado/a", "Desempleado/a");
+         
     }
 
     public void setSession(Session session) {

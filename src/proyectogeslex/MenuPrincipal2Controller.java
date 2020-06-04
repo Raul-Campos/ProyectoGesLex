@@ -8,6 +8,7 @@ package proyectogeslex;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.binding.StringBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -18,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.hibernate.Session;
@@ -56,7 +58,8 @@ public class MenuPrincipal2Controller implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+              // principal.setStyle("-fx-background-color:#000E3A");
+
     }
 
     @FXML
@@ -95,7 +98,7 @@ public class MenuPrincipal2Controller implements Initializable {
         Tab tabLetrados = new Tab();
         Tab tabPeritos = new Tab();
         Tab tabProcuradores = new Tab();
-
+      
         //Añade todas las tabs
         tabPane.getTabs().addAll(tabClientes, tabLetrados, tabPeritos, tabProcuradores);
         tabClientes.setContent(verClientes);
