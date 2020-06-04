@@ -37,7 +37,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="btnVerNotificaciones" mnemonicParsing="false" onAction="#verNotificaciones">
+            <Button fx:id="btnVerConfiguracion" mnemonicParsing="false" onAction="#verConfiguracion">
                <graphic>
                   <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>

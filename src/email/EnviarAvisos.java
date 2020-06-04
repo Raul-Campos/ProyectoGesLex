@@ -21,6 +21,7 @@ import javax.mail.internet.MimeMessage;
 import map.Aviso;
 import javax.mail.Session;
 import org.hibernate.Query;
+import org.hibernate.Transaction;
 
 /**
  *
@@ -82,7 +83,7 @@ public class EnviarAvisos implements Runnable {
                                 Message.RecipientType.TO,
                                 new InternetAddress(aviso.getEmail())
                         );
-                        System.out.println(aviso.getEmail());
+                        
                         //Asunto
                         message.setSubject("Recordatorio de evento");
                         
@@ -93,6 +94,12 @@ public class EnviarAvisos implements Runnable {
                         t.connect("smtp.gmail.com", user, password);
                         t.sendMessage(message, message.getAllRecipients());
                         t.close();
+                        
+                        //Elimina aviso enviado
+                        Transaction tx = session.getTransaction();
+                        tx.begin();
+                        session.delete(aviso);
+                        tx.commit();
 
                     } catch (MessagingException e) {
                         e.printStackTrace();

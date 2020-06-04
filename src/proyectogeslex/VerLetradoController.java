@@ -32,6 +32,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.exception.ConstraintViolationException;
 
 /**
  * FXML Controller class
@@ -134,9 +135,20 @@ public class VerLetradoController implements Initializable {
             //Elimina el letrado seleccionado
             Transaction tx = session.getTransaction();
 
-            tx.begin();
-            session.delete(LetradoABorrar);
-            tx.commit();
+            try {
+                tx.begin();
+                session.delete(LetradoABorrar);
+                tx.commit();
+            } catch (ConstraintViolationException ex) {
+
+                //Controla que no se borra información asociada a otros objetos
+                tx.rollback();
+                Alert alertaBorrar = new Alert(Alert.AlertType.INFORMATION);
+                alertaBorrar.setHeaderText("Imposible eliminar");
+                alertaBorrar.setContentText("Hay expedientes que contienen la información "
+                        + "de este letrado, elimine los expedientes relacionados antes de eliminarlo.");
+                alertaBorrar.showAndWait();
+            }
 
             cargarLetrado();
         } else {
@@ -205,7 +217,7 @@ public class VerLetradoController implements Initializable {
         AnadirLetradoController anadirLetrado = (AnadirLetradoController) fxmlLoader.getController();
         anadirLetrado.setSesion(sesion);
         anadirLetrado.setSession(session);
-        
+
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Añadir Letrado");
@@ -221,7 +233,7 @@ public class VerLetradoController implements Initializable {
     private void modificarLetrado(ActionEvent event) throws IOException {
 
         Letrado letrado = tableLetrados.getSelectionModel().getSelectedItem();
-        
+
         if (letrado != null) {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirLetrado.fxml"));
             Parent root = (Parent) fxmlLoader.load();
@@ -239,13 +251,11 @@ public class VerLetradoController implements Initializable {
             stage.showAndWait();
 
             cargarLetrado();
-        }
-         else
-        {
+        } else {
             Alert seleccionarLetrado = new Alert(Alert.AlertType.INFORMATION);
-                    seleccionarLetrado.setHeaderText("Error al cargar Letrado");
-                    seleccionarLetrado.setContentText("Seleccione un letrado para modificarlo");
-                    seleccionarLetrado.showAndWait();
+            seleccionarLetrado.setHeaderText("Error al cargar Letrado");
+            seleccionarLetrado.setContentText("Seleccione un letrado para modificarlo");
+            seleccionarLetrado.showAndWait();
         }
 
     }

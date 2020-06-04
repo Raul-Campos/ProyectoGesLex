@@ -10,15 +10,6 @@ create table cliente(
     situacion_laboral enum('Empleado/a','Desempleado/a') not null
 );
 
-insert into cliente values( '1111111A', 'María Montero Pérez',
-'1990-02-11', 'Soltero/a', 'Empleado/a');
-
-
-/*nsert into vehiculo values ( '1234CVN', 'Citróën', 'Saxo', 'Verde', '111111111',
-'Aseguradora1', '1235544234');
-insert into vehiculo values ( '3475HGE', 'Citroën', 'C4', 'Verde', '111111111',
-'Aseguradora1', '1235544234');*/
-
 create table letrado(
     dni_letrado varchar(9) primary key,
     nombre varchar(20) not null,
@@ -56,6 +47,7 @@ create table expediente(
     dni_letrado varchar(9) not null,
     dni_procurador varchar(9) not null,
     hoja mediumblob,
+    estadoHoja varchar(30),
     foreign key (dni) references cliente(dni),
     foreign key (dni_letrado) references letrado(dni_letrado),
     foreign key (dni_procurador) references procurador(dni_procurador)
