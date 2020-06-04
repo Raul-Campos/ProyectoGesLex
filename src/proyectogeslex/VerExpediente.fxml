@@ -449,6 +449,9 @@
          <BorderPane.margin>
             <Insets />
          </BorderPane.margin>
+         <padding>
+            <Insets right="45.0" />
+         </padding>
       </TabPane>
    </bottom>
 </BorderPane>

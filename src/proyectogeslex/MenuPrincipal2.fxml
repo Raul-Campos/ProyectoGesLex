@@ -47,7 +47,7 @@
                   <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="btnVerNotificaciones" contentDisplay="TOP" graphicTextGap="0.0" mnemonicParsing="false" onAction="#verNotificaciones" text="Configuracion">
+            <Button fx:id="btnVerConfiguracion" contentDisplay="TOP" graphicTextGap="0.0" mnemonicParsing="false" onAction="#verConfiguracion" text="Configuracion">
                <graphic>
                   <ImageView fitHeight="140.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
