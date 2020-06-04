@@ -5,6 +5,7 @@
  */
 package proyectogeslex;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
@@ -37,6 +38,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.exception.ConstraintViolationException;
 
 /**
  * FXML Controller class
@@ -80,7 +82,6 @@ public class VerClientesController implements Initializable {
     private Button btnModificar;
     @FXML
     private Button btnBorrar1;
-    
 
     /**
      * Initializes the controller class.
@@ -126,7 +127,7 @@ public class VerClientesController implements Initializable {
 
         } else {
             Alert alerta = new Alert(Alert.AlertType.INFORMATION);
-            alerta.setHeaderText("Opción no seleccionado");
+            alerta.setHeaderText("Opción no seleccionada");
             alerta.setContentText("Porfavor seleccione un campo por el que desee realizar la búsqueda");
             alerta.showAndWait();
         }
@@ -142,9 +143,20 @@ public class VerClientesController implements Initializable {
             //Elimina el cliente seleccionado
             Transaction tx = session.getTransaction();
 
-            tx.begin();
-            session.delete(aBorrar);
-            tx.commit();
+            try {
+                tx.begin();
+                session.delete(aBorrar);
+                tx.commit();
+            } catch (ConstraintViolationException ex) {
+                
+                //Controla que no se borra información asociada a otros objetos
+                tx.rollback();
+                Alert alertaBorrar = new Alert(Alert.AlertType.INFORMATION);
+                alertaBorrar.setHeaderText("Imposible eliminar");
+                alertaBorrar.setContentText("Hay expedientes que contienen la información "
+                        + "de este cliente, elimine sus expedientes antes de eliminarlo.");
+                alertaBorrar.showAndWait();
+            }
 
             cargarClientes();
         } else {
@@ -227,7 +239,6 @@ public class VerClientesController implements Initializable {
     @FXML
     private void modificarCliente(ActionEvent event) throws IOException {
 
-
         Cliente cliente = tableClientes.getSelectionModel().getSelectedItem();
 
         if (cliente != null) {
@@ -247,13 +258,11 @@ public class VerClientesController implements Initializable {
             stage.showAndWait();
 
             cargarClientes();
-        }
-         else
-        {
+        } else {
             Alert seleccionarCliente = new Alert(Alert.AlertType.INFORMATION);
-                    seleccionarCliente.setHeaderText("Error al cargar Cliente");
-                    seleccionarCliente.setContentText("Seleccione un cliente para modificarlo");
-                    seleccionarCliente.showAndWait();
+            seleccionarCliente.setHeaderText("Error al cargar Cliente");
+            seleccionarCliente.setContentText("Seleccione un cliente para modificarlo");
+            seleccionarCliente.showAndWait();
         }
 
     }

@@ -22,8 +22,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import map.Usuarios;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import proyectogeslex.configuracion.CambioContrasenaController;
+import proyectogeslex.configuracion.CambioUsuarioController;
 
 /**
  * FXML Controller class
@@ -45,13 +48,14 @@ public class MenuPrincipal2Controller implements Initializable {
     @FXML
     private Button btnBuscarClientes;
     @FXML
-    private Button btnVerNotificaciones;
-    @FXML
     private Button btnVerVehiculos;
     private Stage escenario;
     private TabPane actual;
     private String emailUser;
     private String emailPassword;
+    private Usuarios user;
+    @FXML
+    private Button btnVerConfiguracion;
 
     /**
      * Initializes the controller class.
@@ -158,9 +162,6 @@ public class MenuPrincipal2Controller implements Initializable {
         this.sesion = sesion;
     }
 
-    @FXML
-    private void verNotificaciones(ActionEvent event) {
-    }
 
     @FXML
     private void verVehiculos(ActionEvent event) throws IOException {
@@ -172,13 +173,53 @@ public class MenuPrincipal2Controller implements Initializable {
 
         controladorVehiculos.setSession(session);
 
-        //Crea pestaña para cargar vista de clientes
+        //Crea pestaña para cargar vista de vehículos
         TabPane tabPane = new TabPane();
         Tab tabVehiculos = new Tab();
 
         tabPane.getTabs().add(tabVehiculos);
         tabVehiculos.setContent(verVehiculos);
         tabVehiculos.setText("Vehículos");
+
+        //Evita que se cierren las pestañas
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+
+        principal.setCenter(tabPane);
+
+        actual = tabPane;
+
+        ajustarVista();
+        actualizarTamañoVista();
+    }
+    
+    @FXML
+    private void verConfiguracion(ActionEvent event) throws IOException {
+        
+        //Carga la vista y controlador de cambio de contraseña
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("configuracion/CambioContrasena.fxml"));
+        BorderPane cambioContra = fxmlLoader.load();
+        CambioContrasenaController controladorContras = (CambioContrasenaController) fxmlLoader.getController();
+        
+        //Carga la vista y controlador de cambio de usuario
+        FXMLLoader fxmlLoaderUsuario = new FXMLLoader(getClass().getResource("configuracion/CambioUsuario.fxml"));
+        BorderPane cambioUsuario = fxmlLoaderUsuario.load();
+        CambioUsuarioController controladorUsuarios = (CambioUsuarioController) fxmlLoaderUsuario.getController();
+        
+        controladorContras.setSession(session);
+        controladorContras.setUser(user);
+        controladorUsuarios.setSession(session);
+        controladorUsuarios.setUser(user);
+        
+        //Crea pestaña para cargar vista de comnfiguración
+        TabPane tabPane = new TabPane();
+        Tab tabCambioContras = new Tab();
+        Tab tabCambioUsuarios = new Tab();
+
+        tabPane.getTabs().addAll(tabCambioContras, tabCambioUsuarios);
+        tabCambioContras.setContent(cambioContra);
+        tabCambioContras.setText("Contraseña");
+        tabCambioUsuarios.setContent(cambioUsuario);
+        tabCambioUsuarios.setText("Usuario");
 
         //Evita que se cierren las pestañas
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
@@ -236,4 +277,9 @@ public class MenuPrincipal2Controller implements Initializable {
     public void setEmailPassword(String emailPassword) {
         this.emailPassword = emailPassword;
     }
+    
+    public void setUser(Usuarios user){
+        this.user = user;
+    }
+
 }

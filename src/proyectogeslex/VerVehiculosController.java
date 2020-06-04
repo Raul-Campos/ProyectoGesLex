@@ -32,6 +32,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.exception.ConstraintViolationException;
 
 /**
  * FXML Controller class
@@ -139,9 +140,20 @@ public class VerVehiculosController implements Initializable {
             //Elimina el vehiculo seleccionado
             Transaction tx = session.getTransaction();
 
-            tx.begin();
-            session.delete(vehiculoABorrar);
-            tx.commit();
+            try {
+                tx.begin();
+                session.delete(vehiculoABorrar);
+                tx.commit();
+            } catch (ConstraintViolationException ex) {
+
+                //Controla que no se borra información asociada a otros objetos
+                tx.rollback();
+                Alert alertaBorrar = new Alert(Alert.AlertType.INFORMATION);
+                alertaBorrar.setHeaderText("Imposible eliminar");
+                alertaBorrar.setContentText("Hay expedientes que contienen la información "
+                        + "de este vehículo, elimine los expedientes relacionados antes de eliminarlo.");
+                alertaBorrar.showAndWait();
+            }
 
             cargarVehiculos();
         } else {
@@ -186,7 +198,7 @@ public class VerVehiculosController implements Initializable {
         stage.setScene(new Scene(root));
         stage.setResizable(false);
         stage.showAndWait();
-        
+
         cargarVehiculos();
     }
 
@@ -232,5 +244,4 @@ public class VerVehiculosController implements Initializable {
         }
     }
 
-   
 }

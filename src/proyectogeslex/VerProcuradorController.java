@@ -32,6 +32,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.exception.ConstraintViolationException;
 
 /**
  * FXML Controller class
@@ -103,9 +104,20 @@ public class VerProcuradorController implements Initializable {
             //Elimina el procurador seleccionado
             Transaction tx = session.getTransaction();
 
-            tx.begin();
-            session.delete(procuradorABorrar);
-            tx.commit();
+            try {
+                tx.begin();
+                session.delete(procuradorABorrar);
+                tx.commit();
+            } catch (ConstraintViolationException ex) {
+
+                //Controla que no se borra información asociada a otros objetos
+                tx.rollback();
+                Alert alertaBorrar = new Alert(Alert.AlertType.INFORMATION);
+                alertaBorrar.setHeaderText("Imposible eliminar");
+                alertaBorrar.setContentText("Hay expedientes que contienen la información "
+                        + "de este procurador, elimine los expedientes relacionados antes de eliminarlo.");
+                alertaBorrar.showAndWait();
+            }
 
             cargarProcuradores();
         } else {
