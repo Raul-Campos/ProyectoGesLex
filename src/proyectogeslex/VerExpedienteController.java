@@ -217,6 +217,8 @@ public class VerExpedienteController implements Initializable {
     private Button btnModificarIncidente;
     @FXML
     private Button btnCerrarExp;
+    @FXML
+    private Button btnBorrarExp;
 
     /**
      * Initializes the controller class.
@@ -1068,5 +1070,23 @@ public class VerExpedienteController implements Initializable {
             alertaEliminarExpediente.showAndWait();
         }
        
+    }
+
+    @FXML
+    private void BorrarExpediente(ActionEvent event) {
+        Expediente expedienteABorrar = tableExpedientes.getSelectionModel().getSelectedItem();
+
+        if (expedienteABorrar != null) {
+            Transaction tx = session.getTransaction();
+            tx.begin();
+            session.delete(expedienteABorrar);
+            tx.commit();
+        } else {
+            Alert alertaEliminarExpediente = new Alert(Alert.AlertType.INFORMATION);
+            alertaEliminarExpediente.setHeaderText("Expediente no seleccionado");
+            alertaEliminarExpediente.setContentText("Porfavor seleccione el expediente que desee eliminar");
+            alertaEliminarExpediente.showAndWait();
+        }
+        cargarExpedientes();
     }
 }
