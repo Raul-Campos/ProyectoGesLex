@@ -18,13 +18,13 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="784.0" prefWidth="941.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectogeslex.VerExpedienteController">
    <center>
-      <TabPane fx:id="tabPanePrincipal" prefHeight="200.0" prefWidth="200.0" stylesheets="@Style.css" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+      <TabPane fx:id="tabPanePrincipal" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #B9BECD;" stylesheets="@Style.css" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
           <Tab text="Expedientes">
                <content>
                   <VBox prefHeight="412.0" prefWidth="941.0">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                        <HBox alignment="CENTER" prefHeight="78.0" prefWidth="941.0" style="-fx-background-color: #B9BECD;">
                            <children>
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Seleccione el criterio por el que desa buscar " />
                               <ChoiceBox fx:id="cbColumna" prefWidth="150.0" />
@@ -52,7 +52,7 @@
                               </Button>
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="309.0" prefWidth="941.0">
+                        <HBox alignment="CENTER" prefHeight="383.0" prefWidth="941.0">
                            <children>
                               <TableView fx:id="tableExpedientes" onMouseClicked="#expedienteSeleccionado" prefHeight="303.0" prefWidth="959.0">
                                  <columns>
@@ -70,7 +70,7 @@
                               </TableView>
                            </children>
                         </HBox>
-                        <HBox fx:id="idbajo" alignment="CENTER_RIGHT" prefHeight="79.0" prefWidth="941.0" style="-fx-background-color: #000E3A;">
+                        <HBox fx:id="idbajo" alignment="CENTER_RIGHT" prefHeight="64.0" prefWidth="941.0">
                            <children>
                               <Button fx:id="btnModificarExp" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#ModificarExpediente" prefHeight="33.0" text="Modificar Expediente">
                                  <HBox.margin>
@@ -118,11 +118,11 @@
       </TabPane>
    </center>
    <bottom>
-      <TabPane fx:id="tabPaneAsociado" prefHeight="295.0" prefWidth="919.0" stylesheets="@Style.css" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+      <TabPane fx:id="tabPaneAsociado" prefHeight="268.0" prefWidth="931.0" stylesheets="@Style.css" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
             <Tab text="Coches">
                <content>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #B9BECD;">
                      <children>
                         <TableView fx:id="tableCoches" prefHeight="256.0" prefWidth="752.0">
                            <columns>
@@ -176,7 +176,7 @@
             </Tab>
           <Tab text="Documentos">
                <content>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #B9BECD;">
                      <children>
                         <TableView fx:id="tableDocumentos" prefHeight="246.0" prefWidth="784.0">
                           <columns>
@@ -241,7 +241,7 @@
           </Tab>
           <Tab text="Sentencias">
                <content>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #B9BECD;">
                      <children>
                         <TableView fx:id="tableSentencias" prefHeight="245.0" prefWidth="787.0">
                            <columns>
@@ -294,7 +294,7 @@
           </Tab>
             <Tab text="Avisos">
                <content>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #B9BECD;">
                      <children>
                         <TableView fx:id="tableAvisos" prefHeight="241.0" prefWidth="779.0">
                            <columns>
@@ -337,7 +337,7 @@
             </Tab>
             <Tab text="Incidentes">
                <content>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #B9BECD;">
                      <children>
                         <TableView fx:id="tableIncidente" prefHeight="246.0" prefWidth="787.0">
                            <columns>
@@ -394,7 +394,7 @@
             </Tab>
             <Tab text="Peritos">
                <content>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #B9BECD;">
                      <children>
                         <TableView fx:id="tablePeritos" prefHeight="256.0" prefWidth="857.0">
                            <columns>

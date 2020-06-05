@@ -21,6 +21,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import map.Usuarios;
 import org.hibernate.Session;
@@ -56,13 +57,17 @@ public class MenuPrincipal2Controller implements Initializable {
     private Usuarios user;
     @FXML
     private Button btnVerConfiguracion;
+    @FXML
+    public Text labelUser;
+
+    
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-              // principal.setStyle("-fx-background-color:#000E3A");
+              
 
     }
 
@@ -102,7 +107,7 @@ public class MenuPrincipal2Controller implements Initializable {
         Tab tabLetrados = new Tab();
         Tab tabPeritos = new Tab();
         Tab tabProcuradores = new Tab();
-      
+        
         //Añade todas las tabs
         tabPane.getTabs().addAll(tabClientes, tabLetrados, tabPeritos, tabProcuradores);
         tabClientes.setContent(verClientes);
@@ -119,8 +124,9 @@ public class MenuPrincipal2Controller implements Initializable {
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         principal.setCenter(tabPane);
+        
         actual = tabPane;
-
+        tabPane.applyCss();
         ajustarVista();
         actualizarTamañoVista();
     }
@@ -142,8 +148,9 @@ public class MenuPrincipal2Controller implements Initializable {
 
         escenario = (Stage) principal.getScene().getWindow();
         BorderPane contenido = (BorderPane) principal.getCenter();
-        contenido.setPrefWidth((double) (escenario.getWidth() - btnBuscarClientes.getWidth()));
-        contenido.setPrefHeight((double) (escenario.heightProperty().doubleValue() - 50.0));
+         
+       contenido.setPrefWidth((double) (escenario.getWidth() - btnBuscarClientes.getWidth()));
+        contenido.setPrefHeight((double) (escenario.heightProperty().doubleValue()+50.0));
         escenario.widthProperty().addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
             contenido.setPrefWidth((double) (escenario.getWidth() - btnBuscarClientes.getWidth()));
         });
@@ -280,6 +287,9 @@ public class MenuPrincipal2Controller implements Initializable {
     
     public void setUser(Usuarios user){
         this.user = user;
+    }
+    public void setLabelUser(String labelUser) {
+        this.labelUser.setText(labelUser);
     }
 
 

@@ -12,9 +12,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="784.0" prefWidth="941.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectogeslex.VerProcuradorController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="784.0" prefWidth="941.0" style="-fx-background-color: #B9BECD;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectogeslex.VerProcuradorController">
    <bottom>
-      <HBox fx:id="idbajo" alignment="CENTER_RIGHT" prefHeight="145.0" prefWidth="941.0" BorderPane.alignment="CENTER">
+      <HBox fx:id="idbajo" alignment="CENTER_RIGHT" prefHeight="145.0" prefWidth="941.0" style="-fx-background-color: #4F5F8F;" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="btnModificar" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#modificarProcurador" text=" Modificar ">
                <HBox.margin>
