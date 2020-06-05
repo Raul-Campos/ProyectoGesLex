@@ -158,6 +158,7 @@ public class LoginController implements Initializable {
             controladorMenu.setSession(session);
             controladorMenu.setEmailUser(emailUser);
             controladorMenu.setEmailPassword(emailPassword);
+            controladorMenu.setLabelUser(usuario.getNombreper()+",");
             
             //Muestra menú
             Stage menu = new Stage();

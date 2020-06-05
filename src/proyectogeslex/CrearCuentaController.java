@@ -44,6 +44,8 @@ public class CrearCuentaController implements Initializable {
     private SessionFactory sesion;
     @FXML
     private Button btncancelar;
+    @FXML
+    private TextField tfNombre;
 
     /**
      * Initializes the controller class.
@@ -69,6 +71,14 @@ public class CrearCuentaController implements Initializable {
         boolean errorFormato = false;
         boolean alert = true;
 
+        if (tfNombre.getText() != null && !tfNombre.getText().equals("")) {
+            usuario.setNombreper(tfNombre.getText());
+        } else if (alert) {
+            alerta = new Alert(Alert.AlertType.INFORMATION, "Introduce su nombre");
+            alerta.showAndWait();
+            errorFormato = true;
+            alert = false;
+        }
         if (tfusuario.getText() != null && !tfusuario.getText().equals("")) {
             usuario.setNombre(tfusuario.getText());
         } else if (alert) {

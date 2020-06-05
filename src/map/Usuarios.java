@@ -11,13 +11,15 @@ public class Usuarios  implements java.io.Serializable {
 
      private String nombre;
      private String contrasena;
+     private String nombreper;
 
     public Usuarios() {
     }
 
-    public Usuarios(String nombre, String contrasena) {
+    public Usuarios(String nombre, String contrasena,String nombreper) {
        this.nombre = nombre;
        this.contrasena = contrasena;
+       this.nombreper=nombreper;
     }
    
     public String getNombre() {
@@ -33,6 +35,14 @@ public class Usuarios  implements java.io.Serializable {
     
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
+    }
+
+    public String getNombreper() {
+        return nombreper;
+    }
+
+    public void setNombreper(String nombreper) {
+        this.nombreper = nombreper;
     }
 
 

@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="427.0" prefWidth="635.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectogeslex.AnadirExpedienteController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="427.0" prefWidth="635.0" style="-fx-background-color: linear-gradient(to bottom,  #4F5F8F,#EEEEEE);" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectogeslex.AnadirExpedienteController">
    <children>
       <HBox alignment="CENTER" prefHeight="83.0" prefWidth="635.0">
          <children>
@@ -150,7 +150,7 @@
                         <Insets left="20.0" />
                      </GridPane.margin>
                   </Button>
-                  <Button fx:id="btnAceptar" contentDisplay="RIGHT" graphicTextGap="1.0" mnemonicParsing="false" onAction="#AceptarExpediente" prefHeight="33.0" prefWidth="90.0" text="Aceptar" textAlignment="CENTER" textFill="#00b50c" GridPane.columnIndex="2">
+                  <Button fx:id="btnAceptar" contentDisplay="RIGHT" graphicTextGap="1.0" mnemonicParsing="false" onAction="#AceptarExpediente" prefHeight="33.0" prefWidth="90.0" text="Aceptar" textAlignment="CENTER" GridPane.columnIndex="2">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" smooth="false">
                            <image>
@@ -158,7 +158,7 @@
                            </image>
                         </ImageView>
                      </graphic></Button>
-                  <Button fx:id="btnCancelar" contentDisplay="RIGHT" graphicTextGap="1.0" mnemonicParsing="false" onAction="#CancelarExpediente" text="Cancelar" textFill="#ee0000" GridPane.columnIndex="3">
+                  <Button fx:id="btnCancelar" contentDisplay="RIGHT" graphicTextGap="1.0" mnemonicParsing="false" onAction="#CancelarExpediente" text="Cancelar" GridPane.columnIndex="3">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" smooth="false">
                            <image>

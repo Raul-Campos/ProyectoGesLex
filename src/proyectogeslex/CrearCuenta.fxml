@@ -19,13 +19,13 @@
             <Font name="System Bold Italic" size="14.0" />
          </font>
       </Button>
-      <TextField fx:id="tfusuario" layoutX="238.0" layoutY="138.0" />
-      <Text layoutX="32.0" layoutY="157.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" Inserte su nombre o usuario:" wrappingWidth="193.95654296875">
+      <TextField fx:id="tfusuario" layoutX="238.0" layoutY="171.0" />
+      <Text layoutX="37.0" layoutY="189.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Inserte su usuario:" wrappingWidth="193.95654296875">
          <font>
             <Font size="15.0" />
          </font>
       </Text>
-      <Text layoutX="40.0" layoutY="193.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Inserte una contraseña:">
+      <Text layoutX="37.0" layoutY="219.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Inserte una contraseña:">
          <font>
             <Font size="15.0" />
          </font>
@@ -35,7 +35,7 @@
             <Font name="System Bold Italic" size="24.0" />
          </font>
       </Text>
-      <Text layoutX="40.0" layoutY="228.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Repita la contraseña:">
+      <Text layoutX="37.0" layoutY="253.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Repita la contraseña:">
          <font>
             <Font size="15.0" />
          </font>
@@ -45,10 +45,16 @@
             <Font size="14.0" />
          </font>
       </Text>
-      <TextField fx:id="tfcontrasena" layoutX="238.0" layoutY="174.0">
+      <TextField fx:id="tfcontrasena" layoutX="238.0" layoutY="200.0">
          <tooltip>
             <Tooltip text="Se recomienda utilizar una contraseña de al menos 8 caracteres, y una combinacion de letras numeros y simbolos " />
          </tooltip></TextField>
-      <TextField fx:id="tfcontrasena2" layoutX="238.0" layoutY="209.0" />
+      <TextField fx:id="tfcontrasena2" layoutX="238.0" layoutY="234.0" />
+      <Text layoutX="37.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Inserte su nombre:">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Text>
+      <TextField fx:id="tfNombre" layoutX="238.0" layoutY="139.0" />
    </children>
 </AnchorPane>
