@@ -27,6 +27,7 @@ import map.Usuarios;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import proyectogeslex.configuracion.CambioContrasenaController;
+import proyectogeslex.configuracion.CambioServidorSMTPController;
 import proyectogeslex.configuracion.CambioUsuarioController;
 
 /**
@@ -212,21 +213,30 @@ public class MenuPrincipal2Controller implements Initializable {
         BorderPane cambioUsuario = fxmlLoaderUsuario.load();
         CambioUsuarioController controladorUsuarios = (CambioUsuarioController) fxmlLoaderUsuario.getController();
         
+        //Carga la vista y controlador de cambio de servidor SMTP
+        FXMLLoader fxmlLoaderSMTP = new FXMLLoader(getClass().getResource("configuracion/CambioServidorSMTP.fxml"));
+        BorderPane cambioSMTP = fxmlLoaderSMTP.load();
+        CambioServidorSMTPController controladorSMTP = (CambioServidorSMTPController) fxmlLoaderSMTP.getController();
+        
         controladorContras.setSession(session);
         controladorContras.setUser(user);
         controladorUsuarios.setSession(session);
         controladorUsuarios.setUser(user);
+        controladorSMTP.setSession(session);
         
         //Crea pestaña para cargar vista de comnfiguración
         TabPane tabPane = new TabPane();
         Tab tabCambioContras = new Tab();
         Tab tabCambioUsuarios = new Tab();
+        Tab tabCambioSMTP = new Tab();
 
-        tabPane.getTabs().addAll(tabCambioContras, tabCambioUsuarios);
+        tabPane.getTabs().addAll(tabCambioContras, tabCambioUsuarios, tabCambioSMTP);
         tabCambioContras.setContent(cambioContra);
         tabCambioContras.setText("Contraseña");
         tabCambioUsuarios.setContent(cambioUsuario);
         tabCambioUsuarios.setText("Usuario");
+        tabCambioSMTP.setContent(cambioSMTP);
+        tabCambioSMTP.setText("SMTP");
 
         //Evita que se cierren las pestañas
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
@@ -247,9 +257,10 @@ public class MenuPrincipal2Controller implements Initializable {
         //Ajusta el contenido de las pestañas en función del tamaño del escenario
         for (Tab tab : actual.getTabs()) {
             BorderPane contenido = (BorderPane) tab.getContent();
-            contenido.setPrefWidth((double) (escenario.getWidth() - btnBuscarClientes.getWidth()));
+            contenido.setPrefWidth((double) (escenario.getWidth() - (btnBuscarClientes.getWidth())));
             contenido.setPrefHeight((double) (escenario.heightProperty().doubleValue() - 50.0));
         }
+        
     }
 
     //Actualiza el tamaño de las pestañas si cabmia el tamaño de la ventana

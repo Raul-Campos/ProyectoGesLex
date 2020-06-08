@@ -5,12 +5,15 @@
  */
 package proyectogeslex;
 
+import email.EnviarAvisos;
 import java.io.IOException;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -37,20 +40,23 @@ public class ProyectoGesLex extends Application {
         controladorLogin.setSession(session);
 
         //Comprueba los avisos para ver si hay que enviar
-        String email = getParameters().getNamed().get("email");
-        String password = getParameters().getNamed().get("password");
-        //Thread comprobarAvisos = new Thread(new EnviarAvisos(email, password, session));
-        //comprobarAvisos.start();
-        
-        controladorLogin.setEmailUser(email);
-        controladorLogin.setEmailPassword(password);
+        Thread comprobarAvisos = new Thread(new EnviarAvisos(session));
+        comprobarAvisos.start();
 
         //Muestra escena
         Scene scene = new Scene(root);
         primaryStage.setTitle("Login");
         primaryStage.setScene(scene);
         primaryStage.show();
-        
+
+        //Cierra la conexión
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                session.close();
+                sesion.close();
+            }
+        });
     }
 
     /**

@@ -54,4 +54,5 @@ Contributor(s):
   <table-filter match-name="aviso"/>
   <table-filter match-name="perito"/>
   <table-filter match-name="vehiculo"/>
+  <table-filter match-name="smtp"/>
 </hibernate-reverse-engineering>
