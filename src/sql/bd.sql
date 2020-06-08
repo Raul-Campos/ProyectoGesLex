@@ -124,7 +124,16 @@ create table aviso(
 
 create table usuarios(
 	nombre varchar(20) primary key,
-    contrasena varchar(20) not null
+    contrasena varchar(20) not null,
+    nombreper varchar(30) not null
 );
 
 insert into usuarios values ('admin', 'admin');
+
+create table smtp(
+    host varchar(30) primary key,
+    puerto varchar(5) not null,
+    email varchar(40) not null,
+    contrasena varchar(20) not null,
+    opcion enum('Seleccionado', 'No seleccionado') not null
+);

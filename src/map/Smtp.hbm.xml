@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 05-jun-2020 17:29:00 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="map.Smtp" table="smtp" catalog="geslexdb" optimistic-lock="version">
+        <id name="host" type="string">
+            <column name="host" length="30" />
+            <generator class="assigned" />
+        </id>
+        <property name="puerto" type="string">
+            <column name="puerto" length="5" not-null="true" />
+        </property>
+        <property name="email" type="string">
+            <column name="email" length="40" not-null="true" />
+        </property>
+        <property name="contrasena" type="string">
+            <column name="contrasena" length="20" not-null="true" />
+        </property>
+        <property name="opcion" type="string">
+            <column name="opcion" length="15" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

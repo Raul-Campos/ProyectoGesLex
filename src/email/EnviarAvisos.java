@@ -14,12 +14,16 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.Alert;
+import javax.mail.AuthenticationFailedException;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import map.Aviso;
 import javax.mail.Session;
+import javax.mail.internet.AddressException;
+import map.Smtp;
 import org.hibernate.Query;
 import org.hibernate.Transaction;
 
@@ -29,13 +33,9 @@ import org.hibernate.Transaction;
  */
 public class EnviarAvisos implements Runnable {
 
-    private String user;
-    private String password;
     private org.hibernate.Session session;
 
-    public EnviarAvisos(String user, String password, org.hibernate.Session session) {
-        this.user = user;
-        this.password = password;
+    public EnviarAvisos(org.hibernate.Session session) {
         this.session = session;
     }
 
@@ -44,6 +44,10 @@ public class EnviarAvisos implements Runnable {
         //Trae todos los avisos en la bd
         Query consulta = session.createQuery("from Aviso");
         List<Aviso> avisos = consulta.list();
+
+        //Toma el servidor seleccionado
+        Query consulta2 = session.createQuery("from Smtp where opcion = :opcion").setParameter("opcion", "Seleccionado");
+        Smtp smtp = (Smtp) consulta2.uniqueResult();
 
         //Toma la fecha actual
         Date fechaActual = new Date();
@@ -56,15 +60,15 @@ public class EnviarAvisos implements Runnable {
 
             //Si quedan menos de 5 días para un evento envía un email
             if (fechaActual.after(aviso.getFecha())) {
-                
+
                 try {
                     Properties prop = new Properties();
-                    prop.put("mail.smtp.host", "smtp.gmail.com");
-                    prop.put("mail.smtp.port", "587");
+                    prop.put("mail.smtp.host", smtp.getHost());
+                    prop.put("mail.smtp.port", smtp.getPuerto());
                     prop.put("mail.smtp.auth", "true");
                     prop.put("mail.smtp.starttls.enable", "true"); //TLS
-                    prop.put("mail.smtp.user", user);
-                    prop.put("mail.smtp.clave", password);
+                    prop.put("mail.smtp.user", smtp.getEmail());
+                    prop.put("mail.smtp.clave", smtp.getContrasena());
                     prop.put("mail.debug", "true");
 
                     MailSSLSocketFactory sf = new MailSSLSocketFactory();
@@ -74,40 +78,38 @@ public class EnviarAvisos implements Runnable {
                     Session sessionMail = javax.mail.Session.getDefaultInstance(prop);
                     MimeMessage message = new MimeMessage(sessionMail);
 
-                    try {
+                    message.setFrom(new InternetAddress(smtp.getEmail()));
 
-                        message.setFrom(new InternetAddress("raul14cl@gmail.com"));
-                        
-                        //Destinatario del email
-                        message.setRecipient(
-                                Message.RecipientType.TO,
-                                new InternetAddress(aviso.getEmail())
-                        );
-                        
-                        //Asunto
-                        message.setSubject("Recordatorio de evento");
-                        
-                        //Contenido del email
-                        message.setText(aviso.getDescripcion());
+                    //Destinatario del email
+                    message.setRecipient(
+                            Message.RecipientType.TO,
+                            new InternetAddress(aviso.getEmail())
+                    );
 
-                        SMTPTransport t = (SMTPTransport) sessionMail.getTransport();
-                        t.connect("smtp.gmail.com", user, password);
-                        t.sendMessage(message, message.getAllRecipients());
-                        t.close();
-                        
-                        //Elimina aviso enviado
-                        Transaction tx = session.getTransaction();
-                        tx.begin();
-                        session.delete(aviso);
-                        tx.commit();
+                    //Asunto
+                    message.setSubject("Recordatorio de evento");
 
-                    } catch (MessagingException e) {
-                        e.printStackTrace();
-                    }
+                    //Contenido del email
+                    message.setText(aviso.getDescripcion());
+
+                    SMTPTransport t = (SMTPTransport) sessionMail.getTransport();
+                    t.connect(smtp.getHost(), smtp.getEmail(), smtp.getContrasena());
+                    t.sendMessage(message, message.getAllRecipients());
+                    t.close();
+
+                    //Elimina aviso enviado
+                    Transaction tx = session.getTransaction();
+                    tx.begin();
+                    session.delete(aviso);
+                    tx.commit();
                 } catch (GeneralSecurityException ex) {
                     Logger.getLogger(EnviarAvisos.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (AddressException ex) {
+                    Logger.getLogger(EnviarAvisos.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (MessagingException ex) {
+                    Logger.getLogger(EnviarAvisos.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
+
             }
         }
     }

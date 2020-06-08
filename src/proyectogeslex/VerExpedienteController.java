@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -466,8 +467,9 @@ public class VerExpedienteController implements Initializable {
             stage.showAndWait();
             cargarAvisos(seleccionado);
 
-            Thread comprobarAvisos = new Thread(new EnviarAvisos(emailUser, emailPassword, session));
-            // comprobarAvisos.start();
+            Thread comprobarAvisos = new Thread(new EnviarAvisos(session));
+            comprobarAvisos.start();
+            
         } else {
 
             //Si no selecciona ningúno
