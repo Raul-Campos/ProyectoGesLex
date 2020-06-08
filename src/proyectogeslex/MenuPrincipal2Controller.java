@@ -234,7 +234,7 @@ public class MenuPrincipal2Controller implements Initializable {
         principal.setCenter(tabPane);
 
         actual = tabPane;
-
+       
         ajustarVista();
         actualizarTamañoVista();
     }
