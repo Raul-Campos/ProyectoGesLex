@@ -12,9 +12,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="784.0" prefWidth="941.0" style="-fx-background-color: #B9BECD;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectogeslex.VerPeritoController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #B9BECD;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectogeslex.VerPeritoController">
    <bottom>
-      <HBox fx:id="idbajo" alignment="CENTER_RIGHT" prefHeight="145.0" prefWidth="941.0" style="-fx-background-color: #4F5F8F;" BorderPane.alignment="CENTER">
+      <HBox fx:id="idbajo" alignment="CENTER_RIGHT" prefHeight="145.0" style="-fx-background-color: #4F5F8F;" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="btnModificar" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#modificarPerito" text=" Modificar ">
                <HBox.margin>
@@ -56,7 +56,7 @@
       </HBox>
    </bottom>
    <top>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER" prefHeight="100.0" BorderPane.alignment="CENTER">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Seleccione el criterio por el que desa buscar " />
             <ChoiceBox fx:id="cbColumna" prefWidth="150.0" />
@@ -84,28 +84,31 @@
             </Button>
          </children>
          <BorderPane.margin>
-            <Insets top="20.0" />
+            <Insets />
          </BorderPane.margin>
       </HBox>
    </top>
    <center>
-      <HBox fx:id="idcentro" alignment="CENTER" prefHeight="488.0" prefWidth="941.0" BorderPane.alignment="CENTER">
+      <HBox fx:id="idcentro" alignment="CENTER" BorderPane.alignment="CENTER">
          <children>
-            <TableView fx:id="tablePeritos" prefHeight="408.0" prefWidth="780.0">
+            <TableView fx:id="tablePeritos">
                <columns>
-                  <TableColumn fx:id="columnDNI" prefWidth="81.0" text="DNI" />
-                  <TableColumn fx:id="columnNombre" prefWidth="99.0" text=" Nombre" />
-                  <TableColumn fx:id="columnApellidos" prefWidth="129.0" text="Apellidos" />
-                  <TableColumn fx:id="columnDireccion" prefWidth="141.0" text="Dirección" />
-                  <TableColumn fx:id="columnProvincia" prefWidth="99.0" text="Provincia" />
-                  <TableColumn fx:id="columnTelefono" prefWidth="115.0" text="Télefono" />
-                  <TableColumn fx:id="columnEmail" prefWidth="115.0" text="Email" />
+                  <TableColumn fx:id="columnDNI" minWidth="90.0" prefWidth="-1.0" resizable="false" text="DNI" />
+                  <TableColumn fx:id="columnNombre" minWidth="100.0" prefWidth="-1.0" resizable="false" text=" Nombre" />
+                  <TableColumn fx:id="columnApellidos" minWidth="125.0" prefWidth="-1.0" resizable="false" text="Apellidos" />
+                  <TableColumn fx:id="columnDireccion" minWidth="130.0" prefWidth="-1.0" resizable="false" text="Dirección" />
+                  <TableColumn fx:id="columnProvincia" minWidth="100.0" prefWidth="-1.0" resizable="false" text="Provincia" />
+                  <TableColumn fx:id="columnTelefono" minWidth="100.0" prefWidth="-1.0" resizable="false" text="Télefono" />
+                  <TableColumn fx:id="columnEmail" minWidth="120.0" prefWidth="-1.0" resizable="false" text="Email" />
                </columns>
                <HBox.margin>
-                  <Insets bottom="25.0" top="50.0" />
+                  <Insets bottom="40.0" top="10.0" />
                </HBox.margin>
             </TableView>
          </children>
+         <BorderPane.margin>
+            <Insets left="40.0" right="40.0" />
+         </BorderPane.margin>
       </HBox>
    </center>
 </BorderPane>

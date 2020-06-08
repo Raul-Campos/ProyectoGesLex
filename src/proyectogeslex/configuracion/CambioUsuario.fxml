@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectogeslex.configuracion.CambioUsuarioController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #B9BECD;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectogeslex.configuracion.CambioUsuarioController">
    <top>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Cambiar nombre de usuario" BorderPane.alignment="CENTER">
          <font>
@@ -47,32 +47,32 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nuevo usuario" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Usuario Actual" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                  <GridPane.margin>
                                     <Insets bottom="30.0" />
                                  </GridPane.margin>
                               </Text>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Constraseña" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nuevo Usuario" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                  <GridPane.margin>
                                     <Insets />
                                  </GridPane.margin>
                               </Text>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Confirme su contraseña" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Inserte su contraseña" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                  <GridPane.margin>
                                     <Insets top="30.0" />
                                  </GridPane.margin>
                               </Text>
-                              <PasswordField fx:id="tfContra" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                              <PasswordField fx:id="tfConfContra" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                              <PasswordField fx:id="tfContra" GridPane.columnIndex="2" GridPane.rowIndex="4">
                                  <GridPane.margin>
                                     <Insets top="30.0" />
                                  </GridPane.margin>
                               </PasswordField>
-                              <TextField fx:id="tfUsuario" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                              <TextField fx:id="tfUsuarioA" GridPane.columnIndex="2" GridPane.rowIndex="1">
                                  <GridPane.margin>
                                     <Insets top="10.0" />
                                  </GridPane.margin>
                               </TextField>
+                              <TextField fx:id="tfUsuarioN" layoutX="269.0" layoutY="13.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                            </children>
                         </GridPane>
                      </children>

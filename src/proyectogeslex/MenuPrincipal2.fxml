@@ -65,7 +65,7 @@
       </VBox>
    </left>
    <center>
-      <VBox alignment="CENTER" prefHeight="705.0" prefWidth="503.0" style="-fx-background-color: #4F5F8F;" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" style="-fx-background-color: #4F5F8F;" BorderPane.alignment="CENTER">
          <children>
             <Text fill="WHITE" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Bienvenido a Geslex">
                <font>

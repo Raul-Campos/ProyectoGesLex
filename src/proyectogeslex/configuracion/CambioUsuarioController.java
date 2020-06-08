@@ -29,29 +29,30 @@ public class CambioUsuarioController implements Initializable {
     private Button btnAceptar;
     @FXML
     private PasswordField tfContra;
-    @FXML
-    private PasswordField tfConfContra;
-    @FXML
-    private TextField tfUsuario;
+   
     private Usuarios user;
     private Session session;
+    @FXML
+    private TextField tfUsuarioN;
+    @FXML
+    private TextField tfUsuarioA;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+       
     }
 
     @FXML
     private void aceptar(ActionEvent event) {
 
-        if (!tfUsuario.getText().equals("") && !tfContra.getText().equals("") &&
-            !tfConfContra.getText().equals("")) {
+        if (!tfUsuarioA.getText().equals("") && !tfContra.getText().equals("") &&
+            !tfUsuarioN.getText().equals("")) {
 
-            //Comprueba la confirmación de la  contraseña
-            if (tfContra.getText().equals(tfConfContra.getText()) && 
+            //Comprueba la confirmación del usuario
+            if (tfUsuarioA.getText().equals(user.getNombre()) && 
                 tfContra.getText().equals(user.getContrasena())) {
 
                 Transaction tx = session.getTransaction();
@@ -59,7 +60,7 @@ public class CambioUsuarioController implements Initializable {
                 //Elimina el usuario y lo cambia por uno nuevo
                 tx.begin();
                 session.delete(user);
-                user.setNombre(tfUsuario.getText());
+                user.setNombre(tfUsuarioN.getText());
                 session.save(user);
                 tx.commit();
 
@@ -74,8 +75,8 @@ public class CambioUsuarioController implements Initializable {
             } else {
                 Alert alertaPwdIncorrecta = new Alert(Alert.AlertType.INFORMATION);
                 alertaPwdIncorrecta.setHeaderText("Fallo de confirmación");
-                alertaPwdIncorrecta.setContentText("Fallo en la confirmación de "
-                        + "su contraseña, pruebe  introducirla de nuevo");
+                alertaPwdIncorrecta.setContentText("Fallo en la confirmación de datos,"
+                        + "pruebe  introducirlos de nuevo");
                 alertaPwdIncorrecta.showAndWait();
             }
         } else {
@@ -87,9 +88,9 @@ public class CambioUsuarioController implements Initializable {
     }
 
     private void limpiar() {
-        tfUsuario.setText("");
+        tfUsuarioA.setText("");
         tfContra.setText("");
-        tfConfContra.setText("");
+        tfUsuarioN.setText("");
     }
 
     public void setUser(Usuarios user) {

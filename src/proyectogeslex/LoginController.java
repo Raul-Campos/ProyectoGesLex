@@ -5,6 +5,8 @@
  */
 package proyectogeslex;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -70,7 +72,7 @@ public class LoginController implements Initializable {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Registrarse");
         stage.setScene(new Scene(root));
-        stage.setResizable(false);
+        //stage.setResizable(false);
 
         stage.show();
 
@@ -97,11 +99,14 @@ public class LoginController implements Initializable {
             controladorMenu.setEmailUser(emailUser);
             controladorMenu.setEmailPassword(emailPassword);
             controladorMenu.setUser(usuario);
-            
+            controladorMenu.setLabelUser(usuario.getNombreper()+",");
+
+          
             //Muestra menú
-            Stage menu = new Stage();
-            menu.setScene(new Scene(root, 1200, 775));
-            menu.setTitle("GesLex");
+            Stage menu = new Stage(); 
+            menu.setMaximized(true);
+            menu.setScene(new Scene(root));
+            menu.setTitle("GesLex");    
             menu.show();
             
             menu.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -158,6 +163,7 @@ public class LoginController implements Initializable {
             controladorMenu.setSession(session);
             controladorMenu.setEmailUser(emailUser);
             controladorMenu.setEmailPassword(emailPassword);
+            controladorMenu.setUser(usuario);
             controladorMenu.setLabelUser(usuario.getNombreper()+",");
             
             //Muestra menú
