@@ -27,58 +27,54 @@
    <center>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox alignment="CENTER" prefHeight="241.0" prefWidth="600.0">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <GridPane>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="71.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="229.0" minWidth="10.0" prefWidth="188.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="196.0" minWidth="10.0" prefWidth="196.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
                      <children>
-                        <GridPane>
-                           <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="71.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="229.0" minWidth="10.0" prefWidth="188.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="196.0" minWidth="10.0" prefWidth="196.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                           </columnConstraints>
-                           <rowConstraints>
-                              <RowConstraints />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                           </rowConstraints>
-                           <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Usuario Actual" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                                 <GridPane.margin>
-                                    <Insets bottom="30.0" />
-                                 </GridPane.margin>
-                              </Text>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nuevo Usuario" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                                 <GridPane.margin>
-                                    <Insets />
-                                 </GridPane.margin>
-                              </Text>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Inserte su contraseña" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                                 <GridPane.margin>
-                                    <Insets top="30.0" />
-                                 </GridPane.margin>
-                              </Text>
-                              <PasswordField fx:id="tfContra" GridPane.columnIndex="2" GridPane.rowIndex="4">
-                                 <GridPane.margin>
-                                    <Insets top="30.0" />
-                                 </GridPane.margin>
-                              </PasswordField>
-                              <TextField fx:id="tfUsuarioA" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                                 <GridPane.margin>
-                                    <Insets top="10.0" />
-                                 </GridPane.margin>
-                              </TextField>
-                              <TextField fx:id="tfUsuarioN" layoutX="269.0" layoutY="13.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                           </children>
-                        </GridPane>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Usuario Actual" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <GridPane.margin>
+                              <Insets bottom="30.0" />
+                           </GridPane.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nuevo Usuario" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                           <GridPane.margin>
+                              <Insets />
+                           </GridPane.margin>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Inserte su contraseña" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                           <GridPane.margin>
+                              <Insets top="30.0" />
+                           </GridPane.margin>
+                        </Text>
+                        <PasswordField fx:id="tfContra" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                           <GridPane.margin>
+                              <Insets top="30.0" />
+                           </GridPane.margin>
+                        </PasswordField>
+                        <TextField fx:id="tfUsuarioA" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets top="10.0" />
+                           </GridPane.margin>
+                        </TextField>
+                        <TextField fx:id="tfUsuarioN" layoutX="269.0" layoutY="13.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                      </children>
-                  </HBox>
+                  </GridPane>
                </children>
-            </VBox>
+            </HBox>
          </children>
       </VBox>
    </center>

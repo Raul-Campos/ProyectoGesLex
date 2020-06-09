@@ -7,7 +7,10 @@ package proyectogeslex;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -20,6 +23,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import map.Aviso;
 import map.Expediente;
+import map.Smtp;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -83,16 +88,23 @@ public class AnadirAvisoController implements Initializable {
             aviso.setExpediente(expediente);
             aviso.setFecha(fecha);
 
-            Transaction tx = session.getTransaction();
+            if (formatoCorreo()) {
+                Transaction tx = session.getTransaction();
 
-            //Guarda el aviso
-            tx.begin();
-            session.save(aviso);
-            tx.commit();
+                //Guarda el aviso
+                tx.begin();
+                session.save(aviso);
+                tx.commit();
 
-            //Cierra ventana
-            Stage cerrar = (Stage) tfEmail.getScene().getWindow();
-            cerrar.close();
+                //Cierra ventana
+                Stage cerrar = (Stage) tfEmail.getScene().getWindow();
+                cerrar.close();
+            } else {
+                Alert alertaFormato = new Alert(Alert.AlertType.INFORMATION);
+                alertaFormato.setHeaderText("Error en el formato del email");
+                alertaFormato.setContentText("Porfavor compruebe el formato del email introducido.");
+                alertaFormato.showAndWait();
+            }
 
         } else {
             Alert alertaNuevoAviso = new Alert(Alert.AlertType.INFORMATION);
@@ -101,6 +113,24 @@ public class AnadirAvisoController implements Initializable {
             alertaNuevoAviso.showAndWait();
         }
 
+    }
+
+    private boolean formatoCorreo() {
+
+        //Comprueba el servidor que esta en uso
+        Query consulta = session.createQuery("from Smtp where opcion = :valor");
+        consulta.setParameter("valor", "Seleccionado");
+        Smtp servidor = (Smtp) consulta.uniqueResult();
+
+        //Comprueba el formato correcto
+        Pattern formato = Pattern.compile("[^@;]*@.*\\.[a-zA-Z]{3,3}");
+        Matcher match = formato.matcher(tfEmail.getText());
+
+        if (match.matches()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @FXML
