@@ -33,13 +33,13 @@ public class CambioServidorSMTPController implements Initializable {
     private Button btnAceptar;
     @FXML
     private ChoiceBox<String> cbSMTP;
-    @FXML
-    private TextField tEmail;
-    @FXML
-    private PasswordField tfContra;
-    @FXML
-    private PasswordField tfConfContra;
     private Session session;
+    @FXML
+    private TextField tfHost;
+    @FXML
+    private TextField tfPuerto;
+    @FXML
+    private TextField tfEmail;
 
     /**
      * Initializes the controller class.
@@ -48,6 +48,12 @@ public class CambioServidorSMTPController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         cbSMTP.getItems().addAll("smtp.gmail.com", "mail.gmx.net", "smtp.office365.com");
+        
+        cbSMTP.setOnAction(e -> {
+            if(cbSMTP.getValue() != null){
+                mostrarDatos();
+            }
+        });
     }
 
     @FXML
@@ -103,18 +109,17 @@ public class CambioServidorSMTPController implements Initializable {
         }
     }
 
-    @FXML
-    private void habilitarCampos(ActionEvent event) {
-
-        if (tfContra.isDisable()) {
-            tEmail.setDisable(false);
-            tfContra.setDisable(false);
-            tfConfContra.setDisable(false);
-        } else {
-            tEmail.setDisable(true);
-            tfContra.setDisable(true);
-            tfConfContra.setDisable(true);
-        }
+    private void mostrarDatos(){
+        
+        //Busca la opción en la bd
+        Query consulta = session.createQuery("from Smtp where host = :valor");
+        consulta.setParameter("valor", cbSMTP.getValue());
+        Smtp servidor = (Smtp) consulta.uniqueResult();
+        
+        //Muestra valores
+        tfHost.setText(servidor.getHost());
+        tfPuerto.setText(servidor.getPuerto());
+        tfEmail.setText(servidor.getEmail());
     }
 
     public void setSession(Session session) {
