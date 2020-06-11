@@ -5,23 +5,20 @@
  */
 package email;
 
-import com.sun.mail.smtp.SMTPTransport;
-import com.sun.mail.util.MailSSLSocketFactory;
-import java.security.GeneralSecurityException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.control.Alert;
-import javax.mail.AuthenticationFailedException;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import map.Aviso;
 import javax.mail.Session;
+import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import map.Smtp;
 import org.hibernate.Query;
@@ -69,13 +66,18 @@ public class EnviarAvisos implements Runnable {
                     prop.put("mail.smtp.starttls.enable", "true"); //TLS
                     prop.put("mail.smtp.user", smtp.getEmail());
                     prop.put("mail.smtp.clave", smtp.getContrasena());
+                    prop.put("mail.smtp.ssl.trust", "*");
                     prop.put("mail.debug", "true");
 
-                    MailSSLSocketFactory sf = new MailSSLSocketFactory();
+                    /*MailSSLSocketFactory sf = new MailSSLSocketFactory();
                     sf.setTrustAllHosts(true);
-                    prop.put("mail.smtp.ssl.socketFactory", sf);
-
-                    Session sessionMail = javax.mail.Session.getDefaultInstance(prop);
+                    prop.put("mail.smtp.ssl.socketFactory", sf);*/
+                    Session sessionMail = Session.getInstance(prop,
+                            new javax.mail.Authenticator() {
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(smtp.getEmail(), smtp.getContrasena());
+                        }
+                    });
                     MimeMessage message = new MimeMessage(sessionMail);
 
                     message.setFrom(new InternetAddress(smtp.getEmail()));
@@ -89,21 +91,19 @@ public class EnviarAvisos implements Runnable {
                     //Asunto
                     message.setSubject("Recordatorio de evento");
 
+                    String texto = "Usted tiene un evento con fechas "+aviso.getFecha()
+                            +" que contiene la siguiente descripción: "+aviso.getDescripcion();
+                    
                     //Contenido del email
-                    message.setText(aviso.getDescripcion());
+                    message.setText(texto);
 
-                    SMTPTransport t = (SMTPTransport) sessionMail.getTransport();
-                    t.connect(smtp.getHost(), smtp.getEmail(), smtp.getContrasena());
-                    t.sendMessage(message, message.getAllRecipients());
-                    t.close();
+                    Transport.send(message);
 
                     //Elimina aviso enviado
                     Transaction tx = session.getTransaction();
                     tx.begin();
                     session.delete(aviso);
                     tx.commit();
-                } catch (GeneralSecurityException ex) {
-                    Logger.getLogger(EnviarAvisos.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (AddressException ex) {
                     Logger.getLogger(EnviarAvisos.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (MessagingException ex) {

@@ -12,6 +12,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.hibernate.Session;
@@ -47,6 +48,7 @@ public class ProyectoGesLex extends Application {
         Scene scene = new Scene(root);
         primaryStage.setTitle("Login");
         primaryStage.setScene(scene);
+        primaryStage.getIcons().add(new Image("recursos/logo.png"));
         primaryStage.show();
 
         //Cierra la conexión

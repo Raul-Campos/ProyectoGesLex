@@ -5,8 +5,6 @@
  */
 package proyectogeslex;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -22,10 +20,10 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -72,6 +70,7 @@ public class LoginController implements Initializable {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Registrarse");
         stage.setScene(new Scene(root));
+        stage.getIcons().add(new Image("recursos/logo.png"));
         //stage.setResizable(false);
 
         stage.show();
@@ -107,6 +106,7 @@ public class LoginController implements Initializable {
             menu.setMaximized(true);
             menu.setScene(new Scene(root));
             menu.setTitle("GesLex");    
+            menu.getIcons().add(new Image("recursos/logo.png"));
             menu.show();
             
             menu.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -170,6 +170,7 @@ public class LoginController implements Initializable {
             Stage menu = new Stage();
             menu.setScene(new Scene(root, 1200, 775));
             menu.setTitle("GesLex");
+            menu.getIcons().add(new Image("recursos/logo.png"));
             menu.show();
             
             menu.setOnCloseRequest(new EventHandler<WindowEvent>() {

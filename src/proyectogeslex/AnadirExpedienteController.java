@@ -13,22 +13,18 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -126,11 +122,15 @@ public class AnadirExpedienteController implements Initializable {
             datosRellenos = false;
         }
 
-        if (!tfFechaC.getText().equals("")) {
+        if (!tfFechaC.getText().equals("") && validarFecha(tfFechaC.getText())) {
             java.sql.Date fecha = java.sql.Date.valueOf(tfFechaC.getText());
             expediente.setFechaCreacion(fecha);
         } else {
             datosRellenos = false;
+            Alert fec = new Alert(Alert.AlertType.INFORMATION);
+                fec.setHeaderText("Error Formato fecha");
+                fec.setContentText("Error en el formato de fecha. Por favor, intentelo de nuevo de la siguiente manera: yyyy-MM-dd");
+                fec.showAndWait();
         }
 
         if (hoja != null) {
@@ -176,6 +176,17 @@ public class AnadirExpedienteController implements Initializable {
         }
     }
 
+    private static boolean validarFecha(String fecha) {
+        try {
+            SimpleDateFormat formatoFecha = new SimpleDateFormat("yyy-MM-dd");
+            formatoFecha.setLenient(false);
+            formatoFecha.parse(fecha);
+        } catch (ParseException e) {
+            return false;
+        }
+        return true;
+    }
+    
     @FXML
     private void CancelarExpediente(ActionEvent event) {
         Stage stage = (Stage) btnCancelar.getScene().getWindow();

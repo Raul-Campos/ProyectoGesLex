@@ -6,10 +6,7 @@
 package proyectogeslex;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,11 +16,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javax.persistence.RollbackException;
-import map.Cliente;
-import map.Expediente;
 import map.Vehiculo;
 import org.hibernate.NonUniqueObjectException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -169,7 +163,7 @@ public class AnadirVehiculoController implements Initializable {
                         tx.commit();
                     } else {
                         tx.begin();
-                        session.merge(vehiculo);
+                        session.update(vehiculo);
                         tx.commit();
                     }
                     Stage stage = (Stage) btnAceptar.getScene().getWindow();

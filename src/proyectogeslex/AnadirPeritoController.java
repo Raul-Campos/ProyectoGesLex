@@ -165,8 +165,10 @@ public class AnadirPeritoController implements Initializable {
                         session.save(perito);
                         tx.commit();
                     } else {
+                        perito.getExpedientes().addAll(existente.getExpedientes());
                         tx.begin();
-                        session.merge(perito);
+                        session.clear();
+                        session.update(perito);
                         tx.commit();
                     }
 

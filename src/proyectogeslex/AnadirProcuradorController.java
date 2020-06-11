@@ -152,13 +152,15 @@ public class AnadirProcuradorController implements Initializable {
                         tx.commit();
                     } else {
                         tx.begin();
-                        session.merge(procurador);
+                        session.clear();
+                        session.update(procurador);
                         tx.commit();
                     }
 
                     Stage stage = (Stage) btnAceptar.getScene().getWindow();
                     stage.close();
                 } catch (NonUniqueObjectException ex) {
+                    ex.printStackTrace();
                     tx.rollback();
                     Alert alertaExistente = new Alert(Alert.AlertType.INFORMATION);
                     alertaExistente.setHeaderText("Procurador existente");
