@@ -28,6 +28,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
@@ -200,6 +201,7 @@ public class VerClientesController implements Initializable {
         stage.setTitle("Añadir Clientes");
         stage.setScene(new Scene(root));
         stage.setResizable(false);
+        stage.getIcons().add(new Image("recursos/logo.png"));
         stage.showAndWait();
 
         cargarClientes();
@@ -255,6 +257,7 @@ public class VerClientesController implements Initializable {
             stage.setTitle("Añadir Clientes");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
+            stage.getIcons().add(new Image("recursos/logo.png"));
             stage.showAndWait();
 
             cargarClientes();

@@ -139,8 +139,10 @@ public class AnadirClienteController implements Initializable {
                 alert = false;
             }
 
+
             if (textfieldFecha.getText() != null && !textfieldFecha.getText().equals("")) {
                 cliente.setFechaNacimiento(stringToDate(textfieldFecha.getText()));
+
             } else if (alert) {
                 alerta = new Alert(Alert.AlertType.INFORMATION, "Introduce una fecha de nacimiento valida");
                 alerta.showAndWait();
@@ -204,6 +206,17 @@ public class AnadirClienteController implements Initializable {
         SimpleDateFormat formato = new SimpleDateFormat("");
         java.sql.Date fecha = fecha = java.sql.Date.valueOf(date);
         return fecha;
+    }
+    
+    private static boolean validarFecha(String fecha) {
+        try {
+            SimpleDateFormat formatoFecha = new SimpleDateFormat("yyy-MM-dd");
+            formatoFecha.setLenient(false);
+            formatoFecha.parse(fecha);
+        } catch (ParseException e) {
+            return false;
+        }
+        return true;
     }
 
     @FXML

@@ -37,6 +37,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
@@ -305,7 +306,9 @@ public class VerExpedienteController implements Initializable {
             stage.setTitle("Añadir documentos");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
+            stage.getIcons().add(new Image("recursos/logo.png"));
             stage.showAndWait();
+            
 
             cargarDocumentos(expedienteSeleccionado);
 
@@ -357,6 +360,7 @@ public class VerExpedienteController implements Initializable {
             stage.setTitle("Añadir Sentencias");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
+            stage.getIcons().add(new Image("recursos/logo.png"));
             stage.showAndWait();
 
             cargarSentencia(expedienteSeleccionado);
@@ -408,6 +412,7 @@ public class VerExpedienteController implements Initializable {
                 stage.setTitle("Añadir Incidente");
                 stage.setScene(new Scene(root));
                 stage.setResizable(false);
+                stage.getIcons().add(new Image("recursos/logo.png"));
                 stage.showAndWait();
 
                 cargarIncidente(expedienteSeleccionado);
@@ -466,6 +471,7 @@ public class VerExpedienteController implements Initializable {
             stage.setTitle("Añadir avisos");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
+            stage.getIcons().add(new Image("recursos/logo.png"));
             stage.showAndWait();
             cargarAvisos(seleccionado);
 
@@ -542,7 +548,7 @@ public class VerExpedienteController implements Initializable {
         stage.setTitle("Añadir Expediente");
         stage.setScene(new Scene(root));
         stage.setResizable(false);
-
+        stage.getIcons().add(new Image("recursos/logo.png"));
         AnadirExpedienteController anadirExpediente = (AnadirExpedienteController) fxmlLoader.getController();
         anadirExpediente.setSesion(sesion);
         anadirExpediente.setSession(session);
@@ -974,6 +980,7 @@ public class VerExpedienteController implements Initializable {
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Añadir documentos");
+            stage.getIcons().add(new Image("recursos/logo.png"));
             stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.showAndWait();
@@ -1000,12 +1007,14 @@ public class VerExpedienteController implements Initializable {
             anadirExp.setSesion(sesion);
             anadirExp.setSession(session);
             anadirExp.setExistente(tableExpedientes.getSelectionModel().getSelectedItem());
+            anadirExp.cargaDato();
             anadirExp.cargarDatosExp();
 
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Modificar Expediente");
             stage.setScene(new Scene(root));
+            stage.getIcons().add(new Image("recursos/logo.png"));
             stage.setResizable(false);
             stage.showAndWait();
 
@@ -1036,6 +1045,7 @@ public class VerExpedienteController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Modificar Incidente");
             stage.setScene(new Scene(root));
+            stage.getIcons().add(new Image("recursos/logo.png"));
             stage.setResizable(false);
             stage.showAndWait();
 

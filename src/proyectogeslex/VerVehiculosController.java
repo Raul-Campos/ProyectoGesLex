@@ -23,6 +23,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -196,6 +197,7 @@ public class VerVehiculosController implements Initializable {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Añadir Vehiculo");
         stage.setScene(new Scene(root));
+        stage.getIcons().add(new Image("recursos/logo.png"));
         stage.setResizable(false);
         stage.showAndWait();
 
@@ -232,6 +234,7 @@ public class VerVehiculosController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Modificar Vehiculo");
             stage.setScene(new Scene(root));
+            stage.getIcons().add(new Image("recursos/logo.png"));
             stage.setResizable(false);
             stage.showAndWait();
 
