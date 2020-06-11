@@ -171,7 +171,7 @@ public class AnadirLetradoController implements Initializable {
                         tx.commit();
                     }else{
                         tx.begin();
-                        session.merge(letrado);
+                        session.update(letrado);
                         tx.commit();
                     }
 

@@ -101,15 +101,17 @@ public class AnadirDocumentoController implements Initializable {
             Transaction tx = session.getTransaction();
             try {
 
+                //Convierte fichero a array de bytes
+                byte[] pdf = Files.readAllBytes(file.toPath());
+                documento.setPdf(pdf);
+
                 if (existente == null) {
-                    //Convierte fichero a array de bytes
-                    byte[] pdf = Files.readAllBytes(file.toPath());
-                    documento.setPdf(pdf);
 
                     //Guarda el documento
                     tx.begin();
                     session.save(documento);
                     tx.commit();
+                    file.delete();
                 } else {
                     //Guarda el documento
                     tx.begin();
@@ -165,6 +167,12 @@ public class AnadirDocumentoController implements Initializable {
             tfNombre.setDisable(true);
             tfAportador.setText(existente.getAportadoPor());
             txDesc.setText(existente.getDescripcion());
+
+            //Copia el fichero del documento seleccionado en la máquina
+            file = new File("fichero.pdf");
+            FileOutputStream os = new FileOutputStream(file);
+            os.write(existente.getPdf());
+            os.close();
         }
     }
 }

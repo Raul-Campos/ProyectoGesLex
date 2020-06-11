@@ -1,4 +1,4 @@
- /*
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -67,7 +67,7 @@ public class AnadirClienteController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         cbSitFam.getItems().addAll("Soltero/a", "Casado/a", "Divorciado/a", "Viudo/a");
         cbSitLab.getItems().addAll("Empleado/a", "Desempleado/a");
-         
+
     }
 
     public void setSession(Session session) {
@@ -82,9 +82,10 @@ public class AnadirClienteController implements Initializable {
     @FXML
     private void btnEnviar(ActionEvent event) {
         Cliente cliente = new Cliente();
-        if(existente!=null)
-            cliente=existente;
-        
+        if (existente != null) {
+            cliente = existente;
+        }
+
         Alert alerta;
         boolean errorFormato = false;
         boolean alert = true;
@@ -170,7 +171,7 @@ public class AnadirClienteController implements Initializable {
                         tx.commit();
                     } else {
                         tx.begin();
-                        session.merge(cliente);
+                        session.update(cliente);
                         tx.commit();
                     }
 
@@ -250,7 +251,7 @@ public class AnadirClienteController implements Initializable {
 
     @FXML
     private void OpcionChHombre(ActionEvent event) {
-          if (radiobM.isSelected()) {
+        if (radiobM.isSelected()) {
             radiobM.setSelected(false);
         }
         radiobH.setSelected(true);
@@ -258,9 +259,9 @@ public class AnadirClienteController implements Initializable {
 
     @FXML
     private void OpcionChMujer(ActionEvent event) {
-          if (radiobH.isSelected()) {
+        if (radiobH.isSelected()) {
             radiobH.setSelected(false);
         }
-        radiobH.setSelected(true);
+        radiobM.setSelected(true);
     }
 }

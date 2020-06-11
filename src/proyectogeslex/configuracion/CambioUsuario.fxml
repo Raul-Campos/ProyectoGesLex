@@ -17,7 +17,7 @@
    <top>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Cambiar nombre de usuario" BorderPane.alignment="CENTER">
          <font>
-            <Font size="22.0" />
+            <Font name="System Bold Italic" size="22.0" />
          </font>
          <BorderPane.margin>
             <Insets top="30.0" />
