@@ -122,11 +122,15 @@ public class AnadirExpedienteController implements Initializable {
             datosRellenos = false;
         }
 
-        if (!tfFechaC.getText().equals("")) {
+        if (!tfFechaC.getText().equals("") && validarFecha(tfFechaC.getText())) {
             java.sql.Date fecha = java.sql.Date.valueOf(tfFechaC.getText());
             expediente.setFechaCreacion(fecha);
         } else {
             datosRellenos = false;
+            Alert fec = new Alert(Alert.AlertType.INFORMATION);
+                fec.setHeaderText("Error Formato fecha");
+                fec.setContentText("Error en el formato de fecha. Por favor, intentelo de nuevo de la siguiente manera: yyyy-MM-dd");
+                fec.showAndWait();
         }
 
         if (hoja != null) {
@@ -172,6 +176,17 @@ public class AnadirExpedienteController implements Initializable {
         }
     }
 
+    private static boolean validarFecha(String fecha) {
+        try {
+            SimpleDateFormat formatoFecha = new SimpleDateFormat("yyy-MM-dd");
+            formatoFecha.setLenient(false);
+            formatoFecha.parse(fecha);
+        } catch (ParseException e) {
+            return false;
+        }
+        return true;
+    }
+    
     @FXML
     private void CancelarExpediente(ActionEvent event) {
         Stage stage = (Stage) btnCancelar.getScene().getWindow();
