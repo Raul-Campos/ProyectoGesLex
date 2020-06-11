@@ -533,7 +533,7 @@ public class VerExpedienteController implements Initializable {
     }
 
     @FXML
-    private void añadirExpediente(ActionEvent event) throws IOException {
+    private void anadirExpediente(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirExpediente.fxml"));
         Parent root = (Parent) fxmlLoader.load();
         Stage stage = new Stage();
@@ -1054,11 +1054,18 @@ public class VerExpedienteController implements Initializable {
         Calendar c = Calendar.getInstance();
         java.sql.Date fecha = java.sql.Date.valueOf(Integer.toString(c.get(Calendar.YEAR)) + "-" + Integer.toString(c.get(Calendar.MONTH) + 1) + "-" + Integer.toString(c.get(Calendar.DATE)));
         if (expedienteACerrar != null) {
-            expedienteACerrar.setFechaCierre(fecha);
-            Transaction tx = session.getTransaction();
-            tx.begin();
-            session.update(expedienteACerrar);
-            tx.commit();
+            if (expedienteACerrar.getFechaCierre() == null) {
+                expedienteACerrar.setFechaCierre(fecha);
+                Transaction tx = session.getTransaction();
+                tx.begin();
+                session.update(expedienteACerrar);
+                tx.commit();
+            } else {
+                Alert alertaExpCerrado = new Alert(Alert.AlertType.INFORMATION);
+                alertaExpCerrado.setHeaderText("Expediente cerrado");
+                alertaExpCerrado.setContentText("Ese expediente ya ha sido cerrado anteriormente");
+                alertaExpCerrado.showAndWait();
+            }
             cargarExpedientes();
         } else {
             Alert alertaEliminarExpediente = new Alert(Alert.AlertType.INFORMATION);

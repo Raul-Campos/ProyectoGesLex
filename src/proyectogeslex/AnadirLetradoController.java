@@ -66,7 +66,7 @@ public class AnadirLetradoController implements Initializable {
     }
 
     @FXML
-    private void LimpiarLetrado(ActionEvent event) {
+    private void limpiarLetrado(ActionEvent event) {
         tfNombre.setText("");
         tfApellidos.setText("");
         tfDni.setText("");
@@ -77,7 +77,7 @@ public class AnadirLetradoController implements Initializable {
     }
 
     @FXML
-    private void AceptarLetrado(ActionEvent event) {
+    private void aceptarLetrado(ActionEvent event) {
         Letrado letrado = new Letrado();
         Alert alerta;
         
@@ -202,7 +202,7 @@ public class AnadirLetradoController implements Initializable {
     }
 
     @FXML
-    private void CancelarLetrado(ActionEvent event) {
+    private void cancelarLetrado(ActionEvent event) {
         Stage stage = (Stage) btnCancelar.getScene().getWindow();
         stage.close();
     }

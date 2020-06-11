@@ -144,12 +144,12 @@
                   <RowConstraints maxHeight="57.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Button fx:id="btnLimpiar" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#LimpiarVehiculo" prefHeight="30.0" prefWidth="73.0" text="Limpiar" textAlignment="RIGHT">
+                  <Button fx:id="btnLimpiar" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#limpiarVehiculo" prefHeight="30.0" prefWidth="73.0" text="Limpiar" textAlignment="RIGHT">
                      <GridPane.margin>
                         <Insets left="20.0" />
                      </GridPane.margin>
                   </Button>
-                  <Button fx:id="btnAceptar" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#AceptarVehiculo" text="Aceptar" textAlignment="CENTER" GridPane.columnIndex="2">
+                  <Button fx:id="btnAceptar" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#aceptarVehiculo" text="Aceptar" textAlignment="CENTER" GridPane.columnIndex="2">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" smooth="false">
                            <image>
@@ -157,7 +157,7 @@
                            </image>
                         </ImageView>
                      </graphic></Button>
-                  <Button fx:id="btnCancelar" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#CancelarVehiculo" text="Cancelar" GridPane.columnIndex="3">
+                  <Button fx:id="btnCancelar" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#cancelarVehiculo" text="Cancelar" GridPane.columnIndex="3">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" smooth="false">
                            <image>

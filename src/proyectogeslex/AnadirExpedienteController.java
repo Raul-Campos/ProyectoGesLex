@@ -81,7 +81,7 @@ public class AnadirExpedienteController implements Initializable {
     }
 
     @FXML
-    private void LimpiarExpediente(ActionEvent event) {
+    private void limpiarExpediente(ActionEvent event) {
         chCliente.setValue(null);
         chLetrado.setValue(null);
         chProcurador.setValue(null);

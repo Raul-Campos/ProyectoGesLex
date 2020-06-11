@@ -67,7 +67,7 @@ public class AnadirSentenciaController implements Initializable {
     }
 
     @FXML
-    private void Limpiar(ActionEvent event) {
+    private void limpiar(ActionEvent event) {
         file = null;
         tfTitulo.setText("");
         txDesc.setText("");

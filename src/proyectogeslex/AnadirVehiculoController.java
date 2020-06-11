@@ -66,7 +66,7 @@ public class AnadirVehiculoController implements Initializable {
     }
 
     @FXML
-    private void LimpiarVehiculo(ActionEvent event) {
+    private void limpiarVehiculo(ActionEvent event) {
         tfMatricula.setText("");
 
         tfMarca.setText("");
@@ -79,7 +79,7 @@ public class AnadirVehiculoController implements Initializable {
     }
 
     @FXML
-    private void AceptarVehiculo(ActionEvent event) {
+    private void aceptarVehiculo(ActionEvent event) {
 
         Vehiculo vehiculo = new Vehiculo();
         if (existente != null) {
@@ -193,7 +193,7 @@ public class AnadirVehiculoController implements Initializable {
     }
 
     @FXML
-    private void CancelarVehiculo(ActionEvent event) {
+    private void cancelarVehiculo(ActionEvent event) {
         Stage stage = (Stage) btnCancelar.getScene().getWindow();
         stage.close();
     }

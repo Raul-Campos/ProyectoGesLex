@@ -27,7 +27,7 @@
                      </image>
                   </ImageView>
                </graphic></Button>
-            <Button fx:id="btnAñadir" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#añadirProcurador" text="Añadir Procurador">
+            <Button fx:id="btnAñadir" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#anadirProcurador" text="Añadir Procurador">
                <HBox.margin>
                   <Insets right="30.0" />
                </HBox.margin>

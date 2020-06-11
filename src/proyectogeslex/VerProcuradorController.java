@@ -179,7 +179,7 @@ public class VerProcuradorController implements Initializable {
     }
 
     @FXML
-    private void añadirProcurador(ActionEvent event) throws IOException {
+    private void anadirProcurador(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirProcurador.fxml"));
         Parent root = (Parent) fxmlLoader.load();
         AnadirProcuradorController anadirProcurador = (AnadirProcuradorController) fxmlLoader.getController();

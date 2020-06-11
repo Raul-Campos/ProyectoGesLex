@@ -58,13 +58,13 @@ public class CrearCuentaController implements Initializable {
     }
 
     @FXML
-    private void Cancelar(ActionEvent event) {
+    private void cancelar(ActionEvent event) {
         Stage stage = (Stage) btncancelar.getScene().getWindow();
         stage.close();
     }
 
     @FXML
-    private void CrearCuenta(ActionEvent event) {
+    private void crearCuenta(ActionEvent event) {
         Usuarios usuario = new Usuarios();
         Alert alerta;
 

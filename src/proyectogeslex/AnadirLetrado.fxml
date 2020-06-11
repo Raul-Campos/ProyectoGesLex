@@ -140,12 +140,12 @@
                 <RowConstraints maxHeight="57.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="btnLimpiar" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#LimpiarLetrado" prefHeight="30.0" prefWidth="64.0" text="Limpiar" textAlignment="RIGHT">
+                  <Button fx:id="btnLimpiar" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#limpiarLetrado" prefHeight="30.0" prefWidth="64.0" text="Limpiar" textAlignment="RIGHT">
                      <GridPane.margin>
                         <Insets left="20.0" />
                      </GridPane.margin>
                   </Button>
-                  <Button fx:id="btnAceptar" contentDisplay="RIGHT" graphicTextGap="1.0" mnemonicParsing="false" onAction="#AceptarLetrado" text="Aceptar" textAlignment="CENTER" GridPane.columnIndex="2">
+                  <Button fx:id="btnAceptar" contentDisplay="RIGHT" graphicTextGap="1.0" mnemonicParsing="false" onAction="#aceptarLetrado" text="Aceptar" textAlignment="CENTER" GridPane.columnIndex="2">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" smooth="false">
                            <image>
@@ -153,7 +153,7 @@
                            </image>
                         </ImageView>
                      </graphic></Button>
-                  <Button fx:id="btnCancelar" contentDisplay="RIGHT" graphicTextGap="1.0" mnemonicParsing="false" onAction="#CancelarLetrado" prefHeight="32.0" prefWidth="96.0" text="Cancelar" GridPane.columnIndex="3">
+                  <Button fx:id="btnCancelar" contentDisplay="RIGHT" graphicTextGap="1.0" mnemonicParsing="false" onAction="#cancelarLetrado" prefHeight="32.0" prefWidth="96.0" text="Cancelar" GridPane.columnIndex="3">
                      <graphic>
                         <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" smooth="false">
                            <image>

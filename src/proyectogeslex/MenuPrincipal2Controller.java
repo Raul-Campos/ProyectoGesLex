@@ -133,7 +133,7 @@ public class MenuPrincipal2Controller implements Initializable {
     }
 
     @FXML
-    private void VerExp(ActionEvent event) throws IOException {
+    private void verExp(ActionEvent event) throws IOException {
 
         FXMLLoader fxmlLoaderExpedientes = new FXMLLoader(getClass().getResource("VerExpediente.fxml"));
         BorderPane verExpedientes = fxmlLoaderExpedientes.load();
