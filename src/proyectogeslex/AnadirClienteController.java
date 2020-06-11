@@ -140,7 +140,8 @@ public class AnadirClienteController implements Initializable {
             }
 
 
-            if (textfieldFecha.getText() != null && !textfieldFecha.getText().equals("")) {
+             if (textfieldFecha.getText() != null && !textfieldFecha.getText().equals("") && 
+                 validarFecha(textfieldFecha.getText())) { 
                 cliente.setFechaNacimiento(stringToDate(textfieldFecha.getText()));
 
             } else if (alert) {
@@ -276,5 +277,5 @@ public class AnadirClienteController implements Initializable {
             radiobH.setSelected(false);
         }
         radiobM.setSelected(true);
-    }
+    } 
 }
