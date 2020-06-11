@@ -62,8 +62,8 @@
                   <TextField fx:id="tfDefensaJuridica" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <HBox alignment="CENTER_LEFT" prefHeight="84.0" prefWidth="195.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                      <children>
-                        <CheckBox fx:id="chNo" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#OpcionCheckBoxNo" text="No" />
-                        <CheckBox fx:id="chSi" mnemonicParsing="false" onAction="#OpcionCheckBoxSi" text="Si">
+                        <CheckBox fx:id="chNo" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#opcionCheckBoxNo" text="No" />
+                        <CheckBox fx:id="chSi" mnemonicParsing="false" onAction="#opcionCheckBoxSi" text="Si">
                            <HBox.margin>
                               <Insets left="20.0" />
                            </HBox.margin>
@@ -89,7 +89,7 @@
                   <RowConstraints maxHeight="57.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Button fx:id="btnLimpiar" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#Limpiar" prefHeight="30.0" prefWidth="68.0" text="Limpiar" textAlignment="RIGHT">
+                  <Button fx:id="btnLimpiar" alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#limpiar" prefHeight="30.0" prefWidth="68.0" text="Limpiar" textAlignment="RIGHT">
                      <GridPane.margin>
                         <Insets left="20.0" />
                      </GridPane.margin>

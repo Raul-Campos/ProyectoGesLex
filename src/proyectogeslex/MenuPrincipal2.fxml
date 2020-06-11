@@ -37,7 +37,7 @@
                   <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                </VBox.margin>
             </Button>
-            <Button fx:id="btnVerExp" contentDisplay="TOP" graphicTextGap="0.0" mnemonicParsing="false" onAction="#VerExp" text="Expedientes">
+            <Button fx:id="btnVerExp" contentDisplay="TOP" graphicTextGap="0.0" mnemonicParsing="false" onAction="#verExp" text="Expedientes">
                <graphic>
                   <ImageView fx:id="imagenExpedientes" fitHeight="140.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>

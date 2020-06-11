@@ -66,7 +66,7 @@ public class AnadirPeritoController implements Initializable {
     }
 
     @FXML
-    private void LimpiarPerito(ActionEvent event) {
+    private void limpiarPerito(ActionEvent event) {
         tfNombre.setText("");
         tfApellidos.setText("");
         tfDNI.setText("");
@@ -78,7 +78,7 @@ public class AnadirPeritoController implements Initializable {
     }
 
     @FXML
-    private void AceptarPerito(ActionEvent event) {
+    private void aceptarPerito(ActionEvent event) {
         Perito perito = new Perito();
         Alert alerta;
         boolean errorFormato = false;
@@ -198,7 +198,7 @@ public class AnadirPeritoController implements Initializable {
     }
 
     @FXML
-    private void CancelarPerito(ActionEvent event) {
+    private void cancelarPerito(ActionEvent event) {
         Stage stage = (Stage) btnCancelar.getScene().getWindow();
         stage.close();
     }

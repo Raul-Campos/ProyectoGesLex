@@ -78,7 +78,7 @@ public class AnadirIncidenteController implements Initializable {
     }
 
     @FXML
-    private void Limpiar(ActionEvent event) {
+    private void limpiar(ActionEvent event) {
         datePickeFecha.setValue(null);
         tfLugar.setText("");
         tfEnviadoPor.setText("");
@@ -137,7 +137,7 @@ public class AnadirIncidenteController implements Initializable {
             Transaction tx = session.getTransaction();
 
             try {
-                incidente.setFechaHora(DateToDateTime());
+                incidente.setFechaHora(dateToDateTime());
 
                 if (existente == null) {
                     tx.begin();
@@ -188,7 +188,7 @@ public class AnadirIncidenteController implements Initializable {
     }
 
     @FXML
-    private void OpcionCheckBoxNo(ActionEvent event) {
+    private void opcionCheckBoxNo(ActionEvent event) {
         if (chSi.isSelected()) {
             chSi.setSelected(false);
         }
@@ -196,14 +196,14 @@ public class AnadirIncidenteController implements Initializable {
     }
 
     @FXML
-    private void OpcionCheckBoxSi(ActionEvent event) {
+    private void opcionCheckBoxSi(ActionEvent event) {
         if (chNo.isSelected()) {
             chNo.setSelected(false);
         }
         chSi.setSelected(true);
     }
 
-    private Date DateToDateTime() throws ParseException {
+    private Date dateToDateTime() throws ParseException {
         Date fecha = null;
         String datos = datePickeFecha.getValue().toString() + " " + tfHora.getText();
 
@@ -214,7 +214,7 @@ public class AnadirIncidenteController implements Initializable {
         return fecha;
     }
 
-    private void Cargarfechas() {
+    private void cargarfechas() {
         String hora = "hh:mm:ss";
         String fecha = "yyyy-MM-dd";
         DateFormat df = new SimpleDateFormat(hora);
@@ -231,7 +231,7 @@ public class AnadirIncidenteController implements Initializable {
 
         if (existente != null) {
             //Muestra los datos
-            Cargarfechas();
+            cargarfechas();
             tfLugar.setText(existente.getLugar());
             tfDefensaJuridica.setText(existente.getDefensa());
             tfEnviadoPor.setText(existente.getEnviadoPor());

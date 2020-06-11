@@ -210,7 +210,7 @@ public class VerPeritoController implements Initializable {
     }
 
     @FXML
-    private void añadirPerito(ActionEvent event) throws IOException {
+    private void anadirPerito(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirPerito.fxml"));
         Parent root = (Parent) fxmlLoader.load();
         AnadirPeritoController anadirPerito = (AnadirPeritoController) fxmlLoader.getController();

@@ -145,7 +145,7 @@
                   <RowConstraints maxHeight="57.0" minHeight="10.0" prefHeight="47.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Button fx:id="btnLimpiar" alignment="CENTER" contentDisplay="RIGHT" graphicTextGap="1.0" mnemonicParsing="false" onAction="#LimpiarExpediente" prefHeight="30.0" prefWidth="71.0" text="Limpiar" textAlignment="CENTER">
+                  <Button fx:id="btnLimpiar" alignment="CENTER" contentDisplay="RIGHT" graphicTextGap="1.0" mnemonicParsing="false" onAction="#limpiarExpediente" prefHeight="30.0" prefWidth="71.0" text="Limpiar" textAlignment="CENTER">
                      <GridPane.margin>
                         <Insets left="20.0" />
                      </GridPane.margin>

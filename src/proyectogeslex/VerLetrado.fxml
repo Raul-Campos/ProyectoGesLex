@@ -84,7 +84,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="btnAñadir" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#añadirLetrado" text="Añadir Letrado">
+            <Button fx:id="btnAñadir" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#anadirLetrado" text="Añadir Letrado">
                <HBox.margin>
                   <Insets right="30.0" />
                </HBox.margin>

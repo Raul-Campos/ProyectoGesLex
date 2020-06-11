@@ -62,7 +62,7 @@ public class AnadirProcuradorController implements Initializable {
     }
 
     @FXML
-    private void LimpiarProcurador(ActionEvent event) {
+    private void limpiarProcurador(ActionEvent event) {
         tfNombre.setText("");
         tfApellidos.setText("");
         tfDni.setText("");
@@ -73,7 +73,7 @@ public class AnadirProcuradorController implements Initializable {
     }
 
     @FXML
-    private void AceptarProcurador(ActionEvent event) {
+    private void aceptarProcurador(ActionEvent event) {
         Alert alerta;
         Procurador procurador = new Procurador();
         boolean errorFormato = false;
@@ -184,7 +184,7 @@ public class AnadirProcuradorController implements Initializable {
     }
 
     @FXML
-    private void CancelarProcurador(ActionEvent event) {
+    private void cancelarProcurador(ActionEvent event) {
         Stage stage = (Stage) btnCancelar.getScene().getWindow();
         stage.close();
     }

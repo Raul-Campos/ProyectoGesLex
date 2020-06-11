@@ -73,7 +73,7 @@ public class AnadirDocumentoController implements Initializable {
     }
 
     @FXML
-    private void Limpiar(ActionEvent event) {
+    private void limpiar(ActionEvent event) {
         file = null;
         tfNombre.setText("");
         tfAportador.setText("");

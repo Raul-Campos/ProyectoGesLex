@@ -28,7 +28,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="btnAñadir" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#añadirPerito" text="Añadir Perito">
+            <Button fx:id="btnAñadir" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#anadirPerito" text="Añadir Perito">
                <HBox.margin>
                   <Insets right="30.0" />
                </HBox.margin>

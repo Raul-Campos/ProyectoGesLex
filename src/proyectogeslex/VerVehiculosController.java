@@ -186,7 +186,7 @@ public class VerVehiculosController implements Initializable {
     }
 
     @FXML
-    private void AñadirVehiculo(ActionEvent event) throws IOException {
+    private void anadirVehiculo(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirVehiculo.fxml"));
         Parent root = (Parent) fxmlLoader.load();
         AnadirVehiculoController anadirVehiculo = (AnadirVehiculoController) fxmlLoader.getController();

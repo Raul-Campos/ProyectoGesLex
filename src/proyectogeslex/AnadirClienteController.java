@@ -139,9 +139,10 @@ public class AnadirClienteController implements Initializable {
                 alert = false;
             }
 
-            if (textfieldFecha.getText() != null && !textfieldFecha.getText().equals("") && validarFecha(textfieldFecha.getText())) {
-             
-                cliente.setFechaNacimiento(StringToDate(textfieldFecha.getText()));
+
+            if (textfieldFecha.getText() != null && !textfieldFecha.getText().equals("")) {
+                cliente.setFechaNacimiento(stringToDate(textfieldFecha.getText()));
+
             } else if (alert) {
                 alerta = new Alert(Alert.AlertType.INFORMATION, "Introduce una fecha de nacimiento valida");
                 alerta.showAndWait();
@@ -201,7 +202,7 @@ public class AnadirClienteController implements Initializable {
 
     }
 
-    private static Date StringToDate(String date) {
+    private static Date stringToDate(String date) {
         SimpleDateFormat formato = new SimpleDateFormat("");
         java.sql.Date fecha = fecha = java.sql.Date.valueOf(date);
         return fecha;
@@ -262,7 +263,7 @@ public class AnadirClienteController implements Initializable {
     }
 
     @FXML
-    private void OpcionChHombre(ActionEvent event) {
+    private void opcionChHombre(ActionEvent event) {
         if (radiobM.isSelected()) {
             radiobM.setSelected(false);
         }
@@ -270,7 +271,7 @@ public class AnadirClienteController implements Initializable {
     }
 
     @FXML
-    private void OpcionChMujer(ActionEvent event) {
+    private void opcionChMujer(ActionEvent event) {
         if (radiobH.isSelected()) {
             radiobH.setSelected(false);
         }

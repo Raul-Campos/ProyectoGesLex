@@ -55,8 +55,8 @@
       </Text>
       <ChoiceBox fx:id="cbSitFam" layoutX="178.0" layoutY="221.0" prefWidth="150.0" />
       <ChoiceBox fx:id="cbSitLab" layoutX="178.0" layoutY="271.0" prefWidth="150.0" />
-      <RadioButton fx:id="radiobH" layoutX="425.0" layoutY="225.0" mnemonicParsing="false" onAction="#OpcionChHombre" text="Hombre" />
-      <RadioButton fx:id="radiobM" layoutX="501.0" layoutY="225.0" mnemonicParsing="false" onAction="#OpcionChMujer" text="Mujer" />
+      <RadioButton fx:id="radiobH" layoutX="425.0" layoutY="225.0" mnemonicParsing="false" onAction="#opcionChHombre" text="Hombre" />
+      <RadioButton fx:id="radiobM" layoutX="501.0" layoutY="225.0" mnemonicParsing="false" onAction="#opcionChMujer" text="Mujer" />
       <Button fx:id="btnEnviar" contentDisplay="RIGHT" graphicTextGap="1.0" layoutX="376.0" layoutY="350.0" mnemonicParsing="false" onAction="#btnEnviar" prefHeight="30.0" prefWidth="85.0" text="Enviar">
          <font>
             <Font size="14.0" />

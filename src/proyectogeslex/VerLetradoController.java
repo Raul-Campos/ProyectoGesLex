@@ -212,7 +212,7 @@ public class VerLetradoController implements Initializable {
     }
 
     @FXML
-    private void añadirLetrado(ActionEvent event) throws IOException {
+    private void anadirLetrado(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AnadirLetrado.fxml"));
         Parent root = (Parent) fxmlLoader.load();
         AnadirLetradoController anadirLetrado = (AnadirLetradoController) fxmlLoader.getController();
