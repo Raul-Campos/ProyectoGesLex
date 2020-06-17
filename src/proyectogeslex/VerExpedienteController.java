@@ -766,12 +766,12 @@ public class VerExpedienteController implements Initializable {
                         if (existe == false) {
                             vehiculo.getExpedientes().add(seleccionado);
                             Transaction tx = session.getTransaction();
-
                             try {
-
                                 tx.begin();
                                 session.update(vehiculo);
                                 tx.commit();
+                                session.clear();
+                                cargarExpedientes();
                             } catch (RollbackException e) {
                                 tx.rollback();
                                 Alert alerta;
@@ -810,7 +810,7 @@ public class VerExpedienteController implements Initializable {
             alertaNuevoAviso.setContentText("Porfavor seleccione un expediente para añadir un vehiculo a ese expediente.");
             alertaNuevoAviso.showAndWait();
         }
-
+        
     }
 
     @FXML
