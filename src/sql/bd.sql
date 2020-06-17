@@ -128,7 +128,7 @@ create table usuarios(
     nombreper varchar(30) not null
 );
 
-insert into usuarios values ('admin', 'admin');
+insert into usuarios values ('admin', 'admin', 'Administrador');
 
 create table smtp(
     host varchar(30) primary key,
