@@ -247,7 +247,7 @@ public class VerProcuradorController implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Añadir Procurador");
             stage.setScene(new Scene(root));
-            stage.getIcons().add(new Image("recursos/logo.png"));
+            stage.getIcons().add(new Image("recursos/logo.png")); 
             stage.setResizable(false);
             stage.showAndWait();
 
