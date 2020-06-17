@@ -1116,4 +1116,10 @@ public class VerExpedienteController implements Initializable {
         }
         cargarExpedientes();
     }
+
+    @FXML
+    private void recargarTabla(ActionEvent event) {
+        cargarExpedientes();
+        cbColumna.valueProperty().set(null);
+    }
 }

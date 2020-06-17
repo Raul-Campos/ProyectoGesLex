@@ -258,4 +258,10 @@ public class VerPeritoController implements Initializable {
             cargarPeritos();
         }
     }
+
+    @FXML
+    private void recargarTabla(ActionEvent event) {
+        cargarPeritos();
+        cbColumna.valueProperty().set(null);
+    }
 }

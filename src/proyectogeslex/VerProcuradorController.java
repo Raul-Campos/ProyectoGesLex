@@ -254,4 +254,10 @@ public class VerProcuradorController implements Initializable {
             cargarProcuradores();
         }
     }
+
+    @FXML
+    private void recargarTabla(ActionEvent event) {
+        cargarProcuradores();
+        cbColumna.valueProperty().set(null);
+    }
 }

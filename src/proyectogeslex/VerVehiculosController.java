@@ -247,4 +247,10 @@ public class VerVehiculosController implements Initializable {
         }
     }
 
+    @FXML
+    private void recargarTabla(ActionEvent event) {
+        cargarVehiculos();
+        cbColumna.valueProperty().set(null);
+    }
+
 }

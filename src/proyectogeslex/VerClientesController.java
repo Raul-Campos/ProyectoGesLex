@@ -269,4 +269,10 @@ public class VerClientesController implements Initializable {
         }
 
     }
+
+    @FXML
+    private void recargarTabla(ActionEvent event) {
+        cargarClientes();
+        cbColumna.valueProperty().set(null);
+    }
 }

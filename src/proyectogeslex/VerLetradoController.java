@@ -263,4 +263,10 @@ public class VerLetradoController implements Initializable {
 
     }
 
+    @FXML
+    private void recargarTabla(ActionEvent event) {
+        cargarLetrado();
+        cbColumna.valueProperty().set(null);
+    }
+
 }

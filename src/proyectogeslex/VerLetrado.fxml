@@ -40,6 +40,18 @@
                   </ImageView>
                </graphic>
             </Button>
+            <Button contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#recargarTabla" prefHeight="33.0" prefWidth="33.0">
+               <graphic>
+                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" smooth="false">
+                     <image>
+                        <Image url="@../recursos/recargar.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <HBox.margin>
+                  <Insets left="15.0" />
+               </HBox.margin>
+            </Button>
          </children>
          <BorderPane.margin>
             <Insets />
@@ -56,7 +68,7 @@
                   <TableColumn fx:id="columnApellidos" minWidth="120.0" prefWidth="-1.0" resizable="false" text="Apellidos" />
                   <TableColumn fx:id="columnColegio" minWidth="120.0" prefWidth="-1.0" resizable="false" text="Colegio" />
                   <TableColumn fx:id="columnDireccion" minWidth="120.0" prefWidth="-1.0" resizable="false" text="Dirección" />
-                  <TableColumn fx:id="columnTelefono" minWidth="100.0" prefWidth="-1.0" resizable="false" text="Télefono" />
+                  <TableColumn fx:id="columnTelefono" minWidth="100.0" prefWidth="-1.0" resizable="false" text="Teléfono" />
                   <TableColumn fx:id="columnEmail" minWidth="130.0" prefWidth="-1.0" text="Email" />
                </columns>
                <HBox.margin>
