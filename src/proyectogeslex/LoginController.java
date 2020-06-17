@@ -103,8 +103,8 @@ public class LoginController implements Initializable {
           
             //Muestra menú
             Stage menu = new Stage(); 
-            menu.setMaximized(true);
             menu.setScene(new Scene(root));
+            menu.setMaximized(true);
             menu.setTitle("GesLex");    
             menu.getIcons().add(new Image("recursos/logo.png"));
             menu.show();

@@ -33,6 +33,7 @@
       </Text>
       <TextField fx:id="textfieldFecha" layoutX="426.0" layoutY="128.0" promptText="yyyy-mm-dd" />
       <TextField fx:id="textfieldNombre" layoutX="115.0" layoutY="177.0" prefHeight="25.0" prefWidth="151.0" />
+         <TextField fx:id="textfieldApellidos" layoutX="425.0" layoutY="177.0" prefHeight="25.0" prefWidth="151.0" />
       <Text layoutX="33.0" layoutY="196.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre :">
          <font>
             <Font name="System Bold" size="16.0" />
@@ -86,7 +87,6 @@
                </ImageView>
             </graphic>
       </Button>
-         <TextField fx:id="textfieldApellidos" layoutX="425.0" layoutY="177.0" prefHeight="25.0" prefWidth="151.0" />
          <Text layoutX="336.0" layoutY="195.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Apellidos :">
             <font>
                <Font name="System Bold" size="16.0" />

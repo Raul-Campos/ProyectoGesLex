@@ -11,6 +11,8 @@
 
 <AnchorPane id="AnchorPane" fx:id="anchorGeneral" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #7D91CE;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectogeslex.LoginController">
    <children>
+      <TextField fx:id="tfusuario" layoutX="430.0" layoutY="117.0" />
+      <PasswordField fx:id="tfcontrasena" layoutX="430.0" layoutY="164.0" onKeyReleased="#CapturarEnter" />
       <Button fx:id="btnregistrarse" layoutX="347.0" layoutY="298.0" mnemonicParsing="false" onAction="#registrarse" prefHeight="36.0" prefWidth="97.0" text="Registarse">
          <font>
             <Font name="System Bold Italic" size="14.0" />
@@ -33,8 +35,6 @@
              <Image url="@../recursos/logo.png" />
          </image>
       </ImageView>
-      <TextField fx:id="tfusuario" layoutX="430.0" layoutY="117.0" />
-      <PasswordField fx:id="tfcontrasena" layoutX="430.0" layoutY="164.0" onKeyReleased="#CapturarEnter" />
       <Text layoutX="347.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Usuario:">
          <font>
             <Font size="16.0" />

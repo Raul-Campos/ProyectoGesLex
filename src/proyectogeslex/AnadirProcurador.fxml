@@ -49,8 +49,8 @@
                         <Insets />
                      </GridPane.margin>
                   </Text>
-                  <TextField fx:id="tfApellidos" GridPane.columnIndex="4" />
                   <TextField fx:id="tfNombre" GridPane.columnIndex="1" />
+                  <TextField fx:id="tfApellidos" GridPane.columnIndex="4" />
                </children>
             </GridPane>
          </children>
@@ -75,8 +75,8 @@
                         <Insets />
                      </GridPane.margin>
                   </Text>
-                  <TextField fx:id="tfDireccion" GridPane.columnIndex="4" />
                   <TextField fx:id="tfDni" prefHeight="25.0" prefWidth="181.0" GridPane.columnIndex="1" />
+                  <TextField fx:id="tfDireccion" GridPane.columnIndex="4" />
                </children>
             </GridPane>
          </children>
@@ -101,8 +101,8 @@
                         <Insets />
                      </GridPane.margin>
                   </Text>
-                  <TextField fx:id="tfEmail" GridPane.columnIndex="4" />
                   <TextField fx:id="tfNumero" prefHeight="25.0" prefWidth="181.0" GridPane.columnIndex="1" />
+                  <TextField fx:id="tfEmail" GridPane.columnIndex="4" />
                </children>
             </GridPane>
          </children>

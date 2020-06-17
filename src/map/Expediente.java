@@ -151,7 +151,7 @@ public class Expediente  implements java.io.Serializable {
         if(hoja==null)
             estado="No adjunta";
         else
-            estado="Adjuntado";
+            estado="Adjunta";
        return estado;
     }
 
